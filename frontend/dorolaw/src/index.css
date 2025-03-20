@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+#root {
+  padding: 0;
+  margin: auto;
+}
+
+html {
+  overflow-y: scroll;
+}
