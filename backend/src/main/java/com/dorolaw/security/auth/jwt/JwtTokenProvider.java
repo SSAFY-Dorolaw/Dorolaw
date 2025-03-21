@@ -1,4 +1,4 @@
-package com.dorolaw.auth.jwt;
+package com.dorolaw.security.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

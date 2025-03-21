@@ -1,10 +1,10 @@
-package com.dorolaw.auth.oauth;
+package com.dorolaw.security.auth.oauth;
 
-import com.dorolaw.auth.entity.Member;
-import com.dorolaw.auth.entity.MemberRole;
-import com.dorolaw.auth.entity.MemberSocialType;
-import com.dorolaw.auth.entity.MemberStatus;
-import com.dorolaw.auth.repository.MemberRepository;
+import com.dorolaw.member.entity.Member;
+import com.dorolaw.member.entity.MemberRole;
+import com.dorolaw.member.entity.MemberSocialType;
+import com.dorolaw.member.entity.MemberStatus;
+import com.dorolaw.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

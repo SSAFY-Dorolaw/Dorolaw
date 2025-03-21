@@ -1,4 +1,4 @@
-package com.dorolaw.auth.jwt;
+package com.dorolaw.security.auth.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
