@@ -1,7 +1,7 @@
-package com.dorolaw.auth.jwt;
+package com.dorolaw.security.jwt;
 
-import com.dorolaw.auth.entity.Member;
-import com.dorolaw.auth.repository.MemberRepository;
+import com.dorolaw.member.entity.Member;
+import com.dorolaw.member.repository.MemberRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;

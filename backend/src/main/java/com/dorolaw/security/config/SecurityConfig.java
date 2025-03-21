@@ -1,8 +1,8 @@
-package com.dorolaw.config;
+package com.dorolaw.security.config;
 
-import com.dorolaw.auth.jwt.JwtAuthenticationFilter;
-import com.dorolaw.auth.jwt.JwtAuthenticationSuccessHandler;
-import com.dorolaw.auth.oauth.CustomOAuth2UserService;
+import com.dorolaw.security.jwt.JwtAuthenticationFilter;
+import com.dorolaw.security.jwt.JwtAuthenticationSuccessHandler;
+import com.dorolaw.security.oauth.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

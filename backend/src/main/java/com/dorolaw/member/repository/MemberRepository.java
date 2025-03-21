@@ -1,6 +1,6 @@
-package com.dorolaw.auth.repository;
+package com.dorolaw.member.repository;
 
-import com.dorolaw.auth.entity.Member;
+import com.dorolaw.member.entity.Member;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

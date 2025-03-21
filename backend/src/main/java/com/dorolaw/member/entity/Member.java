@@ -1,4 +1,4 @@
-package com.dorolaw.auth.entity;
+package com.dorolaw.member.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

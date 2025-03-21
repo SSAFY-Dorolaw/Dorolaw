@@ -1,4 +1,4 @@
-package com.dorolaw.auth.controller;
+package com.dorolaw.security.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller // FIXME @RestController로 추후 변경
 @RequestMapping("/api/members")
-public class MemberController {
+public class AuthController {
 
     @GetMapping("/")
     public String index() {
