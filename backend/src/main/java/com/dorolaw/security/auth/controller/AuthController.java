@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller // FIXME @RestController로 추후 변경
 @RequestMapping("/api/members")
-public class RestController {
+public class AuthController {
 
     @GetMapping("/")
     public String index() {
