@@ -1,4 +1,4 @@
-package com.dorolaw.security.auth.controller;
+package com.dorolaw.security.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

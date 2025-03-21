@@ -1,4 +1,4 @@
-package com.dorolaw.security.auth.jwt;
+package com.dorolaw.security.jwt;
 
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.repository.MemberRepository;

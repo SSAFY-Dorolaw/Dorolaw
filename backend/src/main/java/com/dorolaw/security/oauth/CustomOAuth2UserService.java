@@ -1,4 +1,4 @@
-package com.dorolaw.security.auth.oauth;
+package com.dorolaw.security.oauth;
 
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.MemberRole;
