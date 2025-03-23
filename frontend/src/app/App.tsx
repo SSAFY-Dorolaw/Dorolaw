@@ -1,5 +1,5 @@
-import Header from '../commons/Header';
-import NavBar from '../commons/NavBar';
+import Header from '../widgets/Header';
+import NavBar from '../widgets/NavBar';
 
 function App() {
   return (
