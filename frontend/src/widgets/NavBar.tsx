@@ -7,7 +7,7 @@ function NavBar() {
         <div>홈</div>
       </div>
       <div className="flex">
-        <div className="bg-p5 rounded-full">프사</div>
+        <div className="rounded-full bg-p5">프사</div>
       </div>
     </nav>
   );

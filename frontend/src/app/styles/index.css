@@ -1,4 +1,6 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #root {
   padding: 0;
@@ -15,36 +17,16 @@ body {
   font-family: 'PretendardVariable';
 }
 
-@theme {
-  --color-p5: #374151;
-  --color-p4: #6b7280;
-  --color-p3: #9ca3af;
-  --color-p2: #d1d5db;
-  --color-p1: #f3f4f6;
-
-  --color-y5: #ffe000;
-  --color-y4: #ffea55;
-  --color-y3: #fff07f;
-  --color-y2: #fff5a3;
-  --color-y1: #fffad0;
-
-  --color-g5: #333333;
-  --color-g4: #4f4f4f;
-  --color-g3: #8a8a8a;
-  --color-g2: #d1d5db;
-  --color-g1: #f3f4f6;
-}
-
 @font-face {
   font-family: 'SBAggroB';
-  src: url('../assets/fonts/SBAggroB.ttf') format('woff');
+  src: url('../../shared/assets/fonts/SBAggroB.ttf') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'PretendardVariable';
-  src: url('../assets/fonts/PretendardVariable.ttf') format('woff');
+  src: url('../../shared/assets/fonts/PretendardVariable.ttf') format('woff');
   font-weight: normal;
   font-style: normal;
 }
