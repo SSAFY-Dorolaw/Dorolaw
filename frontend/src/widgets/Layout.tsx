@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import Header from './Header';
-import NavBar from './NavBar';
-import Footer from './Footer';
+import Header from '@/widgets/Header';
+import NavBar from '@/widgets/NavBar';
+import Footer from '@/widgets/Footer';
 
 function Layout() {
   return (
