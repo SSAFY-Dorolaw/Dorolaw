@@ -18,7 +18,7 @@ const VideoUpload = () => {
           파일 업로드
         </button>
       </div>
-      {/* 영상 업로드 */}
+      {/* 영상 업로드 드래그 */}
       <UploadArea />
     </form>
   );
