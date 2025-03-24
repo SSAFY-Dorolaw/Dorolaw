@@ -1,1 +1,9 @@
-// 커밋용 임시 파일
+const ConsultUpload = () => {
+  return (
+    <div>
+      <h2>consult upload</h2>
+    </div>
+  );
+};
+
+export default ConsultUpload;
