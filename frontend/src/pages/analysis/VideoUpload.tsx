@@ -3,9 +3,22 @@ import UploadArea from '@/features/analysis/UploadArea';
 const VideoUpload = () => {
   return (
     <main className="mt-[50px]">
+      {/* 제목 */}
+      <section className="mx-auto w-[800px]">
+        <div className="flex items-center gap-5">
+          <h2 className="text-h2 font-bold text-p5">제목</h2>
+          <p className="text-caption text-red-500">* 필수</p>
+        </div>
+        <input
+          type="text"
+          placeholder="제목을 입력하세요"
+          className="mt-3 h-[35px] w-full rounded-[5px] pl-[5px]"
+        />
+      </section>
+
       {/* 업로드 타이틀 */}
-      <div className="mx-auto flex w-[800px] items-center justify-between px-0">
-        <div>
+      <section className="mx-auto flex w-[800px] items-center justify-between px-0">
+        <div className="mt-[30px]">
           <div className="flex items-center gap-5">
             <h2 className="text-h2 font-bold text-p5">사고 영상 업로드</h2>
             <p className="text-caption text-red-500">* 필수</p>
@@ -17,11 +30,13 @@ const VideoUpload = () => {
         <button className="rounded-[10px] bg-p5 px-6 py-2 text-g1">
           파일 업로드
         </button>
-      </div>
+      </section>
+
       {/* 영상 업로드 드래그 */}
       <UploadArea />
+
       {/* 옵션 */}
-      <div className="mx-auto flex w-[800px] items-center justify-between">
+      <section className="mx-auto flex w-[800px] items-center justify-between">
         <div className="flex items-center gap-5">
           <h2 className="text-body font-bold text-p5">공개 여부</h2>
           <input
@@ -40,7 +55,8 @@ const VideoUpload = () => {
           />
           <p className="text-caption text-red-500">* 필수</p>
         </div>
-      </div>
+      </section>
+
       <button className="mx-auto my-9 block rounded-[10px] bg-p5 px-6 py-2 text-g1">
         분석 요청하기
       </button>
