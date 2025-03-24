@@ -19,6 +19,13 @@ body {
   margin: 0;
   display: flex;
   font-family: 'PretendardVariable';
+  color: p5;
+}
+
+@layer base {
+  body {
+    @apply text-p5;
+  }
 }
 
 @font-face {
