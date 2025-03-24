@@ -7,15 +7,15 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <Main />,
       },
       {
-        path: "upload",
-        element: <VideoUpload />
-      }
+        path: 'upload',
+        element: <VideoUpload />,
+      },
     ],
-  }
+  },
 ]);
 
 export default router;
