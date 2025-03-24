@@ -8,10 +8,10 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col bg-p1">
+      <div className="flex min-h-screen flex-col bg-p1">
         <Header></Header>
         <NavBar></NavBar>
-        <main className="flex-grow">Main content...</main>
+        <main className="grow">Main content...</main>
         <Footer></Footer>
       </div>
     </QueryClientProvider>
