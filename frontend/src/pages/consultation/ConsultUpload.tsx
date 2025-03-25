@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import UploadArea from '@/features/analysis/UploadArea';
 import UploadTitle from '@/features/videoupload/UploadTitle';
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
