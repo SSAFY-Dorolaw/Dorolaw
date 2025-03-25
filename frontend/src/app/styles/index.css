@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  padding: 0;
+  margin: auto;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  font-family: 'PretendardVariable';
+  color: p5;
+}
+
+@layer base {
+  body {
+    @apply text-p5;
+  }
+}
+
+@font-face {
+  font-family: 'SBAggroB';
+  src: url('../../shared/assets/fonts/SBAggroB.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PretendardVariable';
+  src: url('../../shared/assets/fonts/PretendardVariable.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.logo {
+  height: 80px;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logotext {
+  font-family: 'SBAggroB';
+}

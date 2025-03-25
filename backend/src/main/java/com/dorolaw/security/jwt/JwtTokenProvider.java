@@ -8,7 +8,10 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -75,4 +78,13 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    public String extractToken(String authorizationHeader){
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
+            // 에러메세지 추가
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return authorizationHeader.substring(7);
+    }
+
 }

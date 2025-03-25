@@ -92,7 +92,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 기존 OAuth2User의 attributes에 memberId와 role을 추가해서 반환
         Map<String, Object> customAttributes = new HashMap<>(oAuth2User.getAttributes());
-        customAttributes.put("memberId", socialId);
+        customAttributes.put("memberId", member.getMemberId());
         customAttributes.put("role", role.name());
         customAttributes.put("name", name);
         customAttributes.put("profileImage", profileImage);
