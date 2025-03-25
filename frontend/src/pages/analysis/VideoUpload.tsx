@@ -1,6 +1,18 @@
+import { useState } from 'react';
 import UploadArea from '@/features/analysis/UploadArea';
 
 const VideoUpload = () => {
+  const [isPublic, setIsPublic] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
+
+  const publicCheckbox = () => {
+    setIsPublic(!isPublic);
+  };
+
+  const agreeCheckbox = () => {
+    setIsAgree(!isAgree);
+  };
+
   return (
     <main className="mt-[50px]">
       {/* 제목 */}
@@ -12,7 +24,7 @@ const VideoUpload = () => {
         <input
           type="text"
           placeholder="제목을 입력하세요"
-          className="mt-3 h-[35px] w-full rounded-[5px] pl-[5px]"
+          className="mt-3 h-[35px] w-full rounded-[5px] pl-[10px]"
         />
       </section>
 
@@ -38,19 +50,32 @@ const VideoUpload = () => {
       {/* 옵션 */}
       <section className="mx-auto flex w-[800px] items-center justify-between">
         <div className="flex items-center gap-5">
-          <h2 className="text-body font-bold text-p5">공개 여부</h2>
+          <h2
+            onClick={publicCheckbox}
+            className="cursor-pointer text-body font-bold text-p5"
+          >
+            공개 여부
+          </h2>
           <input
             type="checkbox"
-            className="size-4 bg-p5"
+            checked={isPublic}
+            onChange={publicCheckbox}
+            className="size-4 cursor-pointer bg-p5"
             style={{ accentColor: '#374151' }}
           />
-          <p className="text-caption text-red-500">* 필수</p>
         </div>
         <div className="flex items-center gap-5">
-          <h2 className="text-body font-bold text-p5">개인정보 제공 동의</h2>
+          <h2
+            onClick={agreeCheckbox}
+            className="cursor-pointer text-body font-bold text-p5"
+          >
+            개인정보 제공 동의
+          </h2>
           <input
             type="checkbox"
-            className="size-4 bg-p5"
+            checked={isAgree}
+            onChange={agreeCheckbox}
+            className="size-4 cursor-pointer bg-p5"
             style={{ accentColor: '#374151' }}
           />
           <p className="text-caption text-red-500">* 필수</p>
