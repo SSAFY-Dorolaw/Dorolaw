@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     @Cacheable(value = "members", key = "#kakaoId")
     Optional<Member> findBySocialId(Long socialId);
+
+    @Cacheable(value = "members", key = "#id")
+    @Override
+    Optional<Member> findById(Long id);
 }

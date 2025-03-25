@@ -1,7 +1,5 @@
 package com.dorolaw.member.service;
 
-import com.dorolaw.common.exception.BaseException;
-import com.dorolaw.common.response.BaseResponseStatus;
 import com.dorolaw.member.dto.common.LawyerProfileDto;
 import com.dorolaw.member.dto.common.MemberProfileDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
@@ -12,11 +10,12 @@ import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import org.springframework.web.server.ResponseStatusException;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final LawyerProfileRepository lawyerProfileRepository;
 
-
-    @Transactional(readOnly = true)
     public Object getMemberInfo(String authorizationHeader){
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
@@ -39,7 +36,7 @@ public class MemberService {
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         MemberProfileDto baseProfile = MemberProfileDto.builder()
@@ -58,7 +55,7 @@ public class MemberService {
             LawyerProfileDto lawyerProfileDto = getLawyerAdditionalInfo(memberId);
             return baseProfile.toLawyerProfile(lawyerProfileDto);
         } else {
-            throw new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -69,7 +66,7 @@ public class MemberService {
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         member.setName(requestDto.getName());
         member.setPhoneNumber(requestDto.getPhoneNumber());
@@ -86,7 +83,7 @@ public class MemberService {
 
     private void updateLawyerProfile(Member member, MyPageUpdateRequestDto requestDto) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(member.getMemberId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         lawyerProfile.updateProfile(
                 requestDto.getOfficeName(),
@@ -161,11 +158,9 @@ public class MemberService {
             LawyerProfileDto lawyerProfileDto = getLawyerAdditionalInfo(member.getMemberId());
             return baseProfile.toLawyerProfile(lawyerProfileDto);
         } else {
-            throw new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
-
-
 
     @Transactional
     public void verifyLawyer(String authorizationHeader){
@@ -175,26 +170,25 @@ public class MemberService {
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         if (memberRole.equals("CERTIFIED_LAWYER")){
-            throw new BaseException(BaseResponseStatus.INVALID_MYPAGE_REQUEST);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         member.setRole(CERTIFIED_LAWYER);
         memberRepository.save(member);
 
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_MYPAGE_REQUEST));
+                .orElseThrow(() ->  new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         lawyerProfile.verifiedLawyer();
         lawyerProfileRepository.save(lawyerProfile);
     }
 
-
     private LawyerProfileDto getLawyerAdditionalInfo(Long memberId) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         // 리뷰 관련 정보는 consultation 서비스에서 가져온다고 가정
         // 실제 구현시에는 feign client 등을 사용해서 consultation 서비스에 요청해야 함
@@ -224,9 +218,4 @@ public class MemberService {
                 .build();
 
     }
-
-
-
-
-
 }
