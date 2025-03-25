@@ -24,13 +24,15 @@ public enum BaseResponseStatus {
      * 1000: user 관련 에러
      */
     FAILED_TO_LOGIN(HttpStatus.UNAUTHORIZED, false, 1000, "아이디 또는 패스워드를 다시 확인하세요."),
+    MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, false, 1001, "회원 정보를 찾을 수 없습니다."),
+    INVALID_AUTH_HEADER(HttpStatus.UNAUTHORIZED, false, 1002, "유효하지 않은 Authorization 헤더입니다."),
+    INVALID_MYPAGE_REQUEST(HttpStatus.BAD_REQUEST, false, 1003, "마이페이지 유효하지 않는 요청입니다."),
 
     /**
      * 2000: TEAM 관련
      */
 
     USER_ALREADY_IN_TEAM(HttpStatus.BAD_REQUEST, false, 2000, "사용자는 이미 해당 팀에 속해 있습니다.");
-
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

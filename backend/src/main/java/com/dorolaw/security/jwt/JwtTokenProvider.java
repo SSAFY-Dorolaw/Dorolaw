@@ -1,11 +1,14 @@
 package com.dorolaw.security.jwt;
 
+import com.dorolaw.common.exception.BaseException;
+import com.dorolaw.common.response.BaseResponseStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -74,5 +77,12 @@ public class JwtTokenProvider {
         } catch (JwtException ex) {
             return false;
         }
+    }
+
+    public String extractToken(String authorizationHeader){
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
+            throw new BaseException(BaseResponseStatus.INVALID_AUTH_HEADER);
+        }
+        return authorizationHeader.substring(7);
     }
 }
