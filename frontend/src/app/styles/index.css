@@ -51,3 +51,79 @@ body {
 .logotext {
   font-family: 'SBAggroB';
 }
+
+h1 {
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h3 {
+  display: block;
+  font-size: 1.2em;
+  margin-top: 0.75em;
+  margin-bottom: 0.5em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 600;
+}
+
+.typo-body {
+  font-size: 1.07em;
+  font-weight: normal;
+}
+
+.typo-body-medium {
+  font-size: 0.96em;
+  font-weight: normal;
+}
+
+.typo-body-small {
+  font-size: 0.86em;
+  font-weight: normal;
+}
+
+.typo-caption {
+  font-size: 0.75em;
+  font-weight: normal;
+}
+
+.typo-button {
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.typo-button-small {
+  font-size: 0.87em;
+  font-weight: 500;
+}
+
+.tab-item {
+  display: inline-block; /* 텍스트 길이만큼의 영역 확보 */
+  position: relative; /* 자식의 absolute 위치 기준 */
+  padding-bottom: 4px; /* 선과 텍스트 간 간격 */
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* 부모의 width만큼 적용되어 텍스트 길이와 동일 */
+  height: 2px;
+  background-color: #000; /* 원하는 색상 */
+}
