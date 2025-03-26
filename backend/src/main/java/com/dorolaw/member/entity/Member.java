@@ -1,5 +1,6 @@
 package com.dorolaw.member.entity;
 
+import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,9 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
+
+    @OneToOne(mappedBy = "member")
+    private LawyerProfile lawyerProfile;
 
     @Column(nullable = false)
     private String name;
