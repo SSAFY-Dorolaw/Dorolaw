@@ -1,7 +1,7 @@
 import Answer from '@/features/consultation/Answer';
 
 function AnswerTab() {
-  const answers = 1;
+  const answers: object[] = [{ id: 1, answer: 'asdflkjs' }];
   return (
     <>
       <div className="mx-4 my-2 flex gap-2 justify-self-start">
@@ -12,7 +12,7 @@ function AnswerTab() {
           시/군/구
         </button>
       </div>
-      {answers === 0 ? (
+      {answers.length === 0 ? (
         <div className="mx-4 grid aspect-[210/297] place-items-center bg-white">
           <div className="typo-body">아직 답변이 없습니다.</div>
         </div>
