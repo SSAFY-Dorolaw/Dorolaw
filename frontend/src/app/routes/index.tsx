@@ -7,6 +7,7 @@ import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
+import Reservation from '@/pages/reservation/Reservation';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
             element: <ConsultUpload />,
           },
           { path: 'detail', element: <ConsultDetail /> },
+          { path: 'reservation', element: <Reservation /> },
         ],
       },
       {
