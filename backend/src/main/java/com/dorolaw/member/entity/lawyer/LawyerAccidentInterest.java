@@ -1,6 +1,5 @@
 package com.dorolaw.member.entity.lawyer;
 
-import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.request.entity.AccidentType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +14,6 @@ public class LawyerAccidentInterest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "interest_id")
     private Integer interestId;
 
     @ManyToOne(fetch = FetchType.LAZY)

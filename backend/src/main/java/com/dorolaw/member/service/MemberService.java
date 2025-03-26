@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
-
 import static com.dorolaw.member.entity.MemberRole.CERTIFIED_LAWYER;
 
 @Service
@@ -34,7 +33,7 @@ public class MemberService {
     public Object getMemberInfo(String authorizationHeader){
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getUserIdFromJWT(extractToken));
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)
@@ -64,7 +63,7 @@ public class MemberService {
     public Object updateMemberProfile(String authorizationHeader, MyPageUpdateRequestDto requestDto){
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getUserIdFromJWT(extractToken));
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)
@@ -172,7 +171,7 @@ public class MemberService {
     public void verifyLawyer(String authorizationHeader){
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getUserIdFromJWT(extractToken));
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
         String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
         Member member = memberRepository.findById(memberId)

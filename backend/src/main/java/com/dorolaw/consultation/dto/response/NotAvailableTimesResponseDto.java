@@ -1,7 +1,6 @@
 package com.dorolaw.consultation.dto.response;
 
 import lombok.*;
-
 import java.util.List;
 
 @Getter

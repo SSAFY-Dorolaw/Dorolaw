@@ -1,12 +1,10 @@
 package com.dorolaw.member.entity.lawyer;
 
-
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
