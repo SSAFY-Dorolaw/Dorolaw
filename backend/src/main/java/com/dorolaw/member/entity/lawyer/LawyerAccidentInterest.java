@@ -1,6 +1,5 @@
 package com.dorolaw.member.entity.lawyer;
 
-import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.request.entity.AccidentType;
 import jakarta.persistence.*;
 import lombok.*;

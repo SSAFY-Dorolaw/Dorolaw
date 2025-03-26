@@ -1,6 +1,5 @@
 package com.dorolaw.member.controller;
 
-import com.dorolaw.member.dto.common.MemberProfileDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
 import com.dorolaw.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,6 @@ package com.dorolaw.consultation.entity;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity

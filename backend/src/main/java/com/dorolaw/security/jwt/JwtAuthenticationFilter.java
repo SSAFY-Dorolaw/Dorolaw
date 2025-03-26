@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getJwtFromRequest(request);
 
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            String userId = tokenProvider.getUserIdFromJWT(token);
+            String userId = tokenProvider.getMemberIdFromJWT(token);
             Optional<Member> memberOptional = memberRepository.findById(Long.parseLong(userId));
             if (memberOptional.isPresent()) {
                 Member user = memberOptional.get();

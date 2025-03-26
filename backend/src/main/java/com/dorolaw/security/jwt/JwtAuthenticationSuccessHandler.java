@@ -25,14 +25,12 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         // memberId와 role 추출
         Long memberId = null;
         String role = null;
-        String name = null;
         String profileImage = null;
 
         if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
             DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
             memberId = (Long) oauthUser.getAttributes().get("memberId"); // OAuth2User에서 memberId 가져오기
             role = (String) oauthUser.getAttributes().get("role"); // role 가져오기
-            name = (String) oauthUser.getAttributes().get("name");
             profileImage = (String) oauthUser.getAttributes().get("profileImage");
         }
 
@@ -58,7 +56,7 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         // JSON 응답으로 반환
         response.setContentType("application/json; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"profileImage\": \"" + profileImage + "\", \"role\": \"" + role + "\", \"name\": + \"" + name + "\"}");
+        response.getWriter().write("{\"profileImage\": \"" + profileImage + "\", \"role\": \"" + role + "\", \"memberId\": + \"" + memberId + "\"}");
         response.getWriter().flush();
     }
 }

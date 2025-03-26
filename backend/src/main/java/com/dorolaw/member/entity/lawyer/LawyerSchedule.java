@@ -3,7 +3,6 @@ package com.dorolaw.member.entity.lawyer;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
