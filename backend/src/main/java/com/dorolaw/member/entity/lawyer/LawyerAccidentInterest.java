@@ -14,7 +14,6 @@ public class LawyerAccidentInterest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "interest_id")
     private Integer interestId;
 
     @ManyToOne(fetch = FetchType.LAZY)
