@@ -1,5 +1,6 @@
 package com.dorolaw.member.service;
 
+import com.dorolaw.consultation.repository.ReviewRepository;
 import com.dorolaw.member.dto.common.LawyerProfileDto;
 import com.dorolaw.member.dto.common.MemberProfileDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
@@ -28,6 +29,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final LawyerProfileRepository lawyerProfileRepository;
+    private final ReviewRepository reviewRepository;
 
     public Object getMemberInfo(String authorizationHeader){
 
@@ -85,10 +87,14 @@ public class MemberService {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(member.getMemberId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
+        lawyerProfile.parseAndSetAddress(requestDto.getOfficeAddress());
+
         lawyerProfile.updateProfile(
                 requestDto.getOfficeName(),
                 requestDto.getOfficePhoneNumber(),
-                requestDto.getOfficeAddress(),
+                lawyerProfile.getOfficeProvince(),
+                lawyerProfile.getOfficeCityDistrict(),
+                lawyerProfile.getOfficeDetailedAddress(),
                 requestDto.getGender(),
                 requestDto.getSpecialties(),
                 requestDto.getOneLineIntro(),
@@ -190,22 +196,20 @@ public class MemberService {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        // 리뷰 관련 정보는 consultation 서비스에서 가져온다고 가정
-        // 실제 구현시에는 feign client 등을 사용해서 consultation 서비스에 요청해야 함
-        Long reviewCount = 0L; // 임시값, 실제로는 consultation 서비스에서 가져와야 함
-        Float averageRating = 0.0f; // 임시값, 실제로는 consultation 서비스에서 가져와야 함
+        Long reviewCount = reviewRepository.countByLawyerId(memberId);
+        Float averageRating = reviewRepository.calculateAverageRatingByLawyerId(memberId);
 
         return LawyerProfileDto.builder()
                 .lawyerId(memberId)
                 .officeName(lawyerProfile.getOfficeName())
                 .officePhoneNumber(lawyerProfile.getOfficePhoneNumber())
-                .officeAddress(lawyerProfile.getOfficeAddress())
+                .officeAddress(lawyerProfile.getFullOfficeAddress())
                 .gender(lawyerProfile.getGender())
                 .oneLineIntro(lawyerProfile.getShortIntroduction())
                 .specialties(lawyerProfile.getSpecialties())
                 .greetingMessage(lawyerProfile.getGreeting())
-//                .reviewCount(lawyerProfile.getReviewCount()) // 수임 건수
-//                .averageRating(lawyerProfile.getAverageRating()) // 평점
+                .reviewCount(reviewCount)
+                .averageRating(averageRating)
                 .introVideo(lawyerProfile.getIntroductionVideoUrl())
                 .education(lawyerProfile.getEducations().stream().map(edu ->
                         new LawyerProfileDto.EducationDto(edu.getSchool(), edu.getDegree(), edu.getGraduationYear())

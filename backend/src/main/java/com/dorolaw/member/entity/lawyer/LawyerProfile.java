@@ -4,6 +4,8 @@ package com.dorolaw.member.entity.lawyer;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,8 +42,17 @@ public class LawyerProfile {
     @Column(name = "office_phone_number", length = 20, nullable = false)
     private String officePhoneNumber;
 
-    @Column(name = "office_address", length = 255, nullable = false)
-    private String officeAddress;
+    // 광역시,도
+    @Column(name = "office_province", length = 50, nullable = false)
+    private String officeProvince;
+
+    // 시군구
+    @Column(name = "office_city_district", length = 50, nullable = false)
+    private String officeCityDistrict;
+
+    // 기타 상세 주소
+    @Column(name = "office_detailed_address", length = 255, nullable = false)
+    private String officeDetailedAddress;
 
     @Column(name = "region", length = 50)
     private String region;
@@ -112,13 +123,16 @@ public class LawyerProfile {
         this.verificationDate = LocalDateTime.now();
     }
 
-    public void updateProfile(String officeName, String officePhoneNumber, String officeAddress,
-                              String gender, String specialties, String shortIntroduction,
+    public void updateProfile(String officeName, String officePhoneNumber, String officeProvince,
+                              String officeCityDistrict, String officeDetailedAddress, String gender,
+                              String specialties, String shortIntroduction,
                               String greeting, String introductionVideoUrl, Long accountNumber,
                               String bankName) {
         this.officeName = officeName;
         this.officePhoneNumber = officePhoneNumber;
-        this.officeAddress = officeAddress;
+        this.officeProvince = officeProvince;
+        this.officeCityDistrict = officeCityDistrict;
+        this.officeDetailedAddress = officeDetailedAddress;
         this.gender = gender;
         this.specialties = specialties;
         this.shortIntroduction = shortIntroduction;
@@ -127,6 +141,21 @@ public class LawyerProfile {
         this.accountNumber = accountNumber;
         this.bankName = bankName;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void parseAndSetAddress(String fullAddress) {
+        String[] parts = fullAddress.trim().split(" ", 3);
+        if (parts.length >= 3) {
+            this.officeProvince = parts[0];
+            this.officeCityDistrict = parts[1];
+            this.officeDetailedAddress = parts[2];
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public String getFullOfficeAddress() {
+        return officeProvince + " " + officeCityDistrict + " " + officeDetailedAddress;
     }
 
 }
