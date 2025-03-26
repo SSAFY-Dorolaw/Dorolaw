@@ -7,41 +7,38 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "payments")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class Review {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private Long reviewId;
+    @Column(name = "payment_id")
+    private Long paymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_id", nullable = false)
     private Consultation consultation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = false)
-    private Member client;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lawyer_id", nullable = false)
     private Member lawyer;
 
-    @Column(name = "rating", nullable = false)
-    private Float rating;
+    @Column(name = "lawyer_fee", nullable = false)
+    private Integer lawyerFee;
 
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", nullable = false)
+    private PaymentStatus paymentStatus;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "paid_date")
+    private LocalDateTime paidDate;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        paymentStatus = paymentStatus != null ? paymentStatus : PaymentStatus.UNPAID;
     }
 }

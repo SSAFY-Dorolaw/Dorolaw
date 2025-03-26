@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LawyerAccidentInterestRepository extends JpaRepository<LawyerAccidentInterest, Integer> {
-    void deleteByLawyerProfile_LawyerProfileId(Long lawyerProfileId);
 }
