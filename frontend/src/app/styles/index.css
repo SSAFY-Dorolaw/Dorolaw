@@ -111,19 +111,3 @@ h3 {
   font-size: 0.87em;
   font-weight: 500;
 }
-
-.tab-item {
-  display: inline-block; /* 텍스트 길이만큼의 영역 확보 */
-  position: relative; /* 자식의 absolute 위치 기준 */
-  padding-bottom: 4px; /* 선과 텍스트 간 간격 */
-}
-
-.tab-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%; /* 부모의 width만큼 적용되어 텍스트 길이와 동일 */
-  height: 2px;
-  background-color: #000; /* 원하는 색상 */
-}
