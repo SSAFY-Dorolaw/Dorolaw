@@ -3,7 +3,6 @@ package com.dorolaw.consultation.entity;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +15,6 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
     private Long paymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,14 +25,13 @@ public class Payment {
     @JoinColumn(name = "lawyer_id", nullable = false)
     private Member lawyer;
 
-    @Column(name = "lawyer_fee", nullable = false)
+    @Column(nullable = false)
     private Integer lawyerFee;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    @Column(name = "paid_date")
     private LocalDateTime paidDate;
 
     @PrePersist

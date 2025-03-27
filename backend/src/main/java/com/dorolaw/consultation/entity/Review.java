@@ -3,7 +3,6 @@ package com.dorolaw.consultation.entity;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +15,6 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,13 +29,13 @@ public class Review {
     @JoinColumn(name = "lawyer_id", nullable = false)
     private Member lawyer;
 
-    @Column(name = "rating", nullable = false)
+    @Column(nullable = false)
     private Float rating;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

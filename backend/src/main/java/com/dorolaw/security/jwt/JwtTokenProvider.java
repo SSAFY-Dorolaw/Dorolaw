@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -51,7 +50,7 @@ public class JwtTokenProvider {
     }
 
     // JWT에서 memberId 추출
-    public String getUserIdFromJWT(String token) {
+    public String getMemberIdFromJWT(String token) {
         Claims claims = parseClaims(token);
         return claims.getSubject();
     }

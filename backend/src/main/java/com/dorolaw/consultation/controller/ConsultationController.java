@@ -5,6 +5,7 @@ import com.dorolaw.consultation.dto.request.NotAvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
 import com.dorolaw.consultation.dto.response.NotAvailableTimesResponseDto;
 import com.dorolaw.consultation.dto.response.ConsultationBookResponseDto;
+import com.dorolaw.consultation.dto.response.ReviewResponseDto;
 import com.dorolaw.consultation.dto.response.ReviewWriteResponseDto;
 import com.dorolaw.consultation.service.ConsultationService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,15 @@ public class ConsultationController {
         ReviewWriteResponseDto response = consultationService.writeReview(requestDto);
         return ResponseEntity.ok(response);
     }
+
+    // 상담 후기 조회 API
+    @GetMapping("/reviews/{consultationId}")
+    public ResponseEntity<ReviewResponseDto> getReviews(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long consultationId){
+        ReviewResponseDto response = consultationService.getReviews(consultationId);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

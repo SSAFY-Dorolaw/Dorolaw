@@ -5,6 +5,7 @@ import com.dorolaw.consultation.dto.request.NotAvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
 import com.dorolaw.consultation.dto.response.ConsultationBookResponseDto;
 import com.dorolaw.consultation.dto.response.NotAvailableTimesResponseDto;
+import com.dorolaw.consultation.dto.response.ReviewResponseDto;
 import com.dorolaw.consultation.dto.response.ReviewWriteResponseDto;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.entity.ConsultationStatus;
@@ -22,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -76,7 +76,7 @@ public class ConsultationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getUserIdFromJWT(extractToken));
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
         Member client = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         // 기본 요청 생성
@@ -136,6 +136,23 @@ public class ConsultationService {
         return ReviewWriteResponseDto.builder()
                 .reviewId(review.getReviewId())
                 .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .build();
+    }
+
+    public ReviewResponseDto getReviews(Long consultationId) {
+
+        Review review = reviewRepository.findByConsultationId(consultationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return ReviewResponseDto.builder()
+                .reviewId(review.getReviewId())
+                .consultationId(review.getConsultation().getConsultationId())
+                .lawyerId(review.getLawyer().getMemberId())
+                .lawyerName(review.getLawyer().getName())
+                .clientName(review.getClient().getName())
+                .rating(review.getRating())
+                .content(review.getContent())
+                .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .build();
     }
 }

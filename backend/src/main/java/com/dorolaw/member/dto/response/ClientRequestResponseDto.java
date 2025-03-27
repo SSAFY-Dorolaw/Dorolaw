@@ -1,6 +1,7 @@
 package com.dorolaw.member.dto.response;
 
 
+import com.dorolaw.faultratioai.entity.AiReport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,20 +14,19 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ClientRequestResponseDto {
-    private List<ClientRequestDetail> cases;
+    private List<ClientRequestDetail> requests;
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class ClientRequestDetail {
-        private Long caseId;
+        private Long requestId;
         private String title;
         private String createdAt;
         private String status;
         private String videoUrl;
-        private String reportUrl;
+        private AiReport reportUrl;
         private String faultRatio;
-        private Long consultationId;
     }
 }

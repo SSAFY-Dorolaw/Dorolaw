@@ -15,9 +15,8 @@ public class AccidentType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accident_type_id")
     private Integer accidentTypeId;
 
-    @Column(name = "type_name", length = 50, nullable = false)
+    @Column(length = 50, nullable = false)
     private String typeName;
 }

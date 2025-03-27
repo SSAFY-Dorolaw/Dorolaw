@@ -1,10 +1,8 @@
 package com.dorolaw.member.repository;
 
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
-import com.dorolaw.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
 @Repository
