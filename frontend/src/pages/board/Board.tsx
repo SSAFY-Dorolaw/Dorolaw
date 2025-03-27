@@ -1,4 +1,4 @@
-import ArticleList from '@/features/board/ArticleList';
+import ArticleList from '@/features/article/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import { useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';

@@ -1,4 +1,4 @@
-import ArticleItem from '@/features/board/ArticleItem';
+import ConsultItem from '@/features/article/ConsultItem';
 import { useNavigate } from 'react-router-dom';
 
 interface article {
@@ -12,7 +12,7 @@ interface article {
   lawyer: string;
 }
 
-function ArticleList() {
+function ConsultList() {
   const navigate = useNavigate();
   const articleList: article[] = [
     {
@@ -60,7 +60,7 @@ function ArticleList() {
   return (
     <div className="mt-10 space-y-4">
       {articleList.map((article) => (
-        <ArticleItem
+        <ConsultItem
           key={article.id}
           writer={article.writer}
           title={article.title}
@@ -76,4 +76,4 @@ function ArticleList() {
   );
 }
 
-export default ArticleList;
+export default ConsultList;

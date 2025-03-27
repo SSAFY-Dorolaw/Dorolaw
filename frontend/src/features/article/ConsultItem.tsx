@@ -1,4 +1,4 @@
-interface ArticleItemProps {
+interface ConsultItemProps {
   writer: string;
   title: string;
   tag1: string;
@@ -9,7 +9,7 @@ interface ArticleItemProps {
   onClick?: () => void;
 }
 
-function ArticleItem({
+function ConsultItem({
   writer,
   title,
   tag1,
@@ -18,7 +18,7 @@ function ArticleItem({
   recentanswer,
   lawyer,
   onClick,
-}: ArticleItemProps) {
+}: ConsultItemProps) {
   return (
     <div
       className="cursor-pointer rounded-[10px] border border-p2 bg-white p-4"
@@ -57,4 +57,4 @@ function ArticleItem({
     </div>
   );
 }
-export default ArticleItem;
+export default ConsultItem;
