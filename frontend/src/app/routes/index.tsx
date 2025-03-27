@@ -8,7 +8,6 @@ import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
 import Reservation from '@/pages/reservation/Reservation';
-import AnalysisList from '@/pages/mypage/AnalysisList';
 import ConsultationList from '@/pages/mypage/ConsultationList';
 import ReservationList from '@/pages/mypage/Reservationlist';
 import ReviewList from '@/pages/mypage/ReviewList';
