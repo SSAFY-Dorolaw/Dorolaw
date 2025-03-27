@@ -49,8 +49,8 @@ function ArticleItem({
             <div className="border-grey size-[24px] rounded-full border bg-white"></div>
             <p className="typo-body-small">{lawyer}</p>
           </div>
-          <div className="mt-2">
-            <p className="typo-body">{recentanswer}</p>
+          <div className="mr-10 mt-2">
+            <p className="typo-body line-clamp-2">{recentanswer}</p>
           </div>
         </div>
       </div>

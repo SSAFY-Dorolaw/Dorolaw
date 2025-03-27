@@ -8,7 +8,7 @@ function Layout() {
     <div className="flex min-h-screen flex-col bg-p1">
       <Header></Header>
       <NavBar></NavBar>
-      <main className="full mx-auto mt-10 flex w-[1200px] grow justify-between">
+      <main className="full mx-auto mt-10 flex w-[1200px] grow flex-col items-center">
         <Outlet />
       </main>
       <Footer></Footer>

@@ -7,6 +7,10 @@ import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
+import Reservation from '@/pages/reservation/Reservation';
+import ConsultationList from '@/pages/mypage/ConsultationList';
+import ReservationList from '@/pages/mypage/Reservationlist';
+import ReviewList from '@/pages/mypage/ReviewList';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +30,7 @@ const router = createBrowserRouter([
             element: <ConsultUpload />,
           },
           { path: 'detail', element: <ConsultDetail /> },
+          { path: 'reservation', element: <Reservation /> },
         ],
       },
       {
@@ -35,6 +40,18 @@ const router = createBrowserRouter([
       {
         path: '/mypage',
         element: <MyPage />,
+      },
+      {
+        path: '/client/consultations',
+        element: <ConsultationList />,
+      },
+      {
+        path: '/client/reservations',
+        element: <ReservationList />,
+      },
+      {
+        path: '/client/reviews',
+        element: <ReviewList />,
       },
     ],
   },
