@@ -1,5 +1,7 @@
 package com.dorolaw.request.controller;
 
+import com.dorolaw.faultratioai.dto.AiRequestDto;
+import com.dorolaw.faultratioai.service.DiagnosisRequestService;
 import com.dorolaw.request.dto.*;
 import com.dorolaw.request.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +15,19 @@ import org.springframework.data.domain.Page;
 public class RequestController {
 
     private final RequestService requestService;
+    private final DiagnosisRequestService diagnosisRequestService;
 
-    public RequestController(RequestService requestService) {
+    public RequestController(RequestService requestService, DiagnosisRequestService diagnosisRequestService) {
         this.requestService = requestService;
+        this.diagnosisRequestService = diagnosisRequestService;
     }
 
     // 의뢰 등록 API
     @PostMapping
     public ResponseEntity<RequestCreateResDto> create(@RequestHeader("Authorization") String authorizationHeader,
                                        @RequestBody RequestCreateDto dto) {
-        RequestCreateResDto res = requestService.createRequest(authorizationHeader, dto);
+        AiRequestDto aiRequestDto = requestService.createRequest(authorizationHeader, dto); // db 등록
+        RequestCreateResDto res = diagnosisRequestService.sendDiagnosisRequest(aiRequestDto); // ai server에 요청
         return ResponseEntity.ok(res);
     }
 
@@ -50,5 +55,12 @@ public class RequestController {
             @RequestParam(defaultValue = "10") int size) {
         Page<ReqeustListResDto> requestList = requestService.getRequestList(page, size);
         return ResponseEntity.ok(requestList);
+    }
+    
+    // 테스트
+    @GetMapping("/diagnosis")
+    public ResponseEntity<RequestCreateResDto> sendMessage(@RequestBody AiRequestDto dto) {
+        RequestCreateResDto res = diagnosisRequestService.sendDiagnosisRequest(dto); // ai server에 요청
+        return ResponseEntity.ok(res);
     }
 }
