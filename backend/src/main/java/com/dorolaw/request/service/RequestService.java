@@ -1,5 +1,6 @@
 package com.dorolaw.request.service;
 
+import com.dorolaw.faultratioai.dto.AiRequestDto;
 import com.dorolaw.request.dto.*;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
@@ -20,7 +21,7 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public RequestCreateResDto createRequest(String authorizationHeader, RequestCreateDto dto) {
+    public AiRequestDto createRequest(String authorizationHeader, RequestCreateDto dto) {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.valueOf(jwtTokenProvider.getMemberIdFromJWT(token));
 
@@ -35,8 +36,9 @@ public class RequestService {
         request.setStatus(RequestStatus.PENDING); // 초기 상태 설정
 
         Request saved = requestRepository.save(request);
-        RequestCreateResDto res = new RequestCreateResDto();
-        res.setId(saved.getRequestId());
+        AiRequestDto res = new AiRequestDto();
+        res.setRequestId(saved.getRequestId());
+        res.setFileName(saved.getFileName());
         return res;
     }
 

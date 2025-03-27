@@ -48,6 +48,17 @@ services:
     networks:
       - app-network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"      # 메시지 브로커 포트
+      - "15672:15672"    # 웹 관리 콘솔 포트
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
