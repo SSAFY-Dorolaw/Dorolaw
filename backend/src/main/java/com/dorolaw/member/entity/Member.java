@@ -1,7 +1,9 @@
 package com.dorolaw.member.entity;
 
+import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,13 +11,17 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "members")
-@Data
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
+
+    @OneToOne(mappedBy = "member")
+    private LawyerProfile lawyerProfile;
 
     @Column(nullable = false)
     private String name;
