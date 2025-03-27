@@ -24,7 +24,7 @@ public class ConsultationController {
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long lawyerId,
             @RequestBody NotAvailableTimesRequestDto notAvailableTimesRequestDto){
-        NotAvailableTimesResponseDto response = consultationService.getNotAvailableTimes(authorizationHeader, lawyerId,notAvailableTimesRequestDto);
+        NotAvailableTimesResponseDto response = consultationService.getNotAvailableTimes(lawyerId,notAvailableTimesRequestDto);
         return ResponseEntity.ok(response);
     }
 
@@ -40,12 +40,10 @@ public class ConsultationController {
     // 상담 후기 작성 API
     @PostMapping("/reviews")
     public ResponseEntity<ReviewWriteResponseDto> writeReview(
+            @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ReviewWriteRequestDto requestDto) {
         ReviewWriteResponseDto response = consultationService.writeReview(requestDto);
         return ResponseEntity.ok(response);
     }
-
-
-
 
 }

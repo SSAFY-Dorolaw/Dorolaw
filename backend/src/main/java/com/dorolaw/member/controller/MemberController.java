@@ -1,6 +1,6 @@
 package com.dorolaw.member.controller;
 
-import com.dorolaw.member.dto.common.MemberProfileDto;
+import com.dorolaw.member.dto.request.LawyerBusinessHourRequestDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
 import com.dorolaw.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/mypage/members")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -33,6 +33,15 @@ public class MemberController {
     @PostMapping("/lawyer-verification")
     public ResponseEntity<?> verifyLawyer(@RequestHeader("Authorization") String authorization){
         memberService.verifyLawyer(authorization);
+        return ResponseEntity.ok().build();
+    }
+
+    // 변호사 운영 시간 설정 API
+    @PostMapping("/business-hours")
+    public ResponseEntity<Void> setAvailableTimes(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody LawyerBusinessHourRequestDto request) {
+        memberService.setLawyerBusinessTimes(authorizationHeader, request);
         return ResponseEntity.ok().build();
     }
 

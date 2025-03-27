@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
@@ -86,5 +88,19 @@ public class JwtTokenProvider {
         }
         return authorizationHeader.substring(7);
     }
+
+    public Map<String, Object> extractMemberInfo(String authorizationHeader) {
+        String extractToken = extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(getUserIdFromJWT(extractToken));
+        String memberRole = getRoleFromJWT(extractToken);
+
+        Map<String, Object> memberInfo = new HashMap<>();
+        memberInfo.put("memberId", memberId);
+        memberInfo.put("memberRole", memberRole);
+
+        return memberInfo;
+    }
+
+
 
 }

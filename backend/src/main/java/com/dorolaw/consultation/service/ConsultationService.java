@@ -42,7 +42,6 @@ public class ConsultationService {
     private final ReviewRepository reviewRepository;
 
     public NotAvailableTimesResponseDto getNotAvailableTimes(
-            String authorizationHeader,
             Long lawyerId,
             NotAvailableTimesRequestDto availableTimesRequestDto){
 

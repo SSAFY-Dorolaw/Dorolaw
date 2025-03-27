@@ -20,9 +20,9 @@ public class LawyerSchedule {
     @Column(name = "schedule_id")
     private Long scheduleId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lawyer_id", nullable = false)
-    private Member lawyer;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lawyer_profile_id", nullable = false)
+    private LawyerProfile lawyer;
 
     @Column(name = "monday_start_time")
     private LocalTime mondayStartTime;
@@ -84,27 +84,31 @@ public class LawyerSchedule {
     }
 
     public void updateSchedule(
-            LocalTime mondayStartTime, LocalTime mondayEndTime,
-            LocalTime tuesdayStartTime, LocalTime tuesdayEndTime,
-            LocalTime wednesdayStartTime, LocalTime wednesdayEndTime,
-            LocalTime thursdayStartTime, LocalTime thursdayEndTime,
-            LocalTime fridayStartTime, LocalTime fridayEndTime,
-            LocalTime saturdayStartTime, LocalTime saturdayEndTime,
-            LocalTime sundayStartTime, LocalTime sundayEndTime) {
+            String mondayStartTime, String mondayEndTime,
+            String tuesdayStartTime, String tuesdayEndTime,
+            String wednesdayStartTime, String wednesdayEndTime,
+            String thursdayStartTime, String thursdayEndTime,
+            String fridayStartTime, String fridayEndTime,
+            String saturdayStartTime, String saturdayEndTime,
+            String sundayStartTime, String sundayEndTime
+    ) {
+        this.mondayStartTime = parseTime(mondayStartTime);
+        this.mondayEndTime = parseTime(mondayEndTime);
+        this.tuesdayStartTime = parseTime(tuesdayStartTime);
+        this.tuesdayEndTime = parseTime(tuesdayEndTime);
+        this.wednesdayStartTime = parseTime(wednesdayStartTime);
+        this.wednesdayEndTime = parseTime(wednesdayEndTime);
+        this.thursdayStartTime = parseTime(thursdayStartTime);
+        this.thursdayEndTime = parseTime(thursdayEndTime);
+        this.fridayStartTime = parseTime(fridayStartTime);
+        this.fridayEndTime = parseTime(fridayEndTime);
+        this.saturdayStartTime = parseTime(saturdayStartTime);
+        this.saturdayEndTime = parseTime(saturdayEndTime);
+        this.sundayStartTime = parseTime(sundayStartTime);
+        this.sundayEndTime = parseTime(sundayEndTime);
+    }
 
-        this.mondayStartTime = mondayStartTime;
-        this.mondayEndTime = mondayEndTime;
-        this.tuesdayStartTime = tuesdayStartTime;
-        this.tuesdayEndTime = tuesdayEndTime;
-        this.wednesdayStartTime = wednesdayStartTime;
-        this.wednesdayEndTime = wednesdayEndTime;
-        this.thursdayStartTime = thursdayStartTime;
-        this.thursdayEndTime = thursdayEndTime;
-        this.fridayStartTime = fridayStartTime;
-        this.fridayEndTime = fridayEndTime;
-        this.saturdayStartTime = saturdayStartTime;
-        this.saturdayEndTime = saturdayEndTime;
-        this.sundayStartTime = sundayStartTime;
-        this.sundayEndTime = sundayEndTime;
+    private LocalTime parseTime(String time) {
+        return time != null ? LocalTime.parse(time) : null;
     }
 }
