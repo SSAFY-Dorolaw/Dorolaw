@@ -42,7 +42,7 @@ out/
 .DS_Store
 Thumbs.db
 
-# Spring Boot 패키징 결과물
+# # Spring Boot 패키징 결과물
 # *.jar
 # *.war
 
