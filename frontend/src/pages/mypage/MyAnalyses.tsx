@@ -1,5 +1,5 @@
-function AnalysisList() {
-  function SingleAnalysis() {
+function MyAnalyses() {
+  function AnalysisItem() {
     return (
       <section>
         <div className="mb-2 aspect-video bg-black"></div>
@@ -37,23 +37,23 @@ function AnalysisList() {
       </header>
       <main>
         <div className="mb-10 grid w-screen max-w-[1200px] grid-cols-4 justify-between gap-x-2 gap-y-4 text-center">
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
-          <SingleAnalysis />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
+          <AnalysisItem />
         </div>
       </main>
     </div>
   );
 }
 
-export default AnalysisList;
+export default MyAnalyses;
