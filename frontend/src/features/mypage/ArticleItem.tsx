@@ -1,4 +1,4 @@
-interface ConsultItemProps {
+interface ArticleItemProps {
   writer: string;
   title: string;
   tag1: string;
@@ -9,7 +9,7 @@ interface ConsultItemProps {
   onClick?: () => void;
 }
 
-function ConsultItem({
+function ArticleItem({
   writer,
   title,
   tag1,
@@ -18,7 +18,7 @@ function ConsultItem({
   recentanswer,
   lawyer,
   onClick,
-}: ConsultItemProps) {
+}: ArticleItemProps) {
   return (
     <div
       className="cursor-pointer rounded-[10px] border border-p2 bg-white p-4"
@@ -49,12 +49,12 @@ function ConsultItem({
             <div className="border-grey size-[24px] rounded-full border bg-white"></div>
             <p className="typo-body-small">{lawyer}</p>
           </div>
-          <div className="mt-2">
-            <p className="typo-body">{recentanswer}</p>
+          <div className="mr-10 mt-2">
+            <p className="typo-body line-clamp-2">{recentanswer}</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
-export default ConsultItem;
+export default ArticleItem;

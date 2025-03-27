@@ -1,4 +1,4 @@
-import ConsultItem from '@/features/article/ConsultItem';
+import ArticleItem from '@/features/mypage/ArticleItem';
 import { useNavigate } from 'react-router-dom';
 
 interface article {
@@ -12,7 +12,7 @@ interface article {
   lawyer: string;
 }
 
-function ConsultList() {
+function ArticleList() {
   const navigate = useNavigate();
   const articleList: article[] = [
     {
@@ -32,7 +32,8 @@ function ConsultList() {
       tag1: '#차대차',
       tag2: '#교차로',
       answercount: 4,
-      recentanswer: '영상을 보니 6:4로 보입니다.',
+      recentanswer:
+        '영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. 영상을 보니 6:4로 보입니다. ',
       lawyer: '나해결',
     },
     {
@@ -60,7 +61,7 @@ function ConsultList() {
   return (
     <div className="mt-10 space-y-4">
       {articleList.map((article) => (
-        <ConsultItem
+        <ArticleItem
           key={article.id}
           writer={article.writer}
           title={article.title}
@@ -76,4 +77,4 @@ function ConsultList() {
   );
 }
 
-export default ConsultList;
+export default ArticleList;

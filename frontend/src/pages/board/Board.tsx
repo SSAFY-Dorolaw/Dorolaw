@@ -1,12 +1,10 @@
-import ArticleList from '@/features/article/ConsultList';
+import ArticleList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import { useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
 
 const Board = () => {
   const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
-  const navigate = useNavigate();
   return (
     <div className="flex max-w-[1200px] flex-col gap-4 xl:w-[1200px]">
       <header>
