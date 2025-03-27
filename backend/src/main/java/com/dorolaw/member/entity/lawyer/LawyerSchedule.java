@@ -1,10 +1,8 @@
 package com.dorolaw.member.entity.lawyer;
 
-import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "lawyer_schedule")
@@ -18,37 +16,30 @@ public class LawyerSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lawyer_profile_id", nullable = false)
-    private LawyerProfile lawyer;
+    private LawyerProfile lawyerProfile;
 
-    private LocalTime mondayStartTime;
+    private String mondayStartTime;
+    private String mondayEndTime;
 
-    private LocalTime mondayEndTime;
+    private String tuesdayStartTime;
+    private String tuesdayEndTime;
 
-    private LocalTime tuesdayStartTime;
+    private String wednesdayStartTime;
+    private String wednesdayEndTime;
 
-    private LocalTime tuesdayEndTime;
+    private String thursdayStartTime;
+    private String thursdayEndTime;
 
-    private LocalTime wednesdayStartTime;
+    private String fridayStartTime;
+    private String fridayEndTime;
 
-    private LocalTime wednesdayEndTime;
+    private String saturdayStartTime;
+    private String saturdayEndTime;
 
-    private LocalTime thursdayStartTime;
-
-    private LocalTime thursdayEndTime;
-
-    private LocalTime fridayStartTime;
-
-    private LocalTime fridayEndTime;
-
-    private LocalTime saturdayStartTime;
-
-    private LocalTime saturdayEndTime;
-
-    private LocalTime sundayStartTime;
-
-    private LocalTime sundayEndTime;
+    private String sundayStartTime;
+    private String sundayEndTime;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -76,23 +67,19 @@ public class LawyerSchedule {
             String saturdayStartTime, String saturdayEndTime,
             String sundayStartTime, String sundayEndTime
     ) {
-        this.mondayStartTime = parseTime(mondayStartTime);
-        this.mondayEndTime = parseTime(mondayEndTime);
-        this.tuesdayStartTime = parseTime(tuesdayStartTime);
-        this.tuesdayEndTime = parseTime(tuesdayEndTime);
-        this.wednesdayStartTime = parseTime(wednesdayStartTime);
-        this.wednesdayEndTime = parseTime(wednesdayEndTime);
-        this.thursdayStartTime = parseTime(thursdayStartTime);
-        this.thursdayEndTime = parseTime(thursdayEndTime);
-        this.fridayStartTime = parseTime(fridayStartTime);
-        this.fridayEndTime = parseTime(fridayEndTime);
-        this.saturdayStartTime = parseTime(saturdayStartTime);
-        this.saturdayEndTime = parseTime(saturdayEndTime);
-        this.sundayStartTime = parseTime(sundayStartTime);
-        this.sundayEndTime = parseTime(sundayEndTime);
-    }
-
-    private LocalTime parseTime(String time) {
-        return time != null ? LocalTime.parse(time) : null;
+        this.mondayStartTime = mondayStartTime != null ? mondayStartTime : "closed";
+        this.mondayEndTime = mondayEndTime != null ? mondayEndTime : "closed";
+        this.tuesdayStartTime = tuesdayStartTime != null ? tuesdayStartTime : "closed";
+        this.tuesdayEndTime = tuesdayEndTime != null ? tuesdayEndTime : "closed";
+        this.wednesdayStartTime = wednesdayStartTime != null ? wednesdayStartTime : "closed";
+        this.wednesdayEndTime = wednesdayEndTime != null ? wednesdayEndTime : "closed";
+        this.thursdayStartTime = thursdayStartTime != null ? thursdayStartTime : "closed";
+        this.thursdayEndTime = thursdayEndTime != null ? thursdayEndTime : "closed";
+        this.fridayStartTime = fridayStartTime != null ? fridayStartTime : "closed";
+        this.fridayEndTime = fridayEndTime != null ? fridayEndTime : "closed";
+        this.saturdayStartTime = saturdayStartTime != null ? saturdayStartTime : "closed";
+        this.saturdayEndTime = saturdayEndTime != null ? saturdayEndTime : "closed";
+        this.sundayStartTime = sundayStartTime != null ? sundayStartTime : "closed";
+        this.sundayEndTime = sundayEndTime != null ? sundayEndTime : "closed";
     }
 }

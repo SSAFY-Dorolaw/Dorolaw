@@ -141,7 +141,7 @@ public class ConsultationService {
 
     public ReviewResponseDto getReviews(Long consultationId) {
 
-        Review review = reviewRepository.findByConsultationId(consultationId)
+        Review review = reviewRepository.findByConsultation_ConsultationId(consultationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         return ReviewResponseDto.builder()

@@ -2,6 +2,7 @@ package com.dorolaw.consultation.entity;
 
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
+import com.dorolaw.request.entity.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -21,9 +22,9 @@ public class Consultation {
     @Column(name = "consultation_id")
     private Long consultationId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "request_id", nullable = false)
-//    private Request request;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id", nullable = false)
+    private Request request;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "memberId", nullable = false)

@@ -56,10 +56,8 @@ public class MypageService {
                         .clientName(consultation.getClient().getName())
                         .lawyerId(consultation.getLawyer().getLawyerProfileId())
                         .lawyerName(consultation.getLawyer().getMember().getName())
-                        // 용국이 request코드 DEV-BE 머지되면, 여기서 Request 참조해서 caseId와 caseTitle 처리 필요.
-                        .caseId(null)
-                        .caseTitle(null)
-                        .caseLink(null)
+                        .requestId(consultation.getRequest().getRequestId())
+                        .requestTitle(consultation.getRequest().getTitle())
                         .build())
                 .collect(Collectors.toList());
 
@@ -75,10 +73,7 @@ public class MypageService {
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-
-        List<Request> requests = requestRepository.findByMember(member);
+        List<Request> requests = requestRepository.findByMemberId(memberId);
 
         List<ClientRequestResponseDto.ClientRequestDetail> clientRequestDetails = requests.stream()
                 .map(request -> ClientRequestResponseDto.ClientRequestDetail.builder()
@@ -116,6 +111,4 @@ public class MypageService {
                         .build())
                 .collect(Collectors.toList());
     }
-
-
 }

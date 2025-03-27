@@ -34,13 +34,11 @@ public class MypageController {
 
     }
 
-//     본인이 업로드한 AI 분석자료 조회
+     // 본인이 업로드한 AI 분석자료 조회
     @GetMapping("/clients/reports")
     public ResponseEntity<List<AiReportResponseDto>> getMyReports(
             @RequestHeader("Authorization") String authorizationHeader) {
         List<AiReportResponseDto> reports = mypageService.getAllReportsForMember(authorizationHeader);
         return ResponseEntity.ok(reports);
     }
-
-
 }

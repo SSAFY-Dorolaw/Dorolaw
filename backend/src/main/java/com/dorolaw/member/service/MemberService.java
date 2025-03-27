@@ -233,18 +233,19 @@ public class MemberService {
 
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
-        String memberRole = (String) memberInfo.get("memberRole");
 
-        if (!memberRole.equals("CERTIFIED_LAWYER")){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+        // JWT 실시간 반영시 주석 해제
+//        String memberRole = (String) memberInfo.get("memberRole");
+//        if (!memberRole.equals("CERTIFIED_LAWYER")){
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
 
         LawyerProfile lawyer = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         LawyerSchedule schedule = lawyer.getSchedules().stream()
                 .findFirst()
-                .orElse(LawyerSchedule.builder().lawyer(lawyer).build());
+                .orElse(LawyerSchedule.builder().lawyerProfile(lawyer).build());
 
         schedule.updateSchedule(
                 request.getMonday_start_time(),

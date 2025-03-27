@@ -22,5 +22,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where r.requestId = :requestId")
     Optional<Request> findRequestDetail(@Param("requestId") Long requestId);
 
-    List<Request> findByMember(Member member);
+    List<Request> findByMemberId(Long memberId);
 }

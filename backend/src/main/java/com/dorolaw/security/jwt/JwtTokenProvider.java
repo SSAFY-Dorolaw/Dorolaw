@@ -90,7 +90,7 @@ public class JwtTokenProvider {
 
     public Map<String, Object> extractMemberInfo(String authorizationHeader) {
         String extractToken = extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(getUserIdFromJWT(extractToken));
+        Long memberId = Long.parseLong(getMemberIdFromJWT(extractToken));
         String memberRole = getRoleFromJWT(extractToken);
 
         Map<String, Object> memberInfo = new HashMap<>();

@@ -55,6 +55,4 @@ public class ConsultationController {
         ReviewResponseDto response = consultationService.getReviews(consultationId);
         return ResponseEntity.ok(response);
     }
-
-
 }

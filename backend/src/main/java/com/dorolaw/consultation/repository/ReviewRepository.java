@@ -15,5 +15,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.lawyer.memberId = :lawyerId")
     Float calculateAverageRatingByLawyerId(@Param("lawyerId") Long lawyerId);
 
-    Optional<Review> findByConsultationId(Long consultationId);
+    Optional<Review> findByConsultation_ConsultationId(Long consultationId);
 }

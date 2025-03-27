@@ -27,9 +27,7 @@ public class ConsultationResponseDto {
         private String clientName;
         private Long lawyerId;
         private String lawyerName;
-        // 일단 아래는 용국 request 코드 작성전까지 null 처리될것임.
-        private Long caseId;
-        private String caseTitle;
-        private String caseLink;
+        private Long requestId;
+        private String requestTitle;
     }
 }

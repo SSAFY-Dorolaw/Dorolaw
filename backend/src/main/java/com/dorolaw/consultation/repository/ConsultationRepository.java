@@ -22,6 +22,5 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
             @Param("status") ConsultationStatus status
     );
 
-    // client 또는 lawyer가 일치하는 데이터 조회
     List<Consultation> findByClientOrLawyer(Member client, LawyerProfile lawyer);
 }

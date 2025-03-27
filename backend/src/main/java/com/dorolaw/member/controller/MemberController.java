@@ -44,5 +44,4 @@ public class MemberController {
         memberService.setLawyerBusinessTimes(authorizationHeader, request);
         return ResponseEntity.ok().build();
     }
-
 }
