@@ -21,7 +21,7 @@ function ArticleItem({
 }: ArticleItemProps) {
   return (
     <div
-      className="cursor-pointer rounded-[10px] border border-p2 bg-white p-4"
+      className="cursor-pointer rounded-[10px] border border-p2 bg-white p-4 hover:bg-p1"
       onClick={onClick}
     >
       <div className="mt-2">

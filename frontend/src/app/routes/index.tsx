@@ -11,6 +11,7 @@ import Reservation from '@/pages/reservation/Reservation';
 import ConsultationList from '@/pages/mypage/MyConsultations';
 import ReservationList from '@/pages/mypage/MyReservations';
 import ReviewList from '@/pages/mypage/MyReviews';
+import MyAnalyses from '@/pages/mypage/MyAnalyses';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: '/client/reviews',
         element: <ReviewList />,
+      },
+      {
+        path: '/client/analyses',
+        element: <MyAnalyses />,
       },
     ],
   },
