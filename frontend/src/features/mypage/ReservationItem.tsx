@@ -1,3 +1,5 @@
+import { IoChevronForward } from 'react-icons/io5';
+
 interface ReservationItemProps {
   consultationId: number;
   scheduledDate: string;
@@ -26,25 +28,29 @@ function ReservationItem({
   onClick,
 }: ReservationItemProps) {
   return (
-    <div
-      className="flex cursor-pointer items-center justify-between rounded-[10px] border border-p2 bg-white p-4"
-      onClick={onClick}
-    >
+    <div className="flex items-center justify-between rounded-[10px] border border-p2 bg-white p-4 hover:bg-p1">
       <div className="mt-2">
-        <div className="flex">
-          <p>{new Date(scheduledDate).toLocaleDateString()}</p>
+        <div className="flex items-center gap-2 font-bold">
+          <p className="text-lg">
+            {new Date(scheduledDate).toLocaleDateString()}
+          </p>
+          {' | '}
           <p>{new Date(scheduledDate).toLocaleTimeString()}</p>
         </div>
-        <div className="flex">
+        <div className="flex items-center gap-2">
           <div>{lawyerName} 변호사</div>
-          <div>{consultationMethod}</div>
+          <div className="text-sm">{consultationMethod}</div>
         </div>
-        <div className="flex">
-          <div>{status}</div>
-          <div>후기쓰기</div>
+        <div className="mt-2 flex gap-4">
+          <div className="rounded-full border border-p5 px-4">{status}</div>
+          <button className="rounded-full border border-p5 px-4">
+            후기쓰기
+          </button>
         </div>
       </div>
-      <div>의뢰내용 보기</div>
+      <button className="flex items-center gap-2" onClick={onClick}>
+        의뢰내용 보기 <IoChevronForward size={10} />
+      </button>
     </div>
   );
 }
