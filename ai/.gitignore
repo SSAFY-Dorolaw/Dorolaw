@@ -25,3 +25,6 @@ build/
 *.egg-info/
 pip-wheel-metadata/
 __pypackages__/
+
+# 도커 이미지 파일
+*.tar
