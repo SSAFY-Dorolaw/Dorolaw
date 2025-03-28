@@ -1,7 +1,7 @@
 import ArticleList from '@/features/mypage/ArticleList';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
-function ConsultationList() {
+function MyConsultations() {
   return (
     <div className="flex max-w-[1200px] flex-col gap-4 xl:w-[1200px]">
       <header>
@@ -42,4 +42,4 @@ function ConsultationList() {
   );
 }
 
-export default ConsultationList;
+export default MyConsultations;
