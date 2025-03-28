@@ -1,21 +1,16 @@
 import { useState } from 'react';
-import {
-  Phone,
-  CalendarDays,
-  Clock,
-  ChevronUp,
-  ChevronDown,
-} from 'lucide-react';
+import { CalendarDays, Clock, ChevronDown } from 'lucide-react';
+import SelectConsultingType from '@/features/reservation/SelectConsultingType';
 
 interface BookingPlanProps {
   onClose: () => void;
 }
 
 const BookingPlan = ({ onClose }: BookingPlanProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [selectConsulting, setSelectConsulting] = useState('');
 
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
+  const handleSelectConsulting = (option: string) => {
+    setSelectConsulting(option);
   };
 
   return (
@@ -28,35 +23,10 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
           X
         </p>
         {/* 전화상담 선택 */}
-        <div
-          className="flex cursor-pointer justify-between"
-          onClick={toggleOpen}
-        >
-          <div className="my-5 flex items-center">
-            <Phone className="size-6" />
-            <p className="ml-5 text-h3 font-bold text-p5">상담 종류 선택</p>
-          </div>
-          <div className="flex items-center">
-            {isOpen ? (
-              <ChevronUp className="mr-2 mt-1 size-6" />
-            ) : (
-              <ChevronDown className="mr-2 mt-1 size-6" />
-            )}
-          </div>
-        </div>
-        {isOpen && (
-          <div className="mb-3 ml-3 mr-5 flex justify-between">
-            <button className="rounded-lg bg-g3 px-3 py-1.5 text-white">
-              15분 전화상담
-            </button>
-            <button className="rounded-lg bg-g3 px-3 py-1.5 text-white">
-              20분 화상상담
-            </button>
-            <button className="rounded-lg bg-g3 px-3 py-1.5 text-white">
-              30분 방문상담
-            </button>
-          </div>
-        )}
+        <SelectConsultingType
+          selectedConsulting={selectConsulting}
+          onSelectConsulting={handleSelectConsulting}
+        />
 
         {/* 날짜 선택 */}
         <div className="flex cursor-pointer justify-between">
