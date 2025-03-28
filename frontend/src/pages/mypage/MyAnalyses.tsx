@@ -1,5 +1,4 @@
 import AnalysisItem from '@/features/mypage/AnalysisItem';
-import PaginationBar from '@/widgets/PaginationBar';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 interface analysis {
