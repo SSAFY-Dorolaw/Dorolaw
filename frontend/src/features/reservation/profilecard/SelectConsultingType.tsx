@@ -1,30 +1,26 @@
-import { useState } from 'react';
 import { Phone, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface ConsultingTypeProps {
   selectedConsulting: string;
   onSelectConsulting: (option: string) => void;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 const SelectConsultingType = ({
   selectedConsulting,
   onSelectConsulting,
+  isOpen,
+  onToggle,
 }: ConsultingTypeProps) => {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
-
   const consultingOption = (option: string) => {
     onSelectConsulting(option);
-    setIsOpen(false);
   };
 
   return (
     <div>
       {/* 전화상담 선택 */}
-      <div className="flex cursor-pointer justify-between" onClick={toggleOpen}>
+      <div className="flex cursor-pointer justify-between" onClick={onToggle}>
         <div className="my-5 flex items-center">
           <Phone className="size-6" />
           <p className="ml-5 text-h3 font-bold text-p5">

@@ -1,9 +1,9 @@
-import LawyerSlogan from '@/features/reservation/LawyerSlogan';
-import LawyerCareer from '@/features/reservation/LawyerCareer';
-import LawyerExpert from '@/features/reservation/LawyerExpert';
-import LawyerConsult from '@/features/reservation/LawyerConsult';
-import LawyerReview from '@/features/reservation/LawyerReview';
-import LawyerMap from '@/features/reservation/LawyerMap';
+import LawyerSlogan from '@/features/reservation/profiledetail/LawyerSlogan';
+import LawyerCareer from '@/features/reservation/profiledetail/LawyerCareer';
+import LawyerExpert from '@/features/reservation/profiledetail/LawyerExpert';
+import LawyerConsult from '@/features/reservation/profiledetail/LawyerConsult';
+import LawyerReview from '@/features/reservation/profiledetail/LawyerReview';
+import LawyerMap from '@/features/reservation/profiledetail/LawyerMap';
 
 const LawyerProfileDetail = () => {
   return (
