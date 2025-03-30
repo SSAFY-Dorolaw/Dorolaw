@@ -84,7 +84,7 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
         />
       </div>
       {/* 예약 버튼 */}
-      <div className="rounded-[10px] bg-p5 p-4">
+      <div className="rounded-b-[10px] bg-p5 p-4">
         <button className="w-full bg-p5 text-body text-white">
           상담 예약하기
         </button>
