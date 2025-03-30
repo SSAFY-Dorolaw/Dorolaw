@@ -1,5 +1,5 @@
 import Fee from '@/features/consultation/Fee';
-import BookingPlan from '@/features/reservation/BookingPlan';
+import BookingPlan from '@/features/reservation/profilecard/BookingPlan';
 import { useState } from 'react';
 
 const LawyerProfileCard = () => {

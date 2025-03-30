@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SelectConsultingType from '@/features/reservation/profilecard/SelectConsultingType';
-import SelectDate from './profilecard/SelectDate';
-import SelectTime from './profilecard/SelectTime';
+import SelectDate from './SelectDate';
+import SelectTime from './SelectTime';
 
 interface BookingPlanProps {
   onClose: () => void;
