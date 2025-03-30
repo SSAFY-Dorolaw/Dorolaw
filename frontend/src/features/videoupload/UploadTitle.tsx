@@ -1,4 +1,29 @@
+import { useState, useRef } from 'react';
+
 const UploadTitle = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const fileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0]);
+    }
+  };
+
+  const removeFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div>
       {/* 제목 */}
@@ -22,13 +47,39 @@ const UploadTitle = () => {
             <p className="text-caption text-red-500">* 필수</p>
           </div>
           <p className="text-g3">
-            사진/영상 업로드 시 AI가 과실 비율을 분석합니다.
+            영상을 업로드하면 AI가 과실 비율을 분석합니다.
           </p>
         </div>
-        <button className="rounded-[10px] bg-p5 px-6 py-2 text-g1">
+
+        {/* 숨겨진 file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={fileChange}
+          accept="video/*"
+          className="hidden"
+        />
+
+        <button
+          onClick={uploadButtonClick}
+          className="rounded-[10px] bg-p5 px-6 py-2 text-g1"
+        >
           파일 업로드
         </button>
       </section>
+
+      {/* 선택된 파일 표시 및 삭제 */}
+      {selectedFile && (
+        <p className="mt-5 flex items-center">
+          <span>파일명: {selectedFile.name}</span>
+          <span
+            className="ml-3 cursor-pointer text-red-700"
+            onClick={removeFile}
+          >
+            x
+          </span>
+        </p>
+      )}
     </div>
   );
 };
