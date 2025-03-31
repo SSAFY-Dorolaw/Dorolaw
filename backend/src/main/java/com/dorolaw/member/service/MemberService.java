@@ -1,5 +1,6 @@
 package com.dorolaw.member.service;
 
+import com.dorolaw.member.dto.request.LawyerBusinessHourRequestDto;
 import com.dorolaw.consultation.repository.ReviewRepository;
 import com.dorolaw.member.dto.common.LawyerProfileDto;
 import com.dorolaw.member.dto.common.MemberProfileDto;
@@ -8,7 +9,9 @@ import com.dorolaw.member.entity.lawyer.LawyerCareer;
 import com.dorolaw.member.entity.lawyer.LawyerEducation;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.entity.Member;
+import com.dorolaw.member.entity.lawyer.LawyerSchedule;
 import com.dorolaw.member.repository.LawyerProfileRepository;
+import com.dorolaw.member.repository.LawyerScheduleRepository;
 import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.stream.Collectors;
 import static com.dorolaw.member.entity.MemberRole.CERTIFIED_LAWYER;
 
@@ -29,6 +33,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final LawyerProfileRepository lawyerProfileRepository;
     private final ReviewRepository reviewRepository;
+    private final LawyerScheduleRepository lawyerScheduleRepository;
 
     public Object getMemberInfo(String authorizationHeader){
 
@@ -220,5 +225,44 @@ public class MemberService {
                 .lawyerLicenseExam(lawyerProfile.getQualificationExam())
                 .build();
 
+    }
+
+
+    @Transactional
+    public void setLawyerBusinessTimes(String authorizationHeader, LawyerBusinessHourRequestDto request){
+
+        Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
+        Long memberId = (Long) memberInfo.get("memberId");
+
+        // JWT 실시간 반영시 주석 해제
+//        String memberRole = (String) memberInfo.get("memberRole");
+//        if (!memberRole.equals("CERTIFIED_LAWYER")){
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+
+        LawyerProfile lawyer = lawyerProfileRepository.findByMember_MemberId(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        LawyerSchedule schedule = lawyer.getSchedules().stream()
+                .findFirst()
+                .orElse(LawyerSchedule.builder().lawyerProfile(lawyer).build());
+
+        schedule.updateSchedule(
+                request.getMonday_start_time(),
+                request.getMonday_end_time(),
+                request.getTuesday_start_time(),
+                request.getTuesday_end_time(),
+                request.getWednesday_start_time(),
+                request.getWednesday_end_time(),
+                request.getThursday_start_time(),
+                request.getThursday_end_time(),
+                request.getFriday_start_time(),
+                request.getFriday_end_time(),
+                request.getSaturday_start_time(),
+                request.getSaturday_end_time(),
+                request.getSunday_start_time(),
+                request.getSunday_end_time()
+        );
+        lawyerScheduleRepository.save(schedule);
     }
 }

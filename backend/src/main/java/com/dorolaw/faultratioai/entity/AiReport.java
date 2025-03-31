@@ -20,7 +20,7 @@ public class AiReport {
 
     @Id
     @Column(nullable = false)
-    private Integer reportId;
+    private Long reportId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id", nullable = false)

@@ -3,6 +3,8 @@ package com.dorolaw.member.entity.lawyer;
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
@@ -34,6 +36,10 @@ public class LawyerProfile {
     @Builder.Default
     private List<LawyerEducation> educations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "lawyerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<LawyerSchedule> schedules = new ArrayList<>();
+
     @Column(name= "office_name", length = 100, nullable = false)
     private String officeName;
 
@@ -64,9 +70,6 @@ public class LawyerProfile {
     @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "specialties", length = 20)
-    private String specialties;
-
     @Column(name = "short_introduction", length = 255)
     private String shortIntroduction;
 
@@ -86,10 +89,12 @@ public class LawyerProfile {
     @Column(name = "verification_date")
     private LocalDateTime verificationDate;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(0)")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Column(name = "account_number", nullable = false)
@@ -101,20 +106,6 @@ public class LawyerProfile {
     @OneToMany(mappedBy = "lawyerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<LawyerAccidentInterest> interests = new ArrayList<>();
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-        if (isVerified == null) {
-            isVerified = false;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
     public void verifiedLawyer(){
         this.isVerified = true;
