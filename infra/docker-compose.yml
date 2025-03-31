@@ -21,7 +21,7 @@ services:
       - app-network
 
   ai:
-    image: dorolaw-ai:v2
+    image: ai:latest
     expose:
       - "5000"
     networks:
