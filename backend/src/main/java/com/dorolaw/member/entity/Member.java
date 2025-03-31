@@ -45,11 +45,11 @@ public class Member {
     private Long socialId;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
