@@ -42,7 +42,7 @@ function NavBar() {
       <div className="mx-auto flex w-[1200px] items-center justify-between gap-20 font-semibold">
         <div className="flex justify-between gap-20">
           <NavLink to="/upload">AI 과실비율 측정</NavLink>
-          <NavLink to="/consultation">의뢰하기</NavLink>
+          <NavLink to="/consultation">변호사 상담신청</NavLink>
           <NavLink to="/board">게시판</NavLink>
         </div>
         <AuthComponent />
