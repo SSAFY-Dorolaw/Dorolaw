@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { useAuthStore } from '@/entities/auth/model/store';
+import { access } from 'fs';
 
 // API 기본 URL
 const API_URL = import.meta.env.VITE_API_LOCAL_URL;
@@ -36,13 +37,26 @@ export const uploadVideo = async (
     // 인증 토큰 가져오기
     const { accessToken } = useAuthStore.getState();
 
+    // 디버깅
+    console.log('디버깅 - 토큰상태: ', accessToken ? '토큰 존재' : '토큰 없음');
+
+    // 디버깅 - 업로드할 파일 정보
+    console.log('디버깅 - 업로드할 파일 정보: ', {
+      name: data.file.name,
+      type: data.file.type,
+      size: `${(data.file.size / 1024 / 1024).toFixed(2)}MB`,
+    });
+
     // FormData 객체 생성
     const formData = new FormData();
     formData.append('file', data.file);
 
+    console.log(data.file);
+    console.log('FormData 키: ', Array.from(formData.keys()));
+
     // axios 요청 설정
     const response: AxiosResponse<SuccessResponse> = await axios.post(
-      `${API_URL}/api/videos/upload`,
+      `${API_URL}/videos/test`,
       formData,
       {
         headers: {
@@ -54,8 +68,13 @@ export const uploadVideo = async (
       },
     );
 
+    // 성공 응답 확인
+    console.log('디버깅 - 응답 상태: ', response.status);
+    console.log('디버깅 - 응답 데이터: ', response.data);
+
     return response.data;
   } catch (error) {
+    console.error('디버깅 - 업로드 중 에러 발생');
     if (axios.isAxiosError(error) && error.response?.data) {
       // 에러 응답 데이터 반환
       return error.response.data as ErrorResponse;
