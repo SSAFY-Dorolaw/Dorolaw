@@ -5,14 +5,14 @@ import java.util.List;
 
 @Getter
 @Builder
-public class NotAvailableTimesResponseDto {
+public class AvailableTimesResponseDto {
     private Long lawyerId;
-    private List<NotAvailableTimesDto> nonAvailableTimes;
+    private List<AvailableTimesDto> AvailableTimes;
 
     @Getter
     @Builder
-    public static class NotAvailableTimesDto {
+    public static class AvailableTimesDto {
         private String date;
-        private List<String> notTimes;
+        private List<String> Times;
     }
 }

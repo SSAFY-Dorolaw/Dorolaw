@@ -1,9 +1,9 @@
 package com.dorolaw.consultation.controller;
 
 import com.dorolaw.consultation.dto.request.ConsultationBookRequestDto;
-import com.dorolaw.consultation.dto.request.NotAvailableTimesRequestDto;
+import com.dorolaw.consultation.dto.request.AvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
-import com.dorolaw.consultation.dto.response.NotAvailableTimesResponseDto;
+import com.dorolaw.consultation.dto.response.AvailableTimesResponseDto;
 import com.dorolaw.consultation.dto.response.ConsultationBookResponseDto;
 import com.dorolaw.consultation.dto.response.ReviewResponseDto;
 import com.dorolaw.consultation.dto.response.ReviewWriteResponseDto;
@@ -20,12 +20,12 @@ public class ConsultationController {
     private final ConsultationService consultationService;
 
     // 예약 불가능한 특정일 시간 조회 API
-    @GetMapping("/{lawyerId}/not-available-times")
-    public ResponseEntity<NotAvailableTimesResponseDto> getNotAvailableTimes(
+    @GetMapping("/{lawyerId}/available-times")
+    public ResponseEntity<AvailableTimesResponseDto> getAvailableTimes(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long lawyerId,
-            @RequestBody NotAvailableTimesRequestDto notAvailableTimesRequestDto){
-        NotAvailableTimesResponseDto response = consultationService.getNotAvailableTimes(lawyerId,notAvailableTimesRequestDto);
+            @RequestBody AvailableTimesRequestDto notAvailableTimesRequestDto){
+        AvailableTimesResponseDto response = consultationService.getAvailableTimes(lawyerId,notAvailableTimesRequestDto);
         return ResponseEntity.ok(response);
     }
 

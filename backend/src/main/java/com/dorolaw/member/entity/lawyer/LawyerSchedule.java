@@ -3,6 +3,7 @@ package com.dorolaw.member.entity.lawyer;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "lawyer_schedule")
@@ -20,26 +21,26 @@ public class LawyerSchedule {
     @JoinColumn(name = "lawyer_profile_id", nullable = false)
     private LawyerProfile lawyerProfile;
 
-    private String mondayStartTime;
-    private String mondayEndTime;
+    private LocalTime mondayStartTime;
+    private LocalTime mondayEndTime;
 
-    private String tuesdayStartTime;
-    private String tuesdayEndTime;
+    private LocalTime tuesdayStartTime;
+    private LocalTime tuesdayEndTime;
 
-    private String wednesdayStartTime;
-    private String wednesdayEndTime;
+    private LocalTime wednesdayStartTime;
+    private LocalTime wednesdayEndTime;
 
-    private String thursdayStartTime;
-    private String thursdayEndTime;
+    private LocalTime thursdayStartTime;
+    private LocalTime thursdayEndTime;
 
-    private String fridayStartTime;
-    private String fridayEndTime;
+    private LocalTime fridayStartTime;
+    private LocalTime fridayEndTime;
 
-    private String saturdayStartTime;
-    private String saturdayEndTime;
+    private LocalTime saturdayStartTime;
+    private LocalTime saturdayEndTime;
 
-    private String sundayStartTime;
-    private String sundayEndTime;
+    private LocalTime sundayStartTime;
+    private LocalTime sundayEndTime;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -67,19 +68,20 @@ public class LawyerSchedule {
             String saturdayStartTime, String saturdayEndTime,
             String sundayStartTime, String sundayEndTime
     ) {
-        this.mondayStartTime = mondayStartTime != null ? mondayStartTime : "closed";
-        this.mondayEndTime = mondayEndTime != null ? mondayEndTime : "closed";
-        this.tuesdayStartTime = tuesdayStartTime != null ? tuesdayStartTime : "closed";
-        this.tuesdayEndTime = tuesdayEndTime != null ? tuesdayEndTime : "closed";
-        this.wednesdayStartTime = wednesdayStartTime != null ? wednesdayStartTime : "closed";
-        this.wednesdayEndTime = wednesdayEndTime != null ? wednesdayEndTime : "closed";
-        this.thursdayStartTime = thursdayStartTime != null ? thursdayStartTime : "closed";
-        this.thursdayEndTime = thursdayEndTime != null ? thursdayEndTime : "closed";
-        this.fridayStartTime = fridayStartTime != null ? fridayStartTime : "closed";
-        this.fridayEndTime = fridayEndTime != null ? fridayEndTime : "closed";
-        this.saturdayStartTime = saturdayStartTime != null ? saturdayStartTime : "closed";
-        this.saturdayEndTime = saturdayEndTime != null ? saturdayEndTime : "closed";
-        this.sundayStartTime = sundayStartTime != null ? sundayStartTime : "closed";
-        this.sundayEndTime = sundayEndTime != null ? sundayEndTime : "closed";
+        // null 체크하고 LocalTime으로 변환
+        this.mondayStartTime = mondayStartTime != null ? LocalTime.parse(mondayStartTime) : null;
+        this.mondayEndTime = mondayEndTime != null ? LocalTime.parse(mondayEndTime) : null;
+        this.tuesdayStartTime = tuesdayStartTime != null ? LocalTime.parse(tuesdayStartTime) : null;
+        this.tuesdayEndTime = tuesdayEndTime != null ? LocalTime.parse(tuesdayEndTime) : null;
+        this.wednesdayStartTime = wednesdayStartTime != null ? LocalTime.parse(wednesdayStartTime) : null;
+        this.wednesdayEndTime = wednesdayEndTime != null ? LocalTime.parse(wednesdayEndTime) : null;
+        this.thursdayStartTime = thursdayStartTime != null ? LocalTime.parse(thursdayStartTime) : null;
+        this.thursdayEndTime = thursdayEndTime != null ? LocalTime.parse(thursdayEndTime) : null;
+        this.fridayStartTime = fridayStartTime != null ? LocalTime.parse(fridayStartTime) : null;
+        this.fridayEndTime = fridayEndTime != null ? LocalTime.parse(fridayEndTime) : null;
+        this.saturdayStartTime = saturdayStartTime != null ? LocalTime.parse(saturdayStartTime) : null;
+        this.saturdayEndTime = saturdayEndTime != null ? LocalTime.parse(saturdayEndTime) : null;
+        this.sundayStartTime = sundayStartTime != null ? LocalTime.parse(sundayStartTime) : null;
+        this.sundayEndTime = sundayEndTime != null ? LocalTime.parse(sundayEndTime) : null;
     }
 }

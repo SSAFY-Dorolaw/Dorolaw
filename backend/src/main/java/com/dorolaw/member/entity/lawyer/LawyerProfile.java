@@ -70,9 +70,6 @@ public class LawyerProfile {
     @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "specialties", length = 20)
-    private String specialties;
-
     @Column(name = "short_introduction", length = 255)
     private String shortIntroduction;
 
