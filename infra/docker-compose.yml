@@ -1,0 +1,71 @@
+name: dorolaw
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    networks:
+      - app-network
+
+  ai:
+    image: ai:latest
+    expose:
+      - "5000"
+    networks:
+      - app-network
+    command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
+    # build:
+    #   context: ../ai
+    #   dockerfile: Dockerfile
+    # expose:
+    #   - "5000"
+    # networks:
+    #   - app-network
+
+  nginx:
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx/ssl:/etc/nginx/ssl
+      - ../nginx/logs:/var/log/nginx
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../frontend/build:/usr/share/nginx/html
+    depends_on:
+      - backend
+      - frontend
+      - ai
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"      # 메시지 브로커 포트
+      - "15672:15672"    # 웹 관리 콘솔 포트
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

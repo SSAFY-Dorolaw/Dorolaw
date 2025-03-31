@@ -42,9 +42,9 @@ out/
 .DS_Store
 Thumbs.db
 
-# Spring Boot 패키징 결과물
-*.jar
-*.war
+# # Spring Boot 패키징 결과물
+# *.jar
+# *.war
 
 # 환경변수
 application.yml
