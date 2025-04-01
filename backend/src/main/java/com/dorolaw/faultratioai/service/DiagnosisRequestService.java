@@ -15,8 +15,8 @@ public class DiagnosisRequestService {
     }
 
     public RequestCreateResDto sendDiagnosisRequest(AiRequestDto requestData) {
-        // "diagnosis_queue"라는 큐에 메시지를 발행
-        rabbitTemplate.convertAndSend("diagnosis_queue", requestData);
+        // "requests_queue"라는 큐에 메시지를 발행
+        rabbitTemplate.convertAndSend("requests_queue", requestData);
 
         return new RequestCreateResDto(requestData.getRequestId());
     }
