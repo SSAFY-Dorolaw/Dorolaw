@@ -1,4 +1,5 @@
 // import { Edit } from 'lucide-react';
+import Fee from '@/features/consultation/Fee';
 import LawyerImg from '@/shared/assets/images/sskim.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +31,9 @@ const ProfileCard = () => {
             className="h-full object-cover"
           />
         </div>
+
+        {/* 비용 */}
+        <Fee />
 
         {/* 내 일정 */}
         <div>

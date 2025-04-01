@@ -50,7 +50,7 @@ const MyCareer = () => {
 
       {/* 팝업 */}
       {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-h3 font-bold">김승소 변호사 이력</h3>
@@ -92,7 +92,7 @@ const MyCareer = () => {
             <div className="mt-6 text-center">
               <button
                 onClick={closePopup}
-                className="rounded-lg bg-p5 px-6 py-1 text-white hover:bg-p4"
+                className="rounded-lg bg-p5 px-6 py-1 text-body text-white hover:bg-p4"
               >
                 확인
               </button>
