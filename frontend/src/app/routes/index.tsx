@@ -12,6 +12,8 @@ import ConsultationList from '@/pages/mypage/MyConsultations';
 import ReservationList from '@/pages/mypage/MyReservations';
 import ReviewList from '@/pages/mypage/MyReviews';
 import MyAnalyses from '@/pages/mypage/MyAnalyses';
+import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
+import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
       {
         path: '/client/analyses',
         element: <MyAnalyses />,
+      },
+      {
+        path: '/lawyer/mypage',
+        element: <LawyerMypage />,
+      },
+      {
+        path: '/lawyer/mypage/edit',
+        element: <EditLawyerPage />,
       },
     ],
   },
