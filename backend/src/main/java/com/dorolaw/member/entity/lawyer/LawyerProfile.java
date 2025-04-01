@@ -114,7 +114,7 @@ public class LawyerProfile {
 
     public void updateProfile(String officeName, String officePhoneNumber, String officeProvince,
                               String officeCityDistrict, String officeDetailedAddress, String gender,
-                              String specialties, String shortIntroduction,
+                              String shortIntroduction,
                               String greeting, String introductionVideoUrl, Long accountNumber,
                               String bankName) {
         this.officeName = officeName;
@@ -123,7 +123,6 @@ public class LawyerProfile {
         this.officeCityDistrict = officeCityDistrict;
         this.officeDetailedAddress = officeDetailedAddress;
         this.gender = gender;
-        this.specialties = specialties;
         this.shortIntroduction = shortIntroduction;
         this.greeting = greeting;
         this.introductionVideoUrl = introductionVideoUrl;

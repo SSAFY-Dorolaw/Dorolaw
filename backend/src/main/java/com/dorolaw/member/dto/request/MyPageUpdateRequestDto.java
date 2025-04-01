@@ -1,5 +1,6 @@
 package com.dorolaw.member.dto.request;
 
+import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class MyPageUpdateRequestDto {
     private String officePhoneNumber;
     private String officeAddress;
     private String gender;
-    private String specialties;
+    private List<LawyerSpeciality> specialties;
     private String oneLineIntro;
     private String greetingMessage;
     private String introVideo;
