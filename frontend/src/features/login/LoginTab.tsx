@@ -9,7 +9,7 @@ const LoginTab = ({ isLawyerTab, setIsLawyerTab }: LoginTabProps) => {
   return (
     <header className="flex w-full rounded-t-[10px]">
       <div
-        className="w-full rounded-t-[10px] text-center"
+        className="w-full cursor-pointer rounded-t-[10px] text-center"
         onClick={() => setIsLawyerTab(false)}
       >
         <h3
@@ -20,7 +20,7 @@ const LoginTab = ({ isLawyerTab, setIsLawyerTab }: LoginTabProps) => {
         <hr />
       </div>
       <div
-        className="w-full rounded-t-[10px] text-center"
+        className="w-full cursor-pointer rounded-t-[10px] text-center"
         onClick={() => setIsLawyerTab(true)}
       >
         <h3
