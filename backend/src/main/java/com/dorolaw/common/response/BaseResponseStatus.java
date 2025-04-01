@@ -31,7 +31,6 @@ public enum BaseResponseStatus {
 
     USER_ALREADY_IN_TEAM(HttpStatus.BAD_REQUEST, false, 2000, "사용자는 이미 해당 팀에 속해 있습니다.");
 
-
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
     private final int code;
