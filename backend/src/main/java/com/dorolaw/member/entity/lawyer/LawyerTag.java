@@ -23,7 +23,7 @@ public class LawyerTag {
     private LawyerSpeciality lawyerSpeciality;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lawyer_id", nullable = false)
+    @JoinColumn(name = "lawyerId", nullable = false)
     private Member lawyerId;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
