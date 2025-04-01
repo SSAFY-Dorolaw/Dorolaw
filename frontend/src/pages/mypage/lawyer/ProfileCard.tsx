@@ -1,7 +1,14 @@
 // import { Edit } from 'lucide-react';
 import LawyerImg from '@/shared/assets/images/sskim.png';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileCard = () => {
+  const navigate = useNavigate();
+
+  const goToEdit = () => {
+    void navigate('/lawyer/mypage/edit');
+  };
+
   return (
     <div>
       {/* 프로필 헤더 */}
@@ -29,9 +36,12 @@ const ProfileCard = () => {
           <p>일정 표시</p>
         </div>
 
-        {/* 예약 버튼 */}
+        {/* 정보 수정 버튼 */}
         <div className="rounded-[10px] bg-p5 p-4">
-          <button className="w-full bg-p5 text-body text-white">
+          <button
+            onClick={goToEdit}
+            className="w-full bg-p5 text-body text-white"
+          >
             정보 수정하기
           </button>
         </div>
