@@ -104,6 +104,7 @@ public class ConsultationService {
                 .scheduledTime(LocalTime.parse(requestDto.getScheduledTime()))
                 .consultationType(ConsultationType.valueOf(requestDto.getConsultationType()))
                 .price(requestDto.getPrice())
+                .additionalQuestion(requestDto.getAdditionalQuestion())
                 .status(ConsultationStatus.CONFIRMED)
                 .build();
 
