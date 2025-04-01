@@ -1,3 +1,4 @@
+name: dorolaw
 services:
   backend:
     build:
@@ -20,13 +21,19 @@ services:
       - app-network
 
   ai:
-    build:
-      context: ../ai
-      dockerfile: Dockerfile
+    image: ai:latest
     expose:
       - "5000"
     networks:
       - app-network
+    command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
+    # build:
+    #   context: ../ai
+    #   dockerfile: Dockerfile
+    # expose:
+    #   - "5000"
+    # networks:
+    #   - app-network
 
   nginx:
     build:

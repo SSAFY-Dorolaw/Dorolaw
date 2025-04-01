@@ -1,8 +1,21 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 
-const UploadTitle = () => {
+// 외부에서 접근할 수 있는 메서드를 정의하는 인터페이스
+export interface UploadTitleRef {
+  getSelectedFile: () => File | null;
+  getTitle: () => string;
+}
+
+const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [title, setTitle] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 외부에서 ref를 통해 selectedFile에 접근할 수 있도록 함
+  useImperativeHandle(ref, () => ({
+    getSelectedFile: () => selectedFile,
+    getTitle: () => title,
+  }));
 
   const uploadButtonClick = () => {
     if (fileInputRef.current) {
@@ -34,6 +47,8 @@ const UploadTitle = () => {
         </div>
         <input
           type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
           className="mt-3 h-[35px] w-full rounded-[5px] pl-[10px]"
         />
@@ -82,6 +97,8 @@ const UploadTitle = () => {
       )}
     </div>
   );
-};
+});
+
+UploadTitle.displayName = 'UploadTitle';
 
 export default UploadTitle;

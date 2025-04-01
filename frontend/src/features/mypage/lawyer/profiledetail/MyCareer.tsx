@@ -1,14 +1,16 @@
 import star from '@/shared/assets/images/star.png';
 import { useState } from 'react';
 
-const LawyerCareer = () => {
+const MyCareer = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const careerPopup = () => {
+    console.log('팝업 열기');
     setShowPopup(true);
   };
 
   const closePopup = () => {
+    console.log('팝업 열기');
     setShowPopup(false);
   };
 
@@ -102,4 +104,4 @@ const LawyerCareer = () => {
   );
 };
 
-export default LawyerCareer;
+export default MyCareer;
