@@ -1,13 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import { useAuthStore } from '@/entities/auth/model/store';
-import { access } from 'fs';
 
 // API 기본 URL
-const API_URL = import.meta.env.VITE_API_LOCAL_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // 비디오 업로드 인터페이스
 interface VideoUploadRequest {
   file: File;
+  title: string;
+  isPublic?: boolean;
 }
 
 // 성공 응답 인터페이스
@@ -45,11 +46,23 @@ export const uploadVideo = async (
       name: data.file.name,
       type: data.file.type,
       size: `${(data.file.size / 1024 / 1024).toFixed(2)}MB`,
+      title: data.title,
+      isPublic: data.isPublic,
     });
 
     // FormData 객체 생성
     const formData = new FormData();
     formData.append('file', data.file);
+
+    // 제목 FormData에 추가
+    if (data.title) {
+      formData.append('title', data.title);
+    }
+
+    // isPublic === true면 추가
+    if (data.isPublic !== undefined) {
+      formData.append('isPublic', String(data.isPublic));
+    }
 
     console.log(data.file);
     console.log('FormData 키: ', Array.from(formData.keys()));
@@ -69,12 +82,12 @@ export const uploadVideo = async (
     );
 
     // 성공 응답 확인
-    console.log('디버깅 - 응답 상태: ', response.status);
-    console.log('디버깅 - 응답 데이터: ', response.data);
+    console.log('응답 상태: ', response.status);
+    console.log('응답 데이터: ', response.data);
 
     return response.data;
   } catch (error) {
-    console.error('디버깅 - 업로드 중 에러 발생');
+    console.error('업로드 중 에러 발생');
     if (axios.isAxiosError(error) && error.response?.data) {
       // 에러 응답 데이터 반환
       return error.response.data as ErrorResponse;

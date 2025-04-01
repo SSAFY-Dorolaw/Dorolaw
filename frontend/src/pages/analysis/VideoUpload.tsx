@@ -10,6 +10,7 @@ const VideoUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -23,6 +24,7 @@ const VideoUpload = () => {
 
     // UploadTitle에서 선택한 파일 불러오기
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
+    const title = uploadTitleRef.current?.getTitle();
 
     if (!selectedFile) {
       setError('업로드할 파일을 선택해주세요.');
@@ -30,9 +32,19 @@ const VideoUpload = () => {
       return;
     }
 
+    if (!title) {
+      setError('제목을 입력해주세요.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      // API 호출
-      const response = await uploadVideo({ file: selectedFile });
+      // API 호출 (제목, 공개 여부)
+      const response = await uploadVideo({
+        file: selectedFile,
+        title: title,
+        isPublic: isPublic,
+      });
 
       // 응답 처리
       if ('fileName' in response) {
@@ -60,19 +72,22 @@ const VideoUpload = () => {
       <UploadArea />
 
       {/* 옵션 */}
-      <OptionCheckbox />
-
-      {/* 에러 메시지 표시 */}
-      {error && (
-        <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
-          {error}
-        </p>
-      )}
+      <OptionCheckbox
+        isPublic={isPublic}
+        onChangePublic={(value: boolean) => setIsPublic(value)}
+      />
 
       {/* 성공 메시지 표시 */}
       {success && (
         <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
           영상이 성공적으로 업로드되었습니다. 분석이 진행 중입니다.
+        </p>
+      )}
+
+      {/* 에러 메시지 표시 */}
+      {error && (
+        <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
+          {error}
         </p>
       )}
 
