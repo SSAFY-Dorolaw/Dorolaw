@@ -69,7 +69,7 @@ export const uploadVideo = async (
 
     // axios 요청 설정
     const response: AxiosResponse<SuccessResponse> = await axios.post(
-      `${API_URL}/videos/test`,
+      `${API_URL}/videos/upload`,
       formData,
       {
         headers: {
