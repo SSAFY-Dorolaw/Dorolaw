@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class AiRequestDto  {
     private Long requestId;
+    private Long memberId;
     private String fileName;
 }

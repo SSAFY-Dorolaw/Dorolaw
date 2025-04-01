@@ -39,6 +39,7 @@ public class RequestService {
         AiRequestDto res = new AiRequestDto();
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
+        res.setMemberId(saved.getMemberId());
         return res;
     }
 
