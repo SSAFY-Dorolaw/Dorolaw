@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     expose:
       - "8080"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
     networks:
@@ -24,6 +26,8 @@ services:
     image: ai:latest
     expose:
       - "5000"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
     networks:
       - app-network
     command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
