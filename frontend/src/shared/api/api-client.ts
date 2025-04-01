@@ -1,9 +1,11 @@
 // src/shared/api/api-client.ts
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
+
+const baseURL = `${import.meta.env.VITE_BASE_URL}`;
 
 /* 기본 설정을 위한 axios 인스턴스 생성 */
 const apiClient = axios.create({
-  baseURL: '/api', // 또는 실제 API 서버 URL (예: process.env.REACT_APP_API_URL)
+  baseURL, // 또는 실제 API 서버 URL (예: process.env.REACT_APP_API_URL)
   headers: {
     'Content-Type': 'application/json',
   },

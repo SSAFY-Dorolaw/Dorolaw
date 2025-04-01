@@ -1,5 +1,3 @@
-import { requestKakaoAuth } from '@/shared/api/login';
-import axios from 'axios';
 import { useState } from 'react';
 
 const LoginButton = () => {
@@ -35,7 +33,7 @@ const LoginButton = () => {
   //   setIsLoading(false);
   // };
 
-  const handleKakaoLogin = (role) => {
+  const handleKakaoLogin = (role: string) => {
     // 쿠키에 역할 정보 저장
     document.cookie = 'role=' + role + '; path=/';
     window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
@@ -60,7 +58,7 @@ const LoginButton = () => {
 
   return (
     <button
-      onClick={handleKakaoLogin}
+      onClick={void handleKakaoLogin}
       disabled={isLoading}
       className={`rounded-md px-4 py-2 font-medium transition-colors ${
         isLoading
