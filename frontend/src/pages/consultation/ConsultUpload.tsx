@@ -69,7 +69,11 @@ const ConsultUpload = () => {
 
       // 파일 업로드 실패 시 중단
       if (!('fileName' in uploadResponse)) {
-        setError(uploadResponse.message || '파일 업로드 실패');
+        const errorMessage =
+          'errorCode' in uploadResponse
+            ? uploadResponse.message
+            : '파일 업로드 실패';
+        setError(errorMessage);
         setLoading(false);
         return;
       }
@@ -98,10 +102,10 @@ const ConsultUpload = () => {
       );
 
       // 응답 처리
-      if ('fileName' in infoResponse) {
+      if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        console.log('의뢰글 업로드 성공: ', infoResponse.fileName);
+        console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면
         setError(infoResponse.message);

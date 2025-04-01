@@ -9,13 +9,7 @@ interface VideoUploadRequest {
   file: File;
 }
 
-// 분석 보고서 업로드 인터페이스
-// interface ReportUploadRequest extends VideoUploadRequest {
-//   title: string;
-//   isPublic?: boolean;
-// }
-
-// 변호사 의뢰 업로드 인터페이스
+// 변호사 의뢰글 업로드 인터페이스
 interface ConsultInfoRequest {
   title: string;
   fileName: string;
@@ -25,9 +19,14 @@ interface ConsultInfoRequest {
   isPublic?: boolean;
 }
 
-// 성공 응답 인터페이스
+// 영상 업로드 성공 응답 인터페이스
 interface SuccessResponse {
   fileName: string;
+}
+
+// 의뢰 게시 성공 응답 인터페이스
+interface ConsultSuccessResponse {
+  requestId: number;
 }
 
 // 에러 응답 인터페이스
@@ -37,7 +36,7 @@ interface ErrorResponse {
 }
 
 // 응답 타입 (성공 또는 에러)
-type ApiResponse = SuccessResponse | ErrorResponse;
+type ApiResponse = SuccessResponse | ConsultSuccessResponse | ErrorResponse;
 
 /**
  * 비디오 파일을 서버에 업로드하는 함수
@@ -47,7 +46,7 @@ type ApiResponse = SuccessResponse | ErrorResponse;
 
 export const uploadVideo = async (
   data: VideoUploadRequest,
-  endpoint = 'videos/upload',
+  endpoint = '/videos/upload',
 ): Promise<ApiResponse> => {
   try {
     // 인증 토큰 가져오기
@@ -66,21 +65,6 @@ export const uploadVideo = async (
     // FormData 객체 생성 및 파일 append
     const formData = new FormData();
     formData.append('file', data.file);
-
-    // 제목 FormData에 추가
-    // if (data.title) {
-    //   formData.append('title', data.title);
-    // }
-
-    // isPublic === true면 추가
-    // if (data.isPublic !== undefined) {
-    //   formData.append('isPublic', String(data.isPublic));
-    // }
-
-    // additionalInfo가 있다면
-    // if ('additionalInfo' in data && data.additionalInfo) {
-    //   formData.append('additionalInfo', data.additionalInfo);
-    // }
 
     console.log(data.file);
     console.log('FormData 키: ', Array.from(formData.keys()));
@@ -131,7 +115,7 @@ export const submitInfo = async (
     console.log('전송할 데이터: ', data);
 
     // axios 요청
-    const response: AxiosResponse<SuccessResponse> = await axios.post(
+    const response: AxiosResponse<ConsultSuccessResponse> = await axios.post(
       `${API_URL}${endpoint}`,
       data,
       {
