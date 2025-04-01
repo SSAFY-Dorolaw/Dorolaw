@@ -4,16 +4,21 @@ import { useAuthStore } from '@/entities/auth/model/store';
 // API 기본 URL
 const API_URL = import.meta.env.VITE_API_URL;
 
-// 비디오 업로드 인터페이스
+// 분석 보고서용 비디오 업로드
 interface VideoUploadRequest {
   file: File;
   title: string;
   isPublic?: boolean;
 }
 
+// 변호사 상담용 비디오 업로드
+interface ConsultUploadRequest extends VideoUploadRequest {
+  additionalInfo?: string;
+}
+
 // 성공 응답 인터페이스
 interface SuccessResponse {
-  filename: string;
+  fileName: string;
 }
 
 // 에러 응답 인터페이스
@@ -32,7 +37,8 @@ type ApiResponse = SuccessResponse | ErrorResponse;
  */
 
 export const uploadVideo = async (
-  data: VideoUploadRequest,
+  data: VideoUploadRequest | ConsultUploadRequest,
+  endpoint = 'videos/upload',
 ): Promise<ApiResponse> => {
   try {
     // 인증 토큰 가져오기
@@ -64,12 +70,17 @@ export const uploadVideo = async (
       formData.append('isPublic', String(data.isPublic));
     }
 
+    // additionalInfo가 있다면
+    if ('additionalInfo' in data && data.additionalInfo) {
+      formData.append('additionalInfo', data.additionalInfo);
+    }
+
     console.log(data.file);
     console.log('FormData 키: ', Array.from(formData.keys()));
 
     // axios 요청 설정
     const response: AxiosResponse<SuccessResponse> = await axios.post(
-      `${API_URL}/videos/test`,
+      `${API_URL}${endpoint}`,
       formData,
       {
         headers: {

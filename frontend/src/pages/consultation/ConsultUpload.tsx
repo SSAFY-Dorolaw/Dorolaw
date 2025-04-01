@@ -12,6 +12,7 @@ const ConsultUpload = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [additionalInfo, setAdditionalInfo] = useState('');
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -27,25 +28,29 @@ const ConsultUpload = () => {
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
     const title = uploadTitleRef.current?.getTitle();
 
-    if (!selectedFile) {
-      setError('업로드할 파일을 선택해주세요');
+    if (!title) {
+      alert('제목을 입력해주세요');
       setLoading(false);
       return;
     }
 
-    if (!title) {
-      setError('제목을 입력해주세요');
+    if (!selectedFile) {
+      alert('업로드할 파일을 선택해주세요');
       setLoading(false);
       return;
     }
 
     try {
       // API 호출 (제목, 추가 정보, 공개 여부)
-      const response = await uploadVideo({
-        file: selectedFile,
-        title: title,
-        isPublic: isPublic,
-      });
+      const response = await uploadVideo(
+        {
+          file: selectedFile,
+          title: title,
+          isPublic: isPublic,
+          additionalInfo: additionalInfo, // 추가 정보 포함
+        },
+        '/counseling/book',
+      );
 
       // 응답 처리
       if ('fileName' in response) {
@@ -72,7 +77,7 @@ const ConsultUpload = () => {
       <UploadArea />
 
       {/* 추가 정보 작성 */}
-      <AdditionalInfo />
+      <AdditionalInfo onChange={(value: string) => setAdditionalInfo(value)} />
 
       {/* 옵션 */}
       <OptionCheckbox
@@ -89,7 +94,7 @@ const ConsultUpload = () => {
 
       {/* 에러 메시지 표시 */}
       {error && (
-        <p className="mx-auto mt-2 w-[800px] text-center text-green-500"></p>
+        <p className="mx-auto mt-2 w-[800px] text-center text-red-500"></p>
       )}
 
       {/* 버튼 */}

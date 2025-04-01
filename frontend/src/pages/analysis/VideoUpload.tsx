@@ -26,25 +26,28 @@ const VideoUpload = () => {
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
     const title = uploadTitleRef.current?.getTitle();
 
-    if (!selectedFile) {
-      setError('업로드할 파일을 선택해주세요.');
+    if (!title) {
+      alert('제목을 입력해주세요.');
       setLoading(false);
       return;
     }
 
-    if (!title) {
-      setError('제목을 입력해주세요.');
+    if (!selectedFile) {
+      alert('업로드할 파일을 선택해주세요.');
       setLoading(false);
       return;
     }
 
     try {
       // API 호출 (제목, 공개 여부)
-      const response = await uploadVideo({
-        file: selectedFile,
-        title: title,
-        isPublic: isPublic,
-      });
+      const response = await uploadVideo(
+        {
+          file: selectedFile,
+          title: title,
+          isPublic: isPublic,
+        },
+        '/videos/upload',
+      );
 
       // 응답 처리
       if ('fileName' in response) {

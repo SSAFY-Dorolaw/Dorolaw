@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
-const AdditionalInfo = () => {
+interface AdditionalInfoProps {
+  onChange: (value: string) => void;
+}
+
+const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [faultRatio, setFaultRatio] = useState('');
-  const [AdditionalInfo, setAdditionalInfo] = useState('');
-  const [question, setQuestion] = useState('');
+  const [additionalInfo, setAdditionalInfo] = useState('');
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -48,7 +51,7 @@ const AdditionalInfo = () => {
               <textarea
                 placeholder="영상에 나와있지 않은 추가 정보를 자세하기 입력해주세요"
                 className="mt-3 h-[160px] w-full rounded-[5px] pl-[10px] pt-[10px]"
-                value={AdditionalInfo}
+                value={additionalInfo}
                 onChange={(e) => setAdditionalInfo(e.target.value)}
               />
             </div>
@@ -57,8 +60,11 @@ const AdditionalInfo = () => {
               <textarea
                 placeholder="추가적으로 변호사에게 궁금한 점을 물어보세요"
                 className="mt-3 h-[160px] w-full rounded-[5px] pl-[10px] pt-[10px]"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                value={additionalInfo}
+                onChange={(e) => {
+                  setAdditionalInfo(e.target.value);
+                  onChange(e.target.value);
+                }}
               />
             </div>
           </div>
