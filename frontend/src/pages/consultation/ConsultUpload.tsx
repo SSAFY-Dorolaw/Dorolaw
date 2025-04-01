@@ -6,16 +6,34 @@ import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
 import { useRef, useState } from 'react';
 import { uploadVideo } from '@/features/videoupload/api';
+import { submitInfo } from '@/features/videoupload/api';
+
+interface AdditionalData {
+  faultRatio: string;
+  description: string;
+  question: string;
+}
 
 const ConsultUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
-  const [additionalInfo, setAdditionalInfo] = useState('');
+
+  // 추가 정보 객체로 분리
+  const [additionalData, setAdditionalData] = useState<AdditionalData>({
+    faultRatio: '',
+    description: '',
+    question: '',
+  });
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
+
+  // 추가 정보 변경 핸들러
+  const additionalDataChange = (data: AdditionalData) => {
+    setAdditionalData(data);
+  };
 
   // 분석 요청 처리
   const requestAnalysis = async () => {
@@ -41,29 +59,56 @@ const ConsultUpload = () => {
     }
 
     try {
-      // API 호출 (제목, 추가 정보, 공개 여부)
-      const response = await uploadVideo(
+      // 1) 파일 업로드 API 호출
+      const uploadResponse = await uploadVideo(
         {
           file: selectedFile,
-          title: title,
-          isPublic: isPublic,
-          additionalInfo: additionalInfo, // 추가 정보 포함
         },
-        '/counseling/book',
+        '/videos/upload',
+      );
+
+      // 파일 업로드 실패 시 중단
+      if (!('fileName' in uploadResponse)) {
+        setError(uploadResponse.message || '파일 업로드 실패');
+        setLoading(false);
+        return;
+      }
+
+      // 디버깅: 전송할 데이터 확인
+      console.log('전송할 추가 정보:', {
+        title,
+        fileName: uploadResponse.fileName,
+        insuranceFaultRatio: additionalData.faultRatio,
+        description: additionalData.description,
+        question: additionalData.question,
+        isPublic,
+      });
+
+      // 2) 파일 업로드 성공 후 추가 정보 전송
+      const infoResponse = await submitInfo(
+        {
+          title: title,
+          fileName: uploadResponse.fileName,
+          insuranceFaultRatio: additionalData.faultRatio,
+          description: additionalData.description,
+          question: additionalData.question,
+          isPublic: isPublic,
+        },
+        '/requests',
       );
 
       // 응답 처리
-      if ('fileName' in response) {
+      if ('fileName' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        console.log('업로드 성공: ', response.fileName);
-      } else if ('message' in response) {
+        console.log('의뢰글 업로드 성공: ', infoResponse.fileName);
+      } else if ('message' in infoResponse) {
         // 실패하면
-        setError(response.message);
+        setError(infoResponse.message);
       }
     } catch (error) {
-      setError('파일 업로드 중 오류 발생');
-      console.error('업로드 오류: ', error);
+      setError('의뢰글 업로드 중 오류 발생');
+      console.error('요청 오류: ', error);
     } finally {
       setLoading(false);
     }
@@ -77,7 +122,7 @@ const ConsultUpload = () => {
       <UploadArea />
 
       {/* 추가 정보 작성 */}
-      <AdditionalInfo onChange={(value: string) => setAdditionalInfo(value)} />
+      <AdditionalInfo onChange={additionalDataChange} />
 
       {/* 옵션 */}
       <OptionCheckbox
@@ -88,13 +133,15 @@ const ConsultUpload = () => {
       {/* 성공 메시지 표시 */}
       {success && (
         <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
-          영상이 성공적으로 업로드되었습니다. 분석이 진행 중입니다.
+          게시글이 업로드되었습니다.
         </p>
       )}
 
       {/* 에러 메시지 표시 */}
       {error && (
-        <p className="mx-auto mt-2 w-[800px] text-center text-red-500"></p>
+        <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
+          {error}
+        </p>
       )}
 
       {/* 버튼 */}

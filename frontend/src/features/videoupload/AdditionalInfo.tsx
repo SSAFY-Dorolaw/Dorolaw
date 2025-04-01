@@ -1,13 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface AdditionalInfoProps {
-  onChange: (value: string) => void;
+  onChange: (additionalData: {
+    faultRatio: string;
+    description: string;
+    question: string;
+  }) => void;
 }
 
 const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [faultRatio, setFaultRatio] = useState('');
-  const [additionalInfo, setAdditionalInfo] = useState('');
+  const [faultRatio, setFaultRatio] = useState(''); // 과실 비율
+  const [description, setDescription] = useState(''); // 영상 외 추가정보
+  const [question, setQuestion] = useState('');
+
+  // 데이터 변경될 때마다 부모 컴포넌트에 전달
+  useEffect(() => {
+    onChange({
+      faultRatio,
+      description,
+      question,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [faultRatio, description, question]);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -35,10 +50,11 @@ const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
                 [나의 과실 : 상대 과실] 순서로 선택해주세요
               </p>
               <select
-                className="mt-3 h-[35px] w-[90px] rounded-[5px] border border-gray-300 pl-[10px]"
+                className="mt-3 h-[35px] w-[110px] rounded-[5px] border border-gray-300 pl-[10px]"
                 value={faultRatio}
                 onChange={(e) => setFaultRatio(e.target.value)}
               >
+                <option>선택하세요</option>
                 {Array.from({ length: 11 }, (_, i) => i * 10).map((value) => (
                   <option key={value} value={value}>
                     {value} : {100 - value}
@@ -51,8 +67,8 @@ const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
               <textarea
                 placeholder="영상에 나와있지 않은 추가 정보를 자세하기 입력해주세요"
                 className="mt-3 h-[160px] w-full rounded-[5px] pl-[10px] pt-[10px]"
-                value={additionalInfo}
-                onChange={(e) => setAdditionalInfo(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className="mt-6">
@@ -60,11 +76,8 @@ const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
               <textarea
                 placeholder="추가적으로 변호사에게 궁금한 점을 물어보세요"
                 className="mt-3 h-[160px] w-full rounded-[5px] pl-[10px] pt-[10px]"
-                value={additionalInfo}
-                onChange={(e) => {
-                  setAdditionalInfo(e.target.value);
-                  onChange(e.target.value);
-                }}
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
               />
             </div>
           </div>

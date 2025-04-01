@@ -24,13 +24,13 @@ const VideoUpload = () => {
 
     // UploadTitle에서 선택한 파일 불러오기
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
-    const title = uploadTitleRef.current?.getTitle();
+    // const title = uploadTitleRef.current?.getTitle();
 
-    if (!title) {
-      alert('제목을 입력해주세요.');
-      setLoading(false);
-      return;
-    }
+    // if (!title) {
+    //   alert('제목을 입력해주세요.');
+    //   setLoading(false);
+    //   return;
+    // }
 
     if (!selectedFile) {
       alert('업로드할 파일을 선택해주세요.');
@@ -43,8 +43,6 @@ const VideoUpload = () => {
       const response = await uploadVideo(
         {
           file: selectedFile,
-          title: title,
-          isPublic: isPublic,
         },
         '/videos/upload',
       );
