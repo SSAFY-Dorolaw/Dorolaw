@@ -27,9 +27,11 @@ public class LawyerTag {
     private Member lawyerId;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(0)")
+    @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
 }
