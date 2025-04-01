@@ -1,3 +1,4 @@
+name: dorolaw
 services:
   backend:
     build:
@@ -5,6 +6,8 @@ services:
       dockerfile: Dockerfile
     expose:
       - "8080"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
     networks:
@@ -20,13 +23,21 @@ services:
       - app-network
 
   ai:
-    build:
-      context: ../ai
-      dockerfile: Dockerfile
+    image: ai:latest
     expose:
       - "5000"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
     networks:
       - app-network
+    command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
+    # build:
+    #   context: ../ai
+    #   dockerfile: Dockerfile
+    # expose:
+    #   - "5000"
+    # networks:
+    #   - app-network
 
   nginx:
     build:
