@@ -19,6 +19,7 @@ const ConsultUpload = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
 
   // 추가 정보 객체로 분리
   const [additionalData, setAdditionalData] = useState<AdditionalData>({
@@ -54,6 +55,12 @@ const ConsultUpload = () => {
 
     if (!selectedFile) {
       alert('업로드할 파일을 선택해주세요');
+      setLoading(false);
+      return;
+    }
+
+    if (!isAgree) {
+      alert('개인정보 제공 동의가 필요합니다.');
       setLoading(false);
       return;
     }
@@ -132,6 +139,8 @@ const ConsultUpload = () => {
       <OptionCheckbox
         isPublic={isPublic}
         onChangePublic={(value: boolean) => setIsPublic(value)}
+        isAgree={isAgree}
+        onChangeAgree={(value: boolean) => setIsAgree(value)}
       />
 
       {/* 성공 메시지 표시 */}
