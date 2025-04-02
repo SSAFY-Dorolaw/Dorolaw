@@ -14,7 +14,6 @@ import java.util.List;
 public class MyPageUpdateRequestDto {
 
     // 공통
-    private String name;
     private String phoneNumber;
     private String profileImage;
 

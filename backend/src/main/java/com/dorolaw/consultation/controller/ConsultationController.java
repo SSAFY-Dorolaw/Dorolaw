@@ -19,7 +19,7 @@ public class ConsultationController {
 
     private final ConsultationService consultationService;
 
-    // 예약 불가능한 특정일 시간 조회 API
+    // 예약 가능한 특정일 시간 조회 API
     @GetMapping("/{lawyerId}/available-times")
     public ResponseEntity<AvailableTimesResponseDto> getAvailableTimes(
             @RequestHeader("Authorization") String authorizationHeader,

@@ -47,6 +47,9 @@ public class Consultation {
     @Column(name = "price", nullable = false)
     private Integer price;
 
+    @Column(name = "additional_question", nullable = false)
+    private String additionalQuestion;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ConsultationStatus status;

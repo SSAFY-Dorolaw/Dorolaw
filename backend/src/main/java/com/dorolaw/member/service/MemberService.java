@@ -75,7 +75,6 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        member.setName(requestDto.getName());
         member.setPhoneNumber(requestDto.getPhoneNumber());
         member.setProfileImage(requestDto.getProfileImage());
 

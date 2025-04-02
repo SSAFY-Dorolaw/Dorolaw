@@ -51,6 +51,7 @@ application.yml
 application-local.yml
 application-prod.yml
 myproject-e9c73-firebase-adminsdk-fbsvc-011240332d
+firebase-service-account.json
 
 ### etc
 HELP.md
