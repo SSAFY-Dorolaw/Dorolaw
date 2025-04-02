@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FaultRatioResponseDto {
     private Long faultAnalysisId;
-    private String title;
     private String fileName;
-    private Boolean isPublic;
+    private Long memberId;
 }
