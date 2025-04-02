@@ -1,6 +1,5 @@
 package com.dorolaw.faultratioai.entity;
 
-import com.dorolaw.alarm.dto.RequestAlarmDto;
 import com.dorolaw.request.entity.Request;
 import jakarta.persistence.*;
 import lombok.Getter;

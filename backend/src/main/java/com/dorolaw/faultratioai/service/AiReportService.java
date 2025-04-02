@@ -4,7 +4,6 @@ import com.dorolaw.alarm.dto.RequestAlarmDto;
 import com.dorolaw.faultratioai.entity.AiReport;
 import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
 import com.dorolaw.faultratioai.reposiroty.FaultAnalysisAiReport;
-import com.dorolaw.faultratioai.reposiroty.FaultAnalysisRepository;
 import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.repository.RequestRepository;
