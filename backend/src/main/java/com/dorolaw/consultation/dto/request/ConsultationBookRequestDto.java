@@ -15,5 +15,6 @@ public class ConsultationBookRequestDto {
     private String scheduledTime;
     private String consultationType;
     private Integer price;
+    private String additionalQuestion;
 }
 

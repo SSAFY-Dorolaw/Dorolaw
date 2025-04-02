@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
+// 과실 비율 분석기
 @Service
 @RequiredArgsConstructor
 public class FaultRatioAiService {
@@ -25,7 +26,7 @@ public class FaultRatioAiService {
     private final RabbitTemplate rabbitTemplate;
     private final FaultAnalysisRepository faultAnalysisRepository;
 
-
+    
     @Transactional
     public FaultRatioResponseDto sendratioDiagnosisRequest(String authorizationHeader, FaultRatioRequestDto requestData) {
 
