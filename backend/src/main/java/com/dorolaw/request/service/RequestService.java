@@ -1,6 +1,6 @@
 package com.dorolaw.request.service;
 
-import com.dorolaw.faultratioai.dto.AiRequestDto;
+import com.dorolaw.faultratioai.dto.request.AiRequestDto;
 import com.dorolaw.request.dto.*;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;

@@ -1,10 +1,12 @@
 package com.dorolaw.alarm.controller;
 
+import com.dorolaw.alarm.dto.RequestAlarmDto;
 import com.dorolaw.alarm.entity.Alarm;
 import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.alarm.service.FcmService;
+import com.dorolaw.faultratioai.service.AiReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,6 +19,7 @@ public class AlarmController {
     private final FcmTokenRepository tokenRepository;
     private final FcmService fcmService;
     private final AlarmService alarmService;
+    private final AiReportService requestAiReportService;
 
     // 테스트용
     @PostMapping("/test")
@@ -25,18 +28,27 @@ public class AlarmController {
         return sendAlarms(tokens,body);
     }
 
-    // 분석 리포트 완료 알림 - 일반인 - fast api
-    @PostMapping("/me")
-    public String senedToMe(@RequestBody String body, @RequestBody Long memberId) {
-        List<FcmToken> tokens = alarmService.findTokenListByMemberId(memberId); // memberId로 fcm 토큰들 조회
-        return sendAlarms(tokens,body);
+    // 의뢰 관련 알림
+    @PostMapping("/requests")
+    public String sendReqeustAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
+        // report 저장
+        requestAiReportService.saveReqeustReport(requestAlarmDto);
+        
+        // 알림 보내기
+        List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
+        tokens.addAll(alarmService.findLawyersByTags(requestAlarmDto.getAccidentObject())); // 태그들로 변호사들 조회
+        return sendAlarms(tokens,requestAlarmDto.getContent());
     }
 
-    // 관련된 태그 변호사에게 알림 - fast api
-    @PostMapping("/lawyers")
-    public String senedToLawyers(@RequestBody String body, @RequestBody String tag) {
-        List<FcmToken> tokens = alarmService.findLawyersByTags(tag); // 태그들로 변호사들 조회
-        return sendAlarms(tokens,body);
+    // 과실 비율 분석기 관련 알림
+    @PostMapping("/analysis")
+    public String sendAnalysisAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
+        // report 저장
+        requestAiReportService.saveAnalysisReport(requestAlarmDto);
+
+        // 알림 보내기
+        List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
+        return sendAlarms(tokens,requestAlarmDto.getContent());
     }
 
     // 상담 예약 확인 알림 - 일반인, 변호사 - 백엔드

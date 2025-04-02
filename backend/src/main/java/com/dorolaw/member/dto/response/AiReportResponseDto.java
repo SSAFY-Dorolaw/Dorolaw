@@ -9,9 +9,14 @@ import java.time.LocalDateTime;
 public class AiReportResponseDto {
     private Long reportId;
     private String thumbnailImageUrl;
-    private Integer accidentalNegligenceRateA;
-    private Integer accidentalNegligenceRateB;
-    private Integer accidentPlaceType;
+    private String accidentObject;
+    private String accidentLocation;
+    private String accidentLocationCharacteristics;
+    private String directionOfA;
+    private String directionOfB;
+    private Integer faultRatioA;
+    private Integer faultRatioB;
+    private Integer accidentType;
     private Boolean isPublic;
     private LocalDateTime createdAt;
 }
