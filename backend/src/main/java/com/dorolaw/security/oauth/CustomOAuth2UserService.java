@@ -48,12 +48,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String phoneNumber = (String) kakaoAccount.get("phone_number");
         String profileImage = (String) profile.get("profile_image_url");
 
-        log.info("socialId: " + socialId);
-        log.info("email: " + email);
-        log.info("name: " + name);
-        log.info("phoneNumber: " + phoneNumber);
-        log.info("profileImage: " + profileImage);
-
         // 쿠키에서 role 값을 읽어오기
         String roleString = "";
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -66,7 +60,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             }
         }
         MemberRole role = "LAWYER".equalsIgnoreCase(roleString) ? MemberRole.LAWYER : MemberRole.GENERAL;
-        log.info("role from cookie: {}", roleString);
 
         // 회원가입 여부 확인
         Optional<Member> existingMember = memberRepository.findBySocialId(socialId);
@@ -92,8 +85,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 기존 OAuth2User의 attributes에 memberId와 role을 추가해서 반환
         Map<String, Object> customAttributes = new HashMap<>(oAuth2User.getAttributes());
-        customAttributes.put("memberId", socialId);
-        customAttributes.put("role", role.name());
+        customAttributes.put("memberId", member.getMemberId());
+        customAttributes.put("role", member.getRole().name());
         customAttributes.put("name", name);
         customAttributes.put("profileImage", profileImage);
         

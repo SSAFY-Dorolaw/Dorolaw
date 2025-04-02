@@ -1,7 +1,7 @@
 # Amazon Corretto 17 slim 버전 사용
 FROM amazoncorretto:17-alpine
 
-# app working direc 만들기 
+# app working direc 만들기
 WORKDIR /app
 
 # Docker 빌드 캐시 활용을 위해 3가지만 먼저 복사함.

@@ -58,8 +58,8 @@ dependencies {
     // 템플릿 엔진 (선택사항 - Thymeleaf)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    // AWS SDK for Java v2 의 S3 모듈 (최신 안정 버전 사용)
-    implementation 'software.amazon.awssdk:s3:2.20.13'
+    // RabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
 
 tasks.named('test') {
