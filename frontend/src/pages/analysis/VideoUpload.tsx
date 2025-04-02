@@ -58,7 +58,7 @@ const VideoUpload = () => {
       if ('fileName' in response) {
         // 성공하면
         setSuccess(true);
-        console.log('업로드 성공: ', response.fileName);
+        console.log('업로드 성공: ', response);
       } else if ('message' in response) {
         // 실패하면
         setError(response.message);
@@ -90,7 +90,7 @@ const VideoUpload = () => {
       {/* 성공 메시지 표시 */}
       {success && (
         <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
-          영상이 성공적으로 업로드되었습니다. 분석이 진행 중입니다.
+          영상이 성공적으로 업로드되었습니다. AI 분석을 시작합니다.
         </p>
       )}
 
