@@ -77,9 +77,9 @@ export const uploadVideo = async (
         headers: {
           'Content-Type': 'multipart/form-data',
           // 토큰이 있는 경우 인증 헤더 추가
-          // ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
-        // withCredentials: true, // 쿠키를 포함하여 요청을 보냄
+        withCredentials: true, // 쿠키를 포함하여 요청을 보냄
       },
     );
 
