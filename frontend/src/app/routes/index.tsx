@@ -14,6 +14,7 @@ import ReviewList from '@/pages/mypage/MyReviews';
 import MyAnalyses from '@/pages/mypage/MyAnalyses';
 import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
 import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
+import LoginRedirect from '@/pages/login/Redirect';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/login/redirect',
+        element: <LoginRedirect />,
       },
       { path: '/', element: <Main /> },
       { path: '/upload', element: <VideoUpload /> },

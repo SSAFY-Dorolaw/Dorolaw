@@ -11,6 +11,7 @@ const VideoUpload = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -26,31 +27,38 @@ const VideoUpload = () => {
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
     const title = uploadTitleRef.current?.getTitle();
 
-    if (!selectedFile) {
-      setError('업로드할 파일을 선택해주세요.');
+    if (!title) {
+      alert('제목을 입력해주세요.');
       setLoading(false);
       return;
     }
 
-    if (!title) {
-      setError('제목을 입력해주세요.');
+    if (!selectedFile) {
+      alert('업로드할 파일을 선택해주세요.');
+      setLoading(false);
+      return;
+    }
+
+    if (!isAgree) {
+      alert('개인정보 제공 동의가 필요합니다.');
       setLoading(false);
       return;
     }
 
     try {
       // API 호출 (제목, 공개 여부)
-      const response = await uploadVideo({
-        file: selectedFile,
-        title: title,
-        isPublic: isPublic,
-      });
+      const response = await uploadVideo(
+        {
+          file: selectedFile,
+        },
+        '/videos/upload',
+      );
 
       // 응답 처리
       if ('fileName' in response) {
         // 성공하면
         setSuccess(true);
-        console.log('업로드 성공: ', response.fileName);
+        console.log('업로드 성공: ', response);
       } else if ('message' in response) {
         // 실패하면
         setError(response.message);
@@ -75,12 +83,14 @@ const VideoUpload = () => {
       <OptionCheckbox
         isPublic={isPublic}
         onChangePublic={(value: boolean) => setIsPublic(value)}
+        isAgree={isAgree}
+        onChangeAgree={(value: boolean) => setIsAgree(value)}
       />
 
       {/* 성공 메시지 표시 */}
       {success && (
         <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
-          영상이 성공적으로 업로드되었습니다. 분석이 진행 중입니다.
+          영상이 성공적으로 업로드되었습니다. AI 분석을 시작합니다.
         </p>
       )}
 
