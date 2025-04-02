@@ -1,23 +1,25 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { FaUserCircle } from 'react-icons/fa';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ClientProfile } from '@/entities/clients/model/types';
+import { clientApi } from '@/entities/clients/api/clientApi';
 
 function NavBar() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   // 캐시된 client 프로필 데이터 읽기
-  const clientProfile = queryClient.getQueryData<ClientProfile>([
-    'client',
-    'profile',
-  ]);
+  const { data: clientProfile } = useQuery<ClientProfile>({
+    queryKey: ['client', 'profile'],
+    queryFn: clientApi.getProfile,
+  });
 
   const handleLogout = () => {
     // 로그아웃 처리: 토큰 삭제(예: localStorage에 저장한 경우) 및 프로필 캐시 제거
     // localStorage.removeItem('token'); // 토큰을 저장한 방식에 따라 필요하면 사용
     queryClient.removeQueries({ queryKey: ['client', 'profile'] });
+    localStorage.clear();
     // 로그아웃 후 로그인 페이지로 이동하거나 메인 페이지로 이동
     void navigate('/login');
   };
