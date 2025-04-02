@@ -4,9 +4,12 @@ import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.MemberRole;
 import com.dorolaw.member.entity.MemberSocialType;
 import com.dorolaw.member.entity.MemberStatus;
+import com.dorolaw.member.entity.lawyer.LawyerProfile;
+import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,18 +22,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 // 카카오 개인정보 파싱해서 로그인 및 회원가입
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
-
-    public CustomOAuth2UserService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final LawyerProfileRepository lawyerProfileRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -78,6 +81,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             member.setRole(role);
             member.setStatus(MemberStatus.ACTIVE);
             memberRepository.save(member);
+            if(MemberRole.LAWYER.equals(role)){
+                LawyerProfile lawyerProfile = createInitialLawyerProfile(member);
+                lawyerProfileRepository.save(lawyerProfile);
+            }
         }
         
         // 인가정보 담기
@@ -92,5 +99,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         
         // 인증, 인가
         return new DefaultOAuth2User(authorities, customAttributes, "id");
+    }
+
+    private LawyerProfile createInitialLawyerProfile(Member member) {
+        return LawyerProfile.builder()
+                .member(member)
+                .officeName("Default Office")
+                .officePhoneNumber("000-0000-0000")
+                .officeProvince("Default Province")
+                .officeCityDistrict("Default District")
+                .officeDetailedAddress("Default Address")
+                .attorneyLicenseNumber("Default-0000")
+                .isVerified(false)
+                .accountNumber(0L)
+                .bankName("Default Bank")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
     }
 }

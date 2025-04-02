@@ -11,6 +11,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -53,6 +59,27 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(
+            @Value("${cors.allowed-origins}") String allowedOrigins,
+            @Value("${cors.allowed-methods}") String allowedMethods,
+            @Value("${cors.allowed-headers}") String allowedHeaders) {
+
+        CorsConfiguration config = new CorsConfiguration();
+        // 여러 도메인일 경우 String을 분리해서 리스트로 변환합니다.
+        List<String> origins = Arrays.asList(allowedOrigins.split(","));
+        List<String> methods = Arrays.asList(allowedMethods.split(","));
+        List<String> headers = Arrays.asList(allowedHeaders.split(","));
+
+        config.setAllowedOrigins(origins);
+        config.setAllowedMethods(methods);
+        config.setAllowedHeaders(headers);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
 

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AiReportDto {
-    private Integer reportId;
+    private Long reportId;
     private Long requestId;
     private String fileName;
     private LocalDateTime createdAt;
