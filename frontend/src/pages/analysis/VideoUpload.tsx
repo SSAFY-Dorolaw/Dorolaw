@@ -11,6 +11,7 @@ const VideoUpload = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -24,16 +25,22 @@ const VideoUpload = () => {
 
     // UploadTitle에서 선택한 파일 불러오기
     const selectedFile = uploadTitleRef.current?.getSelectedFile();
-    // const title = uploadTitleRef.current?.getTitle();
+    const title = uploadTitleRef.current?.getTitle();
 
-    // if (!title) {
-    //   alert('제목을 입력해주세요.');
-    //   setLoading(false);
-    //   return;
-    // }
+    if (!title) {
+      alert('제목을 입력해주세요.');
+      setLoading(false);
+      return;
+    }
 
     if (!selectedFile) {
       alert('업로드할 파일을 선택해주세요.');
+      setLoading(false);
+      return;
+    }
+
+    if (!isAgree) {
+      alert('개인정보 제공 동의가 필요합니다.');
       setLoading(false);
       return;
     }
@@ -76,6 +83,8 @@ const VideoUpload = () => {
       <OptionCheckbox
         isPublic={isPublic}
         onChangePublic={(value: boolean) => setIsPublic(value)}
+        isAgree={isAgree}
+        onChangeAgree={(value: boolean) => setIsAgree(value)}
       />
 
       {/* 성공 메시지 표시 */}
