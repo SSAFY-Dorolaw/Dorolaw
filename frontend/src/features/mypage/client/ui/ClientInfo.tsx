@@ -1,13 +1,13 @@
 import { Mail, Smartphone } from 'lucide-react';
-import { useState } from 'react';
-import apiClient from '@/shared/api/api-client';
+import { FormEvent, useState } from 'react';
+import { useUpdateProfile } from '@/features/mypage/client/model/mutations';
 
 interface ClientInfoProps {
-  clientId: number | undefined;
-  name: string | undefined;
-  phoneNumber: string | undefined;
-  email: string | undefined;
-  profileImage: string | undefined;
+  clientId?: number;
+  name?: string;
+  phoneNumber?: string;
+  email?: string;
+  profileImage?: string;
 }
 
 function ClientInfo({
@@ -17,10 +17,10 @@ function ClientInfo({
   email,
   profileImage,
 }: ClientInfoProps) {
-
-  // 마아페이지 작업업
   const [isEditing, setIsEditing] = useState(false);
   const [phone, setPhone] = useState(phoneNumber ?? '');
+
+  const updateProfileMutation = useUpdateProfile();
 
   // 수정 버튼 클릭 시 편집 모드 전환
   const handleEdit = () => {
@@ -33,18 +33,18 @@ function ClientInfo({
     setPhone(phoneNumber ?? '');
   };
 
-  // 폼 제출 시 PUT 요청으로 전화번호 업데이트
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const updatedData = { phoneNumber: phone, profileImage: profileImage };
-      const { data } = await apiClient.put('/members/profile', updatedData);
-      console.log('전화번호 업데이트 성공:', data);
-      setIsEditing(false);
-      // 필요 시 전역 상태나 캐시 업데이트 처리
-    } catch (error) {
-      console.error('전화번호 업데이트 실패:', error);
-    }
+    updateProfileMutation.mutate(
+      {
+        phoneNumber: phone,
+      },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+        },
+      },
+    );
   };
 
   return (
@@ -76,7 +76,7 @@ function ClientInfo({
             </button>
           </div>
         ) : (
-          <form onSubmit={void handleSubmit} className="mt-10">
+          <form onSubmit={handleSubmit} className="mt-10">
             <label className="flex items-center gap-4">
               <Smartphone />
               <input
