@@ -27,7 +27,15 @@ function NavBar() {
       <div className="flex items-center gap-6">
         <NavLink to="/mypage">
           <div className="flex items-center gap-2">
-            <FaUserCircle size={36} />
+            {clientProfile ? (
+              <img
+                src={clientProfile?.profileImage}
+                className="size-[36px] rounded-full"
+                alt="profile image"
+              />
+            ) : (
+              <FaUserCircle size={36} />
+            )}
             <div>{clientProfile?.name} 님</div>
           </div>
         </NavLink>

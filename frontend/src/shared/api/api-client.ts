@@ -1,14 +1,14 @@
-// src/shared/api/api-client.ts
 import axios from 'axios';
 
-const baseURL = `${import.meta.env.VITE_BASE_URL}`;
+const baseURL = import.meta.env.VITE_API_URL;
 
 /* 기본 설정을 위한 axios 인스턴스 생성 */
 const apiClient = axios.create({
-  baseURL, // 또는 실제 API 서버 URL (예: process.env.REACT_APP_API_URL)
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
   timeout: 30000, // 30초
 });
 

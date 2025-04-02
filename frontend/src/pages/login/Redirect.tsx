@@ -1,25 +1,33 @@
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useClientProfile } from '@/entities/clients/model/queries';
 
 function LoginRedirect() {
   const navigate = useNavigate();
-  const token = new URL(window.location.toString()).searchParams.get('token');
 
+  const token = new URL(window.location.toString()).searchParams.get('token');
   useEffect(() => {
     if (!token) {
       void navigate('/login', { state: { error: '인가 코드 없음' } });
+    } else {
+      localStorage.setItem('token', token);
     }
   }, [token, navigate]);
 
-  const { data, isLoading, isError } = useClientProfile();
+  const { data, isLoading, isError, isSuccess } = useClientProfile();
 
   useEffect(() => {
     if (isError) {
       void navigate('/login');
     }
   }, [isError, navigate]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      void navigate('/');
+    }
+  }, [isSuccess, navigate, data]);
 
   if (isLoading) {
     return (
