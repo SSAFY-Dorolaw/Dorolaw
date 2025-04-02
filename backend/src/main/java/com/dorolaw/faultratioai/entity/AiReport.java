@@ -1,5 +1,6 @@
 package com.dorolaw.faultratioai.entity;
 
+import com.dorolaw.alarm.dto.RequestAlarmDto;
 import com.dorolaw.request.entity.Request;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,9 +27,6 @@ public class AiReport {
     @JoinColumn(name = "request_id", nullable = false)
     private Request request;
 
-    @Column(nullable = false)
-    private String fileName;
-
     @CreatedDate
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
@@ -38,20 +36,26 @@ public class AiReport {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private Integer accidentalNegligenceRateA;
+    private String AccidentObject;
 
     @Column(nullable = false)
-    private Integer accidentalNegligenceRateB;
+    private String AccidentLocation;
 
     @Column(nullable = false)
-    private Integer accidentPlace;
+    private String AccidentLocationCharacteristics;
 
     @Column(nullable = false)
-    private Integer accidentPlaceFeature;
+    private String DirectionOfA;
 
     @Column(nullable = false)
-    private Integer vehicleAProgressInfo;
+    private String DirectionOfB;
 
     @Column(nullable = false)
-    private Integer vehicleBProgressInfo;
+    private Integer FaultRatioA;
+
+    @Column(nullable = false)
+    private Integer FaultRatioB;
+
+    @Column(nullable = false)
+    private Integer AccidentType;
 }

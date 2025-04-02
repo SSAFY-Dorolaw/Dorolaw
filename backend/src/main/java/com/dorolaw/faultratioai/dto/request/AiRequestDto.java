@@ -1,4 +1,4 @@
-package com.dorolaw.faultratioai.dto;
+package com.dorolaw.faultratioai.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

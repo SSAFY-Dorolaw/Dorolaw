@@ -4,7 +4,7 @@ import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.entity.ConsultationType;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.faultratioai.entity.AiReport;
-import com.dorolaw.faultratioai.reposiroty.FaultratioaiRepository;
+import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
 import com.dorolaw.member.dto.response.AiReportResponseDto;
 import com.dorolaw.member.dto.response.ClientRequestResponseDto;
 import com.dorolaw.member.dto.response.ConsultationResponseDto;
@@ -34,7 +34,7 @@ public class MypageService {
     private final LawyerProfileRepository lawyerProfileRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RequestRepository requestRepository;
-    private final FaultratioaiRepository faultratioaiRepository;
+    private final ReqeustAiReportRepository faultratioaiRepository;
 
     public ConsultationResponseDto getAllConsultations(String authorizationHeader){
 
@@ -103,9 +103,14 @@ public class MypageService {
                 .map(report -> AiReportResponseDto.builder()
                         .reportId(report.getReportId())
                         .thumbnailImageUrl(null) // 여기 썸네일 저장소 체크해야됨.
-                        .accidentalNegligenceRateA(report.getAccidentalNegligenceRateA())
-                        .accidentalNegligenceRateB(report.getAccidentalNegligenceRateB())
-                        .accidentPlaceType(report.getAccidentPlaceFeature()) //
+                        .accidentObject(report.getAccidentObject())
+                        .accidentLocation(report.getAccidentLocation())
+                        .accidentLocationCharacteristics(report.getAccidentLocationCharacteristics()) //
+                        .directionOfA(report.getDirectionOfA())
+                        .directionOfB(report.getDirectionOfB())
+                        .faultRatioA(report.getFaultRatioA())
+                        .faultRatioB(report.getFaultRatioB())
+                        .accidentType(report.getAccidentType())
                         .isPublic(report.getRequest().getIsPublic())
                         .createdAt(report.getCreatedAt())
                         .build())
