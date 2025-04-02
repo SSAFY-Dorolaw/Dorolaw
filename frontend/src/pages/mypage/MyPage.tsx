@@ -1,9 +1,22 @@
+import { useQuery } from '@tanstack/react-query';
 import { ClientProfile } from '@/entities/clients/model/types';
 import ClientInfo from '@/features/mypage/ClientInfo';
-import { queryClient } from '@/shared/libs/query/queryClient';
+import { clientApi } from '@/entities/clients/api/clientApi';
 
 const MyPage = () => {
-  const client = queryClient.getQueryData<ClientProfile>(['client', 'profile']);
+  // 마이페이지 작업업
+  const {
+    data: clientProfile,
+    isLoading,
+    error,
+  } = useQuery<ClientProfile>({
+    queryKey: ['client', 'profile'],
+    queryFn: clientApi.getProfile,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred</div>;
+  if (!clientProfile) return <div>No client data available.</div>;
 
   return (
     <div className="w-full">
@@ -12,11 +25,11 @@ const MyPage = () => {
       </header>
       <main>
         <ClientInfo
-          clientId={client?.clientId}
-          name={client?.name}
-          phoneNumber={client?.phoneNumber}
-          email={client?.email}
-          profileImage={client?.profileImage}
+          clientId={clientProfile.clientId}
+          name={clientProfile.name}
+          phoneNumber={clientProfile.phoneNumber}
+          email={clientProfile.email}
+          profileImage={clientProfile.profileImage}
         />
       </main>
     </div>
