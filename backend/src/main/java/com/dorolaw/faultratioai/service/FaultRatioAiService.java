@@ -43,13 +43,13 @@ public class FaultRatioAiService {
         faultAnalysis.setPublic(requestData.isPublic());
 
         FaultAnalysis savedFaultAnalysis = faultAnalysisRepository.save(faultAnalysis);
-        rabbitTemplate.convertAndSend("diagnosis_queue", savedFaultAnalysis);
+        // rabbit에 보내주기.
+        rabbitTemplate.convertAndSend("main_diagnosis_queue", savedFaultAnalysis);
 
         return new FaultRatioResponseDto(
                 savedFaultAnalysis.getRequestId(),
-                savedFaultAnalysis.getTitle(),
                 savedFaultAnalysis.getFileName(),
-                savedFaultAnalysis.isPublic()
+                savedFaultAnalysis.getMember().getMemberId()
         );
     }
 }
