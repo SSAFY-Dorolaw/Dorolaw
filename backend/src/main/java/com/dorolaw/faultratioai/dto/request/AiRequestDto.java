@@ -1,4 +1,4 @@
-package com.dorolaw.faultratioai.dto;
+package com.dorolaw.faultratioai.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class AiRequestDto  {
     private Long requestId;
+    private Long memberId;
     private String fileName;
 }

@@ -1,5 +1,6 @@
 package com.dorolaw.security.jwt;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -7,12 +8,16 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.io.IOException;
 
 @Component
 public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     public JwtAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -42,21 +47,11 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         // JWT 토큰 생성
         String token = jwtTokenProvider.generateToken(memberId, role);
 
-        // JWT 토큰을 HTTP-only 쿠키에 저장
-        Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
-        jwtCookie.setHttpOnly(true);
-        // 운영 환경에서는 Secure 플래그를 true로 설정 (HTTPS 사용 시)
-        jwtCookie.setSecure(false);
-        jwtCookie.setPath("/");
-        // 만료 시간(초 단위): 예를 들어 jwtTokenProvider에 설정된 만료시간 사용
-        jwtCookie.setMaxAge((int)(jwtTokenProvider.getJwtExpirationInMs() / 1000));
+        String redirectUrl = UriComponentsBuilder.fromUriString(frontendUrl)
+                .path("/login/redirect") // 프론트엔드의 콜백 경로
+                .queryParam("token", token)
+                .build().toUriString();
 
-        response.addCookie(jwtCookie);
-
-        // JSON 응답으로 반환
-        response.setContentType("application/json; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"profileImage\": \"" + profileImage + "\", \"role\": \"" + role + "\", \"memberId\": + \"" + memberId + "\"}");
-        response.getWriter().flush();
+        response.sendRedirect(redirectUrl);
     }
 }

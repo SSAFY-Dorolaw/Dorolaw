@@ -1,6 +1,6 @@
 package com.dorolaw.request.dto;
 
-import com.dorolaw.faultratioai.dto.AiReportDto;
+import com.dorolaw.faultratioai.dto.response.AiReportDto;
 import com.dorolaw.request.entity.Request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
