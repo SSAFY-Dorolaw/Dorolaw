@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class AiReport {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long reportId;
 

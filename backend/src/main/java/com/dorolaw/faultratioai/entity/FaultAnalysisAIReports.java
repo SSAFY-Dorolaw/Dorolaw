@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 public class FaultAnalysisAIReports {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long reportId;
 
