@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ClientProfile } from '@/entities/clients/model/types';
-import ClientInfo from '@/features/mypage/ClientInfo';
+import ClientInfo from '@/features/mypage/client/ui/ClientInfo';
 import { clientApi } from '@/entities/clients/api/clientApi';
 
 const MyPage = () => {
@@ -13,6 +13,8 @@ const MyPage = () => {
     queryKey: ['client', 'profile'],
     queryFn: clientApi.getProfile,
   });
+
+  console.log(clientProfile);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred</div>;

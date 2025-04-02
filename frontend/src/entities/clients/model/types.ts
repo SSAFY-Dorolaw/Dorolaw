@@ -6,3 +6,8 @@ export interface ClientProfile {
   joinDate: string;
   profileImage: string;
 }
+
+export interface ClientProfileUpdate {
+  phoneNumber?: string;
+  profileImage?: string;
+}
