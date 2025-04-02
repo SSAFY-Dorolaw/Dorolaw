@@ -1,6 +1,6 @@
 package com.dorolaw.request.service;
 
-import com.dorolaw.faultratioai.dto.AiRequestDto;
+import com.dorolaw.faultratioai.dto.request.AiRequestDto;
 import com.dorolaw.request.dto.*;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
@@ -39,6 +39,7 @@ public class RequestService {
         AiRequestDto res = new AiRequestDto();
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
+        res.setMemberId(saved.getMemberId());
         return res;
     }
 

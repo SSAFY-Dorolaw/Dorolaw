@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.List;
 
 @Data
@@ -20,7 +22,6 @@ public class LawyerProfileDto {
     private String officePhoneNumber;
     private String officeAddress;
     private String gender;
-    private String specialties;
     private String oneLineIntro;
     private String greetingMessage;
     private Long reviewCount;
@@ -30,6 +31,15 @@ public class LawyerProfileDto {
     private List<CareerDto> career;
     private String lawyerLicenseNumber;
     private String lawyerLicenseExam;
+    private List<LawyerTagDto> lawyerTags;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class LawyerTagDto{
+        private String lawyer_specialties;
+    }
 
     @Data
     @NoArgsConstructor

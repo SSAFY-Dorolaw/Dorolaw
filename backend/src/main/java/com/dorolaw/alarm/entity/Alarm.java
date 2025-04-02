@@ -1,12 +1,17 @@
-package com.dorolaw.Notification.entity;
+package com.dorolaw.alarm.entity;
 
-import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "alarms")
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,13 +22,8 @@ public class Alarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alarmId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receive_member_id", nullable = false)
-    private Member receiveMember;
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AlarmType type;
+    private Long receiveMemberId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -31,12 +31,7 @@ public class Alarm {
     @Column(nullable = false)
     private Boolean isRead;
 
-    @Column(nullable = false)
+    @CreatedDate
+    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        isRead = isRead != null ? isRead : false;
-    }
 }
