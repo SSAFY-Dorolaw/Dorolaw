@@ -12,7 +12,7 @@ const Login = () => {
         <header>
           <LoginTab isLawyerTab={isLawyerTab} setIsLawyerTab={setIsLawyerTab} />
         </header>
-        <div className="px-8 pb-8">
+        <div className="p-8">
           {isLawyerTab ? (
             <>
               <h1 className="text-center text-2xl font-bold">
