@@ -1,11 +1,11 @@
 package com.dorolaw.alarm.repository;
 
 import com.dorolaw.alarm.entity.FcmToken;
+import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +19,7 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
             "join f.member m " +
             "join m.lawyerTags t " +
             "where m.status = 'CERTIFIED_LAWYER' " +
-            "and (t.lawyerSpeciality = 'ALL' OR t.lawyerSpeciality = :tag)")
-    List<FcmToken> findLawyersByTags(@Param("tag") String tag);
+            "and (t.lawyerSpeciality = com.dorolaw.member.entity.lawyer.LawyerSpeciality.ALL " +
+            "     OR t.lawyerSpeciality = :tag)")
+    List<FcmToken> findLawyersByTags(@Param("tag") LawyerSpeciality tag);
 }
