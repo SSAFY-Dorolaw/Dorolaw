@@ -1,13 +1,16 @@
 package com.dorolaw.member.service;
 
 import com.dorolaw.consultation.entity.Consultation;
+import com.dorolaw.consultation.entity.ConsultationStatus;
 import com.dorolaw.consultation.entity.ConsultationType;
+import com.dorolaw.consultation.entity.Review;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.faultratioai.entity.AiReport;
 import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
 import com.dorolaw.member.dto.response.AiReportResponseDto;
 import com.dorolaw.member.dto.response.ClientRequestResponseDto;
 import com.dorolaw.member.dto.response.ConsultationResponseDto;
+import com.dorolaw.member.dto.response.LawyerConsultationResponse;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.repository.LawyerProfileRepository;
@@ -52,6 +55,7 @@ public class MypageService {
                         .consultationId(consultation.getConsultationId())
                         .scheduledDate(consultation.getConsultationDate().toString() + " " + consultation.getScheduledTime().toString())
                         .consultationMethod(consultation.getConsultationType() == ConsultationType.VISIT ? "VISIT" : "PHONE")
+                        .status(consultation.getStatus().toString())
                         .clientId(consultation.getClient().getMemberId())
                         .clientName(consultation.getClient().getName())
                         .lawyerId(consultation.getLawyer().getLawyerProfileId())
@@ -62,7 +66,6 @@ public class MypageService {
                 .collect(Collectors.toList());
 
         return ConsultationResponseDto.builder()
-                .status(consultationDetails.isEmpty() ? "EMPTY" : "Consultation Record Exists")
                 .consultations(consultationDetails)
                 .build();
     }
@@ -115,5 +118,54 @@ public class MypageService {
                         .createdAt(report.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public List<LawyerConsultationResponse> getLawyerConsultations(String authorizationHeader) {
+
+        Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
+        Long memberId = (Long) memberInfo.get("memberId");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        List<Consultation> consultations = consultationRepository
+                .findByLawyer_LawyerProfileIdOrderByCreatedAtDesc(lawyerProfile.getLawyerProfileId());
+
+        if (consultations.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return consultations.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    private LawyerConsultationResponse convertToResponse(Consultation consultation) {
+        String consultationType = consultation.getConsultationType() == ConsultationType.VISIT
+                ? "30분방문" : "30분전화";
+
+        String status;
+        if (consultation.getStatus() == ConsultationStatus.PENDING) {
+            status = "상담전";
+        } else if (consultation.getStatus() == ConsultationStatus.COMPLETED) {
+            status = consultation.getReview() != null ? "후기작성완료" : "상담완료";
+        } else {
+            status = "취소됨";
+        }
+
+        return LawyerConsultationResponse.builder()
+                .consultationId(consultation.getConsultationId())
+                .clientName(consultation.getClient().getName())
+                .requestId(consultation.getRequest().getRequestId())
+                .requestTitle(consultation.getRequest().getTitle())
+                .requestContent(consultation.getRequest().getDescription())
+                .additionalQuestion(consultation.getAdditionalQuestion())
+                .consultationStatus(status)
+                .consultationDate(consultation.getConsultationDate())
+                .consultationTime(consultation.getScheduledTime())
+                .consultationType(consultationType)
+                .build();
     }
 }

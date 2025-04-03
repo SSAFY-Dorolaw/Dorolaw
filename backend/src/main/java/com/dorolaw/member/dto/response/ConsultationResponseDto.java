@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ConsultationResponseDto {
-    private String status;
     private List<ConsultationDetail> consultations;
 
     @Getter
@@ -23,6 +22,7 @@ public class ConsultationResponseDto {
         private Long consultationId;
         private String scheduledDate;
         private String consultationMethod;
+        private String status;
         private Long clientId;
         private String clientName;
         private Long lawyerId;

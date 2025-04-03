@@ -3,6 +3,7 @@ package com.dorolaw.member.controller;
 import com.dorolaw.member.dto.response.AiReportResponseDto;
 import com.dorolaw.member.dto.response.ClientRequestResponseDto;
 import com.dorolaw.member.dto.response.ConsultationResponseDto;
+import com.dorolaw.member.dto.response.LawyerConsultationResponse;
 import com.dorolaw.member.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class MypageController {
 
     private final MypageService mypageService;
 
-    // 사용자가 예약한 모든 상담 내역 조회 API
+    // 일반 사용자(본인)가 예약한 모든 상담 내역 조회
     @GetMapping("/consultations")
     public ResponseEntity<ConsultationResponseDto> getConsultations(
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -40,5 +41,13 @@ public class MypageController {
             @RequestHeader("Authorization") String authorizationHeader) {
         List<AiReportResponseDto> reports = mypageService.getAllReportsForMember(authorizationHeader);
         return ResponseEntity.ok(reports);
+    }
+
+    // 변호사-상담 신청 들어온 내역 조회 API
+    @GetMapping("/lawyer/consultation")
+    public ResponseEntity<List<LawyerConsultationResponse>> getLawyerConsultations(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        List<LawyerConsultationResponse> response = mypageService.getLawyerConsultations(authorizationHeader);
+        return ResponseEntity.ok(response);
     }
 }

@@ -36,22 +36,22 @@ public class MemberService {
     private final LawyerScheduleRepository lawyerScheduleRepository;
     private final LawyerTagRepository lawyerTagRepository;
 
-    public Object getMemberInfo(String authorizationHeader){
+        public Object getMemberInfo(String authorizationHeader){
 
-        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
+            String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
+            Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
+            String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        MemberProfileDto baseProfile = MemberProfileDto.builder()
-                .memberId(memberId)
-                .name(member.getName())
-                .email(member.getEmail())
-                .phoneNumber(member.getPhoneNumber())
-                .joinDate(member.getCreatedAt().format(formatter))
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            MemberProfileDto baseProfile = MemberProfileDto.builder()
+                    .memberId(memberId)
+                    .name(member.getName())
+                    .email(member.getEmail())
+                    .phoneNumber(member.getPhoneNumber())
+                    .joinDate(member.getCreatedAt().format(formatter))
                 .profileImage(member.getProfileImage())
                 .role(member.getRole().name())
                 .build();
@@ -75,8 +75,13 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        member.setPhoneNumber(requestDto.getPhoneNumber());
-        member.setProfileImage(requestDto.getProfileImage());
+        if (requestDto.getPhoneNumber() != null) {
+            member.setPhoneNumber(requestDto.getPhoneNumber());
+        }
+
+        if (requestDto.getProfileImage() != null) {
+            member.setProfileImage(requestDto.getProfileImage());
+        }
 
         if (memberRole.equals("LAWYER") || memberRole.equals("CERTIFIED_LAWYER")) {
             updateLawyerProfile(member, requestDto);
@@ -91,25 +96,82 @@ public class MemberService {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(member.getMemberId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        lawyerProfile.parseAndSetAddress(requestDto.getOfficeAddress());
+        // 주소 처리 - 주소가 제공된 경우에만 파싱 수행
+        if (requestDto.getOfficeAddress() != null) {
+            lawyerProfile.parseAndSetAddress(requestDto.getOfficeAddress());
+        }
 
+        // 기존 필드 값들을 먼저 가져옴
+        String officeName = lawyerProfile.getOfficeName();
+        String officePhoneNumber = lawyerProfile.getOfficePhoneNumber();
+        String officeProvince = lawyerProfile.getOfficeProvince();
+        String officeCityDistrict = lawyerProfile.getOfficeCityDistrict();
+        String officeDetailedAddress = lawyerProfile.getOfficeDetailedAddress();
+        String gender = lawyerProfile.getGender();
+        String oneLineIntro = lawyerProfile.getShortIntroduction();
+        String greetingMessage = lawyerProfile.getGreeting();
+        String introVideo = lawyerProfile.getIntroductionVideoUrl();
+        Long accountNumber = lawyerProfile.getAccountNumber();
+        String bankName = lawyerProfile.getBankName();
+
+        if (requestDto.getOfficeName() != null) {
+            officeName = requestDto.getOfficeName();
+        }
+
+        if (requestDto.getOfficePhoneNumber() != null) {
+            officePhoneNumber = requestDto.getOfficePhoneNumber();
+        }
+
+        if (requestDto.getGender() != null) {
+            gender = requestDto.getGender();
+        }
+
+        if (requestDto.getOneLineIntro() != null) {
+            oneLineIntro = requestDto.getOneLineIntro();
+        }
+
+        if (requestDto.getGreetingMessage() != null) {
+            greetingMessage = requestDto.getGreetingMessage();
+        }
+
+        if (requestDto.getIntroVideo() != null) {
+            introVideo = requestDto.getIntroVideo();
+        }
+
+        if (requestDto.getAccountNumber() != null) {
+            accountNumber = Long.parseLong(requestDto.getAccountNumber());
+        }
+
+        if (requestDto.getBankName() != null) {
+            bankName = requestDto.getBankName();
+        }
+
+        // 모든 필드를 updateProfile 메소드에 전달
         lawyerProfile.updateProfile(
-                requestDto.getOfficeName(),
-                requestDto.getOfficePhoneNumber(),
-                lawyerProfile.getOfficeProvince(),
-                lawyerProfile.getOfficeCityDistrict(),
-                lawyerProfile.getOfficeDetailedAddress(),
-                requestDto.getGender(),
-                requestDto.getOneLineIntro(),
-                requestDto.getGreetingMessage(),
-                requestDto.getIntroVideo(),
-                Long.parseLong(requestDto.getAccountNumber()),
-                requestDto.getBankName()
+                officeName,
+                officePhoneNumber,
+                officeProvince,
+                officeCityDistrict,
+                officeDetailedAddress,
+                gender,
+                oneLineIntro,
+                greetingMessage,
+                introVideo,
+                accountNumber,
+                bankName
         );
 
-        updateEducations(lawyerProfile, requestDto);
-        updateCareers(lawyerProfile, requestDto);
-        updateLawyerSpecialties(member, requestDto.getSpecialties());
+        if (requestDto.getEducations() != null) {
+            updateEducations(lawyerProfile, requestDto);
+        }
+
+        if (requestDto.getCareers() != null) {
+            updateCareers(lawyerProfile, requestDto);
+        }
+
+        if (requestDto.getSpecialties() != null) {
+            updateLawyerSpecialties(member, requestDto.getSpecialties());
+        }
 
         lawyerProfileRepository.save(lawyerProfile);
     }
