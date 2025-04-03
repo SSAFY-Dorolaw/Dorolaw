@@ -1,6 +1,5 @@
 package com.dorolaw.alarm.controller;
 
-import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.service.FcmService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,9 @@ public class FcmController {
     }
 
     @PostMapping
-    public String registerToken(@RequestBody FcmToken token, @RequestHeader("Authorization") String authorizationHeader) {
+    public String registerToken(@RequestBody String token, @RequestHeader("Authorization") String authorizationHeader) {
         log.info("Registering token: " + token);
-        fcmService.saveToken(token.getToken(), authorizationHeader);
+        fcmService.saveToken(token, authorizationHeader);
         return "토큰 저장 완료";
     }
 }
