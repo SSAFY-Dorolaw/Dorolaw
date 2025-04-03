@@ -30,6 +30,7 @@ public class AlarmService {
     
     // tag로 fcm 토큰 찾기
     public List<FcmToken> findLawyersByTags(String tag) {
+        if(tag.equals("차대 이륜차")) tag = "차대이륜차";
         return fcmTokenRepository.findLawyersByTags(LawyerSpeciality.valueOf(tag));
     }
     
