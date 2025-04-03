@@ -41,4 +41,7 @@ public class FaultAnalysis {
     public enum Status {
         PENDING, COMPLETED, CANCELED
     }
+
+    @OneToOne(mappedBy = "faultAnalysis", fetch = FetchType.LAZY)
+    private FaultAnalysisAIReports faultAnalysisAIReports;
 }
