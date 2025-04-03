@@ -1,24 +1,18 @@
-interface ArticleItemProps {
-  writer: string;
-  title: string;
-  tag1: string;
-  tag2: string;
-  answercount: number;
-  recentanswer: string;
-  lawyer: string;
-  onClick?: () => void;
+import { ClientRequests } from '@/features/mypage/client/model/types';
+
+interface RequestItemProps extends ClientRequests {
+  onClick: () => void;
 }
 
-function ArticleItem({
-  writer,
+function RequestItem({
+  requestId,
   title,
-  tag1,
-  tag2,
-  answercount,
-  recentanswer,
-  lawyer,
+  status,
+  faultRatioA,
+  faultRatioB,
+  createdAt,
   onClick,
-}: ArticleItemProps) {
+}: RequestItemProps) {
   return (
     <div
       className="cursor-pointer rounded-[10px] border border-p2 bg-white p-4 hover:bg-p1"
@@ -28,17 +22,18 @@ function ArticleItem({
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <div className="border-grey size-[24px] rounded-full border bg-black"></div>
-            <p className="typo-body-small">{writer}</p>
+            <p className="typo-body-small">{status}</p>
           </div>
           <div className="mx-10">
-            <p className="typo-body-small">답변 {answercount}</p>
+            <p className="typo-body-small">
+              {faultRatioA} : {faultRatioB}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-10">
           <h2>{title}</h2>
           <div className="mx-10 flex gap-4">
-            <p>{tag1}</p>
-            <p>{tag2}</p>
+            <p>{createdAt}</p>
           </div>
         </div>
       </div>
@@ -47,14 +42,14 @@ function ArticleItem({
         <div className="px-4 pt-4">
           <div className="flex items-center gap-2">
             <div className="border-grey size-[24px] rounded-full border bg-white"></div>
-            <p className="typo-body-small">{lawyer}</p>
+            {/* <p className="typo-body-small">{lawyer}</p> */}
           </div>
           <div className="mr-10 mt-2">
-            <p className="typo-body line-clamp-2">{recentanswer}</p>
+            {/* <p className="typo-body line-clamp-2">{recentanswer}</p> */}
           </div>
         </div>
       </div>
     </div>
   );
 }
-export default ArticleItem;
+export default RequestItem;

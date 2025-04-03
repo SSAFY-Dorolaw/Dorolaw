@@ -1,4 +1,4 @@
-import ArticleList from '@/features/mypage/ArticleList';
+import RequestList from '@/features/mypage/RequestList';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 function MyConsultations() {
@@ -20,7 +20,7 @@ function MyConsultations() {
               필터2
             </button>
           </div>
-          <ArticleList />
+          <RequestList />
         </div>
       </main>
       <nav>
