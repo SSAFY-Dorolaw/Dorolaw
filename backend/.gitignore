@@ -47,7 +47,7 @@ Thumbs.db
 # *.war
 
 # 환경변수
-application.yml
+src/main/resources/application.yml
 application-local.yml
 application-prod.yml
 myproject-e9c73-firebase-adminsdk-fbsvc-011240332d

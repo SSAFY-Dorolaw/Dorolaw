@@ -10,6 +10,8 @@ services:
       - /home/ubuntu/videos:/home/ubuntu/videos
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
+    depends_on:
+      - rabbitmq
     networks:
       - app-network
 
@@ -28,6 +30,8 @@ services:
       - "5000"
     volumes:
       - /home/ubuntu/videos:/home/ubuntu/videos
+    depends_on:
+      - rabbitmq
     networks:
       - app-network
     command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
@@ -61,14 +65,68 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    ports:
-      - "5672:5672"      # 메시지 브로커 포트
-      - "15672:15672"    # 웹 관리 콘솔 포트
+    expose:
+      - "5672"      # 메시지 브로커 포트
+      - "15672"     # 웹 관리 콘솔 포트
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - app-network
+
+  # 호스트 모니터링
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    expose:
+      - "9100"
+    networks:
+      - app-network
+
+  # 컨테이너 모니터링
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    expose:
+      - "8080"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      # 필요 시 데이터 보존하려면 아래처럼 볼륨 추가 가능
+      # - ./prometheus_data:/prometheus
+    expose:
+      - "9090"  
+    networks:
+      - app-network
+    depends_on:
+      - backend
+      - frontend
+      - ai
+      - nginx
+      - rabbitmq
+      - node-exporter
+      - cadvisor
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    expose:
+      - "3000"  
+    networks:
+      - app-network
+    depends_on:
+      - prometheus
 
 networks:
   app-network:
