@@ -27,7 +27,7 @@ export const getConsultList = async (
     return response.data;
   } catch (error) {
     console.error('API 요청 에러 발생: ', error);
-    throw error; // 에러를 다시 던져 상위 컴포넌트에서 처리할 수 있게 함
+    throw error; // 에러 다시 던져서 상위 컴포넌트에서 처리할 수 있도록 함
   }
 };
 

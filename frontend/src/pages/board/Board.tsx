@@ -1,3 +1,4 @@
+import { useConsultListQuery } from '@/features/board/api';
 import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import Pagenation from '@/widgets/Pagenation';
@@ -5,6 +6,16 @@ import { useState } from 'react';
 
 const Board = () => {
   const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  // Tanstack Query로 데이터 가져오기
+  const { data, isLoading } = useConsultListQuery(currentPage);
+
+  // 페이지 변경 핸들러
+  const pageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="flex max-w-[1200px] flex-col gap-4 xl:w-[1200px]">
       <header>
@@ -40,12 +51,26 @@ const Board = () => {
                 <hr />
               </div>
             </header>
-            <ConsultList />
+            {isLoading ? (
+              <div className="flex justify-center py-10">로딩 중...</div>
+            ) : (
+              <ConsultList currentPage={currentPage} />
+            )}
           </div>
         </nav>
       </main>
       <nav>
-        <Pagenation />
+        {data && (
+          <Pagenation
+            pageInfo={{
+              number: data.number,
+              totalPages: data.totalPages,
+              first: data.first,
+              last: data.last,
+            }}
+            onPageChange={pageChange}
+          />
+        )}
       </nav>
     </div>
   );

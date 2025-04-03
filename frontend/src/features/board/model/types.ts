@@ -32,7 +32,7 @@ export interface SuccessResponse {
   totalPages: number;
   totalElements: number;
   size: number;
-  num: number; // 타입스크립트 예약어 사용을 피하기 위해 num으로 작성
+  number: number; // 타입스크립트 예약어 사용을 피하기 위해 num으로 작성
   sort: SortInfo;
   first: boolean;
   numberOfElements: number;

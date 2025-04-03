@@ -17,7 +17,6 @@ export const useAuthStore = create<AuthStore>((set) => {
   };
 
   const token = getToken();
-  console.log('토큰: ', token ? '존재함' : '없음');
 
   return {
     isLogin: !!token, // 초기 로그인 상태
