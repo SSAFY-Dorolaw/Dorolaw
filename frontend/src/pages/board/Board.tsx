@@ -1,7 +1,7 @@
-import ArticleList from '@/features/board/ConsultList';
+import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
+import Pagenation from '@/widgets/Pagenation';
 import { useState } from 'react';
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 const Board = () => {
   const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
@@ -18,7 +18,7 @@ const Board = () => {
           <div className="max-h-full">
             <header className="flex w-full rounded-t-[10px]">
               <div
-                className="w-full rounded-t-[10px] text-center"
+                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
                 onClick={() => setIsConsultTab(true)}
               >
                 <h3
@@ -29,7 +29,7 @@ const Board = () => {
                 <hr />
               </div>
               <div
-                className="w-full rounded-t-[10px] text-center"
+                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
                 onClick={() => setIsConsultTab(false)}
               >
                 <h3
@@ -40,24 +40,12 @@ const Board = () => {
                 <hr />
               </div>
             </header>
-            <ArticleList />
+            <ConsultList />
           </div>
         </nav>
       </main>
       <nav>
-        <div className="mx-auto my-10 flex items-center justify-center gap-4">
-          <IoChevronBack size={12} />
-          <p>1</p>
-          <p>2</p>
-          <p>3</p>
-          <p>4</p>
-          <p>5</p>
-          <p>6</p>
-          <p>7</p>
-          <p>8</p>
-          <p>9</p>
-          <IoChevronForward size={12} />
-        </div>
+        <Pagenation />
       </nav>
     </div>
   );

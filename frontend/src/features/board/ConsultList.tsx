@@ -1,3 +1,4 @@
+import React from 'react';
 import ConsultItem from '@/features/board/ConsultItem';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,7 +76,7 @@ function ConsultList() {
 
       {/* Article List */}
       {articleList.map((article) => (
-        <>
+        <React.Fragment key={article.requestId}>
           <ConsultItem
             key={article.requestId}
             requestId={article.requestId}
@@ -86,7 +87,7 @@ function ConsultList() {
             onClick={() => void navigate('/consultation/detail')}
           />
           <hr />
-        </>
+        </React.Fragment>
       ))}
     </div>
   );
