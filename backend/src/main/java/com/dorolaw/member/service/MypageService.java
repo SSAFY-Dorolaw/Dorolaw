@@ -82,14 +82,12 @@ public class MypageService {
                 .map(request -> ClientRequestResponseDto.ClientRequestDetail.builder()
                         .requestId(request.getRequestId())
                         .title(request.getTitle())
+                        .status(request.getStatus().toString())
+                        .faultRatioA(request.getAiReport().getFaultRatioA())
+                        .faultRatioB(request.getAiReport().getFaultRatioB())
                         .createdAt(request.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                        .status(request.getStatus().name().toLowerCase())
-                        .videoUrl(request.getFileName())
-                        .reportUrl(request.getAiReport())
-                        .faultRatio(request.getInsuranceFaultRatio())
                         .build())
                 .collect(Collectors.toList());
-
 
         return ClientRequestResponseDto.builder()
                 .requests(clientRequestDetails)

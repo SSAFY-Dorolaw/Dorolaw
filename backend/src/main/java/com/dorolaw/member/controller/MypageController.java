@@ -26,7 +26,7 @@ public class MypageController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 일반 사용자 모든 의뢰 내역 조회 API
+    // 일반 사용자 본인이 작성한 모든 의뢰 내역 조회 API
     @GetMapping("/requests")
     public ResponseEntity<ClientRequestResponseDto> getClientRequests(
             @RequestHeader("Authorization") String authorizationHeader) {
