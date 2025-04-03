@@ -104,6 +104,8 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       # 필요 시 데이터 보존하려면 아래처럼 볼륨 추가 가능
       # - ./prometheus_data:/prometheus
+    command:
+      - '--web.external-url=https://j12a501.p.ssafy.io/prometheus/'
     expose:
       - "9090"  
     networks:
