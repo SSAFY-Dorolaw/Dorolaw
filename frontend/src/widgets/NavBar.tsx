@@ -27,7 +27,7 @@ function NavBar() {
   const AuthComponent = () => {
     return clientProfile ? (
       <div className="flex items-center gap-6">
-        <NavLink to="/mypage">
+        <NavLink to="/client">
           <div className="flex items-center gap-2">
             {clientProfile ? (
               <img
@@ -62,7 +62,7 @@ function NavBar() {
     <nav className="sticky top-0 z-10 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1">
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-20 font-semibold xl:w-[1200px]">
         <div className="flex justify-between gap-20">
-          <NavLink to="/upload">AI 과실비율 측정</NavLink>
+          <NavLink to="/report">AI 과실비율 측정</NavLink>
           <NavLink to="/consultation">의뢰하기</NavLink>
           <NavLink to="/board">게시판</NavLink>
         </div>
