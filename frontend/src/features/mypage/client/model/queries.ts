@@ -1,7 +1,7 @@
 // features/mypage/client/api/queries.ts
 import { useQuery } from '@tanstack/react-query';
 import {
-  Analyses,
+  Analysis,
   ClientConsultations,
   ClientRequests,
 } from '@/features/mypage/client/model/types';
@@ -16,7 +16,7 @@ export const clientMypageKeys = {
 
 // 상담 조회 쿼리 훅
 export const useMyConsultations = () => {
-  return useQuery<ClientConsultations[]>({
+  return useQuery<ClientConsultations>({
     queryKey: clientMypageKeys.myConsultations,
     queryFn: clientMypageApi.getMyConsultations,
   });
@@ -24,7 +24,7 @@ export const useMyConsultations = () => {
 
 // 의뢰 조회 쿼리 훅
 export const useMyRequests = () => {
-  return useQuery<ClientRequests[]>({
+  return useQuery<ClientRequests>({
     queryKey: clientMypageKeys.myRequests,
     queryFn: clientMypageApi.getMyRequests,
   });
@@ -32,7 +32,7 @@ export const useMyRequests = () => {
 
 // 분석 보고서 조회 쿼리 훅
 export const useMyAnalyses = () => {
-  return useQuery<Analyses[]>({
+  return useQuery<Analysis[]>({
     queryKey: clientMypageKeys.myAnalyses,
     queryFn: clientMypageApi.getMyAnalyses,
   });
