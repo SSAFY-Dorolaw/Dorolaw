@@ -31,26 +31,26 @@ public class FaultAnalysisAIReports {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private String AccidentObject;
+    private String accidentObject;
 
     @Column(nullable = false)
-    private String AccidentLocation;
+    private String accidentLocation;
 
     @Column(nullable = false)
-    private String AccidentLocationCharacteristics;
+    private String accidentLocationCharacteristics;
 
     @Column(nullable = false)
-    private String DirectionOfA;
+    private String directionOfA;
 
     @Column(nullable = false)
-    private String DirectionOfB;
+    private String directionOfB;
 
     @Column(nullable = false)
-    private Integer FaultRatioA;
+    private Integer faultRatioA;
 
     @Column(nullable = false)
-    private Integer FaultRatioB;
+    private Integer faultRatioB;
 
     @Column(nullable = false)
-    private Integer AccidentType;
+    private Integer accidentType;
 }
