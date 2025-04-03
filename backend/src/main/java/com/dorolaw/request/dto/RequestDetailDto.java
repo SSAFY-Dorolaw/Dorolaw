@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RequestDetailDto {
     private Long requestId;
+    private Long memberId;
     private String title;
     private String fileName;
     private String insuranceFaultRatio;
@@ -28,6 +29,7 @@ public class RequestDetailDto {
     public static RequestDetailDto fromEntity(Request request) {
         RequestDetailDto dto = new RequestDetailDto();
         dto.setRequestId(request.getRequestId());
+        dto.setMemberId(request.getMemberId());
         dto.setTitle(request.getTitle());
         dto.setFileName(request.getFileName());
         dto.setInsuranceFaultRatio(request.getInsuranceFaultRatio());
