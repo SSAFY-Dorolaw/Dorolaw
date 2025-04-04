@@ -7,15 +7,14 @@ import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
 import com.dorolaw.faultratioai.reposiroty.FaultAiReportRepository;
 import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
-import com.dorolaw.member.dto.response.AiReportResponseDto;
-import com.dorolaw.member.dto.response.ClientRequestResponseDto;
-import com.dorolaw.member.dto.response.ConsultationResponseDto;
-import com.dorolaw.member.dto.response.LawyerConsultationResponse;
+import com.dorolaw.member.dto.response.*;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
+import com.dorolaw.request.entity.Answer;
 import com.dorolaw.request.entity.Request;
+import com.dorolaw.request.repository.AnswerRepository;
 import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,8 @@ public class MypageService {
     private final LawyerProfileRepository lawyerProfileRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RequestRepository requestRepository;
-    private final ReqeustAiReportRepository requestAiReportRepository;
+//    private final ReqeustAiReportRepository requestAiReportRepository;
+    private final AnswerRepository answerRepository;
     private final FaultAiReportRepository faultAiReportRepository;
 
     public ConsultationResponseDto getAllConsultations(String authorizationHeader){
@@ -150,5 +150,31 @@ public class MypageService {
                 .consultationTime(consultation.getScheduledTime())
                 .consultationType(consultationType)
                 .build();
+    }
+
+    public List<LawyerAnsweredInquiryListResponseDto> getAnsweredRequestList(String authorizationHeader){
+        Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
+        Long memberId = (Long) memberInfo.get("memberId");
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        // 변호사 ID로 답변 목록과 연관된 의뢰 정보를 함께 조회
+        List<Answer> answers = answerRepository.findByLawyerIdWithRequest(lawyerProfile.getLawyerProfileId());
+
+        return answers.stream()
+                .map(answer -> LawyerAnsweredInquiryListResponseDto.builder()
+                        .requestId(answer.getRequest().getRequestId())
+                        .title(answer.getRequest().getTitle())
+                        .memberId(answer.getRequest().getMemberId())
+                        .requestAnsweredContent(answer.getContent())
+                        .answeredAt(answer.getCreatedAt())
+                        .isSelected(answer.getIsSelected())
+                        .requestStatus(answer.getRequest().getStatus().toString())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

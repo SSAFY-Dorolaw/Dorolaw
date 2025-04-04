@@ -1,9 +1,6 @@
 package com.dorolaw.member.controller;
 
-import com.dorolaw.member.dto.response.AiReportResponseDto;
-import com.dorolaw.member.dto.response.ClientRequestResponseDto;
-import com.dorolaw.member.dto.response.ConsultationResponseDto;
-import com.dorolaw.member.dto.response.LawyerConsultationResponse;
+import com.dorolaw.member.dto.response.*;
 import com.dorolaw.member.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,4 +48,13 @@ public class MypageController {
         List<LawyerConsultationResponse> response = mypageService.getLawyerConsultations(authorizationHeader);
         return ResponseEntity.ok(response);
     }
+
+    // 변호사 - 의뢰답변 작성한 의뢰 리스트
+    @GetMapping("/lawyer/requests")
+    public ResponseEntity<List<LawyerAnsweredInquiryListResponseDto>> getAnsweredRequest(
+        @RequestHeader("Authorization") String authorizationHeader) {
+        List<LawyerAnsweredInquiryListResponseDto> response = mypageService.getAnsweredRequestList(authorizationHeader);
+        return ResponseEntity.ok(response);
+        }
 }
+
