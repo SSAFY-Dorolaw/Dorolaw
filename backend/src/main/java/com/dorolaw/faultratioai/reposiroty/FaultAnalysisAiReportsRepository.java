@@ -16,4 +16,6 @@ public interface FaultAnalysisAiReportsRepository extends JpaRepository<FaultAna
     List<FaultAnalysisAIReports> findAllByMemberId(@Param("memberId") Long memberId);
 
     Optional<FaultAnalysisAIReports> findByFaultAnalysis(FaultAnalysis faultAnalysis);
+
+    void deleteByFaultAnalysis(FaultAnalysis faultAnalysis);
 }

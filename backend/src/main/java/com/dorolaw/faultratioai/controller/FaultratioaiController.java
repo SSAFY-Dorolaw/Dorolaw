@@ -51,8 +51,8 @@ public class FaultratioaiController {
         return ResponseEntity.ok(response);
     }
 
-    // Controller
-    @PatchMapping("/{id}")
+    // AI 분석 게시판 상세 수정
+    @PatchMapping("/{faultAnalysisId}")
     public ResponseEntity<FaultRatioBoardUpdateResponseDto> updateFaultRatioBoard(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody FaultRatioBoardUpdateRequestDto updateRequestDto) {
@@ -60,26 +60,15 @@ public class FaultratioaiController {
         return ResponseEntity.ok(responseDto);
     }
 
-//     * AI 분석 게시판 상세 수정
-//     */
-//    @PutMapping("/{requestId}")
-//    public ResponseEntity<FaultAnalysisUpdateResponseDto> updateFaultAnalysis(
-//            @RequestHeader("Authorization") String authorizationHeader,
-//            @PathVariable Long requestId,
-//            @RequestBody FaultAnalysisUpdateRequestDto updateRequestDto) {
-//        FaultAnalysisUpdateResponseDto response = faultAnalysisService.updateFaultAnalysis(
-//                authorizationHeader, requestId, updateRequestDto);
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    /**
-//     * AI 분석 게시판 상세 삭제
-//     */
-//    @DeleteMapping("/{requestId}")
-//    public ResponseEntity<Void> deleteFaultAnalysis(
-//            @RequestHeader("Authorization") String authorizationHeader,
-//            @PathVariable Long requestId) {
-//        faultAnalysisService.deleteFaultAnalysis(authorizationHeader, requestId);
-//        return ResponseEntity.noContent().build();
-//    }
+    // AI 분석 게시판 상세 삭제
+    @DeleteMapping("/{faultAnalysisId}")
+    public ResponseEntity<Void> deleteFaultAnalysis(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long faultAnalysisId) {
+        faultAnalysisService.deleteFaultAnalysis(authorizationHeader, faultAnalysisId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // AI 분석 게시판 목록 조회
+
 }

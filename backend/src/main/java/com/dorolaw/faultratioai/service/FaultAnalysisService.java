@@ -133,4 +133,22 @@ public class FaultAnalysisService {
                 .updatedAt(updatedAnalysis.getUpdatedAt())
                 .build();
     }
+
+    @Transactional
+    public void deleteFaultAnalysis(String authorizationHeader, Long requfaultAnalysisIdstId) {
+
+        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
+
+        FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (!faultAnalysis.getMemberId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        faultAnalysisAIReportsRepository.deleteByFaultAnalysis(faultAnalysis);
+
+        faultAnalysisRepository.delete(faultAnalysis);
+    }
 }
