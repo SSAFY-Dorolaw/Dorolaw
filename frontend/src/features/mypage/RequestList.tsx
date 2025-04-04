@@ -5,31 +5,11 @@ import { useNavigate } from 'react-router-dom';
 function RequestList() {
   const navigate = useNavigate();
 
-  const { data, isPending, error } = useMyRequests();
-
-  if (isPending) return <div>로딩 중...</div>;
-  if (error) return <div>에러가 발생했습니다: {error.message}</div>;
-
-  // const data = {
-  //   requests: [
-  //     {
-  //       requestId: 1,
-  //       title: 'Sample Request Title',
-  //       status: 'PENDING',
-  //       faultRatioA: 60,
-  //       faultRatioB: 40,
-  //       createdAt: '2025-04-03 16:54',
-  //     },
-  //     {
-  //       requestId: 2,
-  //       title: 'Sample Request Title',
-  //       status: 'COMPLETED',
-  //       faultRatioA: 60,
-  //       faultRatioB: 40,
-  //       createdAt: '2025-04-03 16:54',
-  //     },
-  //   ],
-  // };
+  const { data, isPending, isError, error } = useMyRequests();
+  console.log(data);
+  if (isPending) return <h2>로딩 중...</h2>;
+  if (isError)
+    return <h2>에러가 발생했습니다: {error?.message || '알 수 없는 에러'}</h2>;
 
   return (
     <div className="my-10 space-y-4">

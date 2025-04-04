@@ -31,9 +31,15 @@ function RequestItem({
         <span></span>
       </div>
       <div className="mb-2 mt-4 flex gap-2">
-        <div className="rounded-full border-2 border-p4 px-3">
-          {status === 'SCHEDULED' ? '상담예정' : '상담완료'}
-        </div>
+        {status === 'PENDING' ? (
+          <div className="rounded-full border-2 border-p4 px-3 py-1">
+            상담 등록하기
+          </div>
+        ) : (
+          <div className="rounded-full border-2 border-p4 px-3">
+            {status === 'SCHEDULED' ? '상담예정' : '상담완료'}
+          </div>
+        )}
         {status === 'COMPLETED' ? (
           <button className="rounded-full bg-p5 px-4 text-p1">후기작성</button>
         ) : (
