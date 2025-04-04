@@ -35,15 +35,12 @@ public class FaultAnalysis {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
     private Status status = Status.PENDING;
 
-    @Column(nullable = false)
-    @Builder.Default
+    @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
-    @Builder.Default
+    @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public enum Status {

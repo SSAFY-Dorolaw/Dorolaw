@@ -17,8 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/ai")
@@ -29,7 +27,7 @@ public class FaultratioaiController {
 
     // 과실 비율 분석 요청 등록 API
     @PostMapping("/analysis")
-    public ResponseEntity<FaultRatioResponseDto> faultRatioAnalysis(
+    public ResponseEntity<FaultRatioResponseDto> create(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody FaultRatioRequestDto faultRatioRequestDto) {
         FaultRatioResponseDto response = faultRatioAiService.sendratioDiagnosisRequest(authorizationHeader, faultRatioRequestDto);
@@ -47,7 +45,7 @@ public class FaultratioaiController {
 
     // AI 분석 게시판 상세 조회
     @GetMapping("/{faultAnalysisId}")
-    public ResponseEntity<FaultRatioBoardResponseDto> getFaultAnalysisList(
+    public ResponseEntity<FaultRatioBoardResponseDto> getfaultRatioBoardDetail(
             @PathVariable Long faultAnalysisId
             ) {
         FaultRatioBoardResponseDto response = faultAnalysisService.getFaultAnalysisDetail(faultAnalysisId);
@@ -56,7 +54,7 @@ public class FaultratioaiController {
 
     // AI 분석 게시판 상세 수정
     @PatchMapping("/{faultAnalysisId}")
-    public ResponseEntity<FaultRatioBoardUpdateResponseDto> updateFaultRatioBoard(
+    public ResponseEntity<FaultRatioBoardUpdateResponseDto> updateFaultRatioBoardDetail(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody FaultRatioBoardUpdateRequestDto updateRequestDto) {
         FaultRatioBoardUpdateResponseDto responseDto = faultAnalysisService.updateFaultAnalysis(authorizationHeader, updateRequestDto);
@@ -65,7 +63,7 @@ public class FaultratioaiController {
 
     // AI 분석 게시판 상세 삭제
     @DeleteMapping("/{faultAnalysisId}")
-    public ResponseEntity<Void> deleteFaultAnalysis(
+    public ResponseEntity<Void> deleteFaultRatioBoardDetail(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long faultAnalysisId) {
         faultAnalysisService.deleteFaultAnalysis(authorizationHeader, faultAnalysisId);
@@ -74,7 +72,7 @@ public class FaultratioaiController {
 
     // AI 분석 게시판 목록 조회
     @GetMapping("/list/{memberId}")
-    public ResponseEntity<Page<FaultAnalysisListResponseDto>> getPublicFaultAnalysisList(
+    public ResponseEntity<Page<FaultAnalysisListResponseDto>> getPublicFaultRatioBoardList(
             @PathVariable Long memberId,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 

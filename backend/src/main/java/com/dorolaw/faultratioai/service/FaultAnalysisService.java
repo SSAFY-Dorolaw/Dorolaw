@@ -90,7 +90,6 @@ public class FaultAnalysisService {
 
             responseDto.setAiReport(aiReportDto);
         } else {
-            // faultAiReport가 존재하지 않으면 aiReport 필드를 null로 설정
             responseDto.setAiReport(null);
         }
 
@@ -105,11 +104,11 @@ public class FaultAnalysisService {
 
 
         FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fault analysis not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
 
         if (!faultAnalysis.getMemberId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You don't have permission to update this analysis");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         if (updateRequestDto.getTitle() != null) {
