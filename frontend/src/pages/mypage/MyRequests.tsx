@@ -10,15 +10,6 @@ function MyRequests() {
       </header>
       <main>
         <div className="mb-10 max-h-full">
-          <div className="flex gap-2">
-            {/* 추후 dropdown으로 */}
-            <button className="rounded-[10px] bg-p5 px-12 py-2 text-p1">
-              필터1
-            </button>
-            <button className="rounded-[10px] bg-p5 px-12 py-2 text-p1">
-              필터2
-            </button>
-          </div>
           <RequestList />
         </div>
       </main>
