@@ -4,5 +4,6 @@ public enum RequestStatus {
     PENDING,
     SCHEDULED,
     COMPLETED,
+    REVIEWED,
     CANCELED
 }
