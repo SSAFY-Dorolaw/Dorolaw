@@ -1,13 +1,19 @@
 package com.dorolaw.faultratioai.controller;
 
 import com.dorolaw.faultratioai.dto.request.FaultRatioBoardRequestDto;
+import com.dorolaw.faultratioai.dto.request.FaultRatioBoardUpdateRequestDto;
 import com.dorolaw.faultratioai.dto.request.FaultRatioRequestDto;
+import com.dorolaw.faultratioai.dto.response.FaultRatioBoardResponseDto;
+import com.dorolaw.faultratioai.dto.response.FaultRatioBoardUpdateResponseDto;
 import com.dorolaw.faultratioai.dto.response.FaultRatioResponseDto;
 import com.dorolaw.faultratioai.service.FaultAnalysisService;
 import com.dorolaw.faultratioai.service.FaultRatioAiService;
+import com.google.api.gax.paging.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,29 +40,26 @@ public class FaultratioaiController {
         faultAnalysisService.createFaultAnalysis(authorizationHeader, faultRatioBoardRequestDto);
         return ResponseEntity.ok().build();
     }
-//
-//    /**
-//     * AI 분석 게시판 목록 조회
-//     * 공개여부가 public인 의뢰만 최신순으로 모두 가져온다
-//     */
-//    @GetMapping("/list")
-//    public ResponseEntity<Page<FaultRatioBoardResponseDto>> getFaultAnalysisList(
-//            @PageableDefault(size = 10) Pageable pageable) {
-//        Page<FaultRatioBoardResponseDto> response = faultAnalysisService.getPublicFaultAnalysisList(pageable);
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    /**
-//     * AI 분석 게시판 상세 조회
-//     */
-//    @GetMapping("/{requestId}")
-//    public ResponseEntity<FaultAnalysisDetailResponseDto> getFaultAnalysisDetail(
-//            @PathVariable Long requestId) {
-//        FaultAnalysisDetailResponseDto response = faultAnalysisService.getFaultAnalysisDetail(requestId);
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    /**
+
+    // AI 분석 게시판 상세 조회
+    @GetMapping("/{faultAnalysisId}")
+    public ResponseEntity<FaultRatioBoardResponseDto> getFaultAnalysisList(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long faultAnalysisId
+            ) {
+        FaultRatioBoardResponseDto response = faultAnalysisService.getFaultAnalysisDetail(authorizationHeader, faultAnalysisId);
+        return ResponseEntity.ok(response);
+    }
+
+    // Controller
+    @PatchMapping("/{id}")
+    public ResponseEntity<FaultRatioBoardUpdateResponseDto> updateFaultRatioBoard(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody FaultRatioBoardUpdateRequestDto updateRequestDto) {
+        FaultRatioBoardUpdateResponseDto responseDto = faultAnalysisService.updateFaultAnalysis(authorizationHeader, updateRequestDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
 //     * AI 분석 게시판 상세 수정
 //     */
 //    @PutMapping("/{requestId}")

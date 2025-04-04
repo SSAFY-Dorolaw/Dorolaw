@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "fault_analysis")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,15 +35,41 @@ public class FaultAnalysis {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private Status status = Status.PENDING;
 
     @Column(nullable = false)
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
+    @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public enum Status {
         PENDING, COMPLETED, CANCELED
+    }
+
+    public void assignMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+    public void updateFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void makePublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changePublicStatus(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public void updateModificationTime() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

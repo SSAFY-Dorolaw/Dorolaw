@@ -34,10 +34,10 @@ public class FaultRatioAiService {
         Long memberId = (Long) memberInfo.get("memberId");
 
         FaultAnalysis faultAnalysis = new FaultAnalysis();
-        faultAnalysis.setMemberId(memberId);
-        faultAnalysis.setTitle(requestData.getTitle());
-        faultAnalysis.setFileName(requestData.getFileName());
-        faultAnalysis.setPublic(requestData.isPublic());
+        faultAnalysis.assignMemberId(memberId);
+        faultAnalysis.changeTitle(requestData.getTitle());
+        faultAnalysis.updateFileName(requestData.getFileName());
+        faultAnalysis.makePublic(requestData.isPublic());
 
         FaultAnalysis savedFaultAnalysis = faultAnalysisRepository.save(faultAnalysis);
         // rabbit에 보내주기.
