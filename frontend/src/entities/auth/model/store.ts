@@ -13,12 +13,9 @@ export const useAuthStore = create<AuthStore>()(
         return null;
       };
 
-      const token = getToken();
-      console.log(token);
-
       return {
-        isLogin: !!token, // 초기 로그인 상태
-        accessToken: token, // 토큰 상태
+        isLogin: false, // 초기 로그인 상태
+        accessToken: null, // 토큰 상태
         clientId: null, // 로그인한 사용자 정보
 
         login: (token: string) => {
@@ -39,6 +36,14 @@ export const useAuthStore = create<AuthStore>()(
         // clientId 설정 함수
         setClientId: (id: number | null) => {
           set({ clientId: id });
+        },
+
+        // 토큰 직접 설정하는 함수
+        setToken: (token: string | null) => {
+          set({
+            accessToken: token,
+            isLogin: !!token,
+          });
         },
       };
     },
