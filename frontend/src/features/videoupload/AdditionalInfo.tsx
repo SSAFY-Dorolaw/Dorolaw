@@ -56,7 +56,7 @@ const AdditionalInfo = ({ onChange }: AdditionalInfoProps) => {
               >
                 <option>선택하세요</option>
                 {Array.from({ length: 11 }, (_, i) => i * 10).map((value) => (
-                  <option key={value} value={value}>
+                  <option key={value} value={`${value}:${100 - value}`}>
                     {value} : {100 - value}
                   </option>
                 ))}
