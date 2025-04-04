@@ -9,9 +9,9 @@ import { uploadVideo } from '@/features/videoupload/api';
 import { submitInfo } from '@/features/videoupload/api';
 
 interface AdditionalData {
-  faultRatio: string;
-  description: string;
-  question: string;
+  faultRatio?: string;
+  description?: string;
+  question?: string;
 }
 
 const ConsultUpload = () => {
