@@ -3,9 +3,9 @@ package com.dorolaw.member.service;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.entity.ConsultationStatus;
 import com.dorolaw.consultation.entity.ConsultationType;
-import com.dorolaw.consultation.entity.Review;
 import com.dorolaw.consultation.repository.ConsultationRepository;
-import com.dorolaw.faultratioai.entity.AiReport;
+import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
+import com.dorolaw.faultratioai.reposiroty.FaultAiReportRepository;
 import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
 import com.dorolaw.member.dto.response.AiReportResponseDto;
 import com.dorolaw.member.dto.response.ClientRequestResponseDto;
@@ -37,7 +37,8 @@ public class MypageService {
     private final LawyerProfileRepository lawyerProfileRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RequestRepository requestRepository;
-    private final ReqeustAiReportRepository faultratioaiRepository;
+    private final ReqeustAiReportRepository requestAiReportRepository;
+    private final FaultAiReportRepository faultAiReportRepository;
 
     public ConsultationResponseDto getAllConsultations(String authorizationHeader){
 
@@ -98,22 +99,16 @@ public class MypageService {
 
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
-        List<AiReport> reports = faultratioaiRepository.findAllByMemberId(memberId);
+        List<FaultAnalysisAIReports> reports = faultAiReportRepository.findAllByMemberId(memberId);
 
         return reports.stream()
                 .map(report -> AiReportResponseDto.builder()
                         .reportId(report.getReportId())
-                        .thumbnailImageUrl(null) // 여기 썸네일 저장소 체크해야됨.
-                        .accidentObject(report.getAccidentObject())
-                        .accidentLocation(report.getAccidentLocation())
-                        .accidentLocationCharacteristics(report.getAccidentLocationCharacteristics()) //
-                        .directionOfA(report.getDirectionOfA())
-                        .directionOfB(report.getDirectionOfB())
+                        .fileName(report.getFaultAnalysis().getFileName())
                         .faultRatioA(report.getFaultRatioA())
                         .faultRatioB(report.getFaultRatioB())
-                        .accidentType(report.getAccidentType())
-                        .isPublic(report.getRequest().getIsPublic())
-                        .createdAt(report.getCreatedAt())
+                        .reportCreatedAt(report.getCreatedAt())
+                        .isPublic(report.getFaultAnalysis().isPublic())
                         .build())
                 .collect(Collectors.toList());
     }

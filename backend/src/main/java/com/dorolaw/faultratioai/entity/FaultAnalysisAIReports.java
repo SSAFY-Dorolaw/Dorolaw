@@ -20,7 +20,7 @@ public class FaultAnalysisAIReports {
     private Long reportId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id", nullable = false)
+    @JoinColumn(name = "fault_analysis_id", nullable = false)
     private FaultAnalysis faultAnalysis;
 
     @CreatedDate

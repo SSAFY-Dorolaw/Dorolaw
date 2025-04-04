@@ -34,11 +34,11 @@ public class FaultRatioAiService {
         Long memberId = (Long) memberInfo.get("memberId");
 
 
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+//        Member currentMember = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         FaultAnalysis faultAnalysis = new FaultAnalysis();
-        faultAnalysis.setMember(currentMember);
+        faultAnalysis.setMemberId(memberId);
         faultAnalysis.setTitle(requestData.getTitle());
         faultAnalysis.setFileName(requestData.getFileName());
         faultAnalysis.setPublic(requestData.isPublic());
@@ -48,9 +48,9 @@ public class FaultRatioAiService {
         rabbitTemplate.convertAndSend("main_diagnosis_queue", savedFaultAnalysis);
 
         return new FaultRatioResponseDto(
-                savedFaultAnalysis.getRequestId(),
+                savedFaultAnalysis.getFaultAnalysisId(),
                 savedFaultAnalysis.getFileName(),
-                savedFaultAnalysis.getMember().getMemberId()
+                savedFaultAnalysis.getMemberId()
         );
     }
 }

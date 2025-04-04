@@ -8,15 +8,9 @@ import java.time.LocalDateTime;
 @Builder
 public class AiReportResponseDto {
     private Long reportId;
-    private String thumbnailImageUrl;
-    private String accidentObject;
-    private String accidentLocation;
-    private String accidentLocationCharacteristics;
-    private String directionOfA;
-    private String directionOfB;
+    private String fileName;
     private Integer faultRatioA;
     private Integer faultRatioB;
-    private Integer accidentType;
+    private LocalDateTime reportCreatedAt;
     private Boolean isPublic;
-    private LocalDateTime createdAt;
 }

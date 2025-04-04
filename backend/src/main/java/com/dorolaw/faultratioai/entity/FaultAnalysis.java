@@ -11,13 +11,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class FaultAnalysis {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long requestId;
+    private Long faultAnalysisId;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Member member;
+    @OneToOne(mappedBy = "faultAnalysis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private FaultAnalysisAIReports faultAnalysisAIReports;
+
+    @Column(nullable = false)
+    private Long memberId;
 
     @Column(nullable = false)
     private String title;
@@ -41,7 +44,4 @@ public class FaultAnalysis {
     public enum Status {
         PENDING, COMPLETED, CANCELED
     }
-
-    @OneToOne(mappedBy = "faultAnalysis", fetch = FetchType.LAZY)
-    private FaultAnalysisAIReports faultAnalysisAIReports;
 }

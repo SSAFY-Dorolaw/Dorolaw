@@ -1,0 +1,16 @@
+package com.dorolaw.faultratioai.reposiroty;
+
+import com.dorolaw.faultratioai.entity.AiReport;
+import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface FaultAiReportRepository extends JpaRepository<FaultAnalysisAIReports, Long> {
+    @Query("SELECT ar FROM FaultAnalysisAIReports ar " +
+            "WHERE ar.faultAnalysis.memberId = :memberId " +
+            "ORDER BY ar.createdAt DESC")
+    List<FaultAnalysisAIReports> findAllByMemberId(@Param("memberId") Long memberId);
+}

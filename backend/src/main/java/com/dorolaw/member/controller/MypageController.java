@@ -35,7 +35,8 @@ public class MypageController {
 
     }
 
-     // 본인이 업로드한 AI 분석자료 조회
+    // 사용자가 업로드한 과실비율 분석 영상 자료 조회 API
+    // 최신순 정렬
     @GetMapping("/clients/reports")
     public ResponseEntity<List<AiReportResponseDto>> getMyReports(
             @RequestHeader("Authorization") String authorizationHeader) {
