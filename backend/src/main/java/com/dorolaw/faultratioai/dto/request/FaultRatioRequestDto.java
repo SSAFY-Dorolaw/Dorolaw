@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FaultRatioRequestDto {
-    private Long faultAnalysisId;
     private String fileName;
     private String title;
     private boolean isPublic = false;
