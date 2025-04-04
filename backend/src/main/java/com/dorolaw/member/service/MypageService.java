@@ -1,12 +1,10 @@
 package com.dorolaw.member.service;
 
 import com.dorolaw.consultation.entity.Consultation;
-import com.dorolaw.consultation.entity.ConsultationStatus;
 import com.dorolaw.consultation.entity.ConsultationType;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
-import com.dorolaw.faultratioai.reposiroty.FaultAiReportRepository;
-import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
+import com.dorolaw.faultratioai.reposiroty.FaultAnalysisAiReportRepository;
 import com.dorolaw.member.dto.response.*;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
@@ -38,7 +36,7 @@ public class MypageService {
     private final RequestRepository requestRepository;
 //    private final ReqeustAiReportRepository requestAiReportRepository;
     private final AnswerRepository answerRepository;
-    private final FaultAiReportRepository faultAiReportRepository;
+    private final FaultAnalysisAiReportRepository faultAnalysisAiReportRepository;
 
     public ConsultationResponseDto getAllConsultations(String authorizationHeader){
 
@@ -99,7 +97,7 @@ public class MypageService {
 
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
-        List<FaultAnalysisAIReports> reports = faultAiReportRepository.findAllByMemberId(memberId);
+        List<FaultAnalysisAIReports> reports = faultAnalysisAiReportRepository.findAllByMemberId(memberId);
 
         return reports.stream()
                 .map(report -> AiReportResponseDto.builder()

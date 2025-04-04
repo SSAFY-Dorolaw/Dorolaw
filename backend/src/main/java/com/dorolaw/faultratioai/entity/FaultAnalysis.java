@@ -2,14 +2,17 @@ package com.dorolaw.faultratioai.entity;
 
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fault_analysis")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FaultAnalysis {
 
     @Id

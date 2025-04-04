@@ -33,10 +33,6 @@ public class FaultRatioAiService {
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
 
-
-//        Member currentMember = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-
         FaultAnalysis faultAnalysis = new FaultAnalysis();
         faultAnalysis.setMemberId(memberId);
         faultAnalysis.setTitle(requestData.getTitle());
