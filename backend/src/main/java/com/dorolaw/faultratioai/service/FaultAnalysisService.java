@@ -2,6 +2,7 @@ package com.dorolaw.faultratioai.service;
 
 import com.dorolaw.faultratioai.dto.request.FaultRatioBoardRequestDto;
 import com.dorolaw.faultratioai.dto.request.FaultRatioBoardUpdateRequestDto;
+import com.dorolaw.faultratioai.dto.response.FaultAnalysisListResponseDto;
 import com.dorolaw.faultratioai.dto.response.FaultRatioBoardResponseDto;
 import com.dorolaw.faultratioai.dto.response.FaultRatioBoardUpdateResponseDto;
 import com.dorolaw.faultratioai.entity.FaultAnalysis;
@@ -13,6 +14,8 @@ import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,14 +56,7 @@ public class FaultAnalysisService {
         FaultAnalysis savedAnalysis = faultAnalysisRepository.save(faultAnalysis);
     }
 
-    public FaultRatioBoardResponseDto getFaultAnalysisDetail(String authorizationHeader, Long faultAnalysisId) {
-
-        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+    public FaultRatioBoardResponseDto getFaultAnalysisDetail(Long faultAnalysisId) {
 
         FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(faultAnalysisId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
@@ -141,7 +137,8 @@ public class FaultAnalysisService {
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
 
         FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (!faultAnalysis.getMemberId().equals(memberId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -150,5 +147,11 @@ public class FaultAnalysisService {
         faultAnalysisAIReportsRepository.deleteByFaultAnalysis(faultAnalysis);
 
         faultAnalysisRepository.delete(faultAnalysis);
+    }
+
+    public Page<FaultAnalysisListResponseDto> getPublicFaultAnalysisList(Long memberId, Pageable pageable) {
+
+        Page<FaultAnalysis> faultAnalysisPage = faultAnalysisRepository.findByMemberIdOrIsPublicTrue(memberId, pageable);
+        return faultAnalysisPage.map(FaultAnalysisListResponseDto::fromEntity);
     }
 }
