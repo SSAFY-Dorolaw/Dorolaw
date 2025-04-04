@@ -23,4 +23,6 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     );
 
     List<Consultation> findByClientOrLawyer(Member client, LawyerProfile lawyer);
+
+    List<Consultation> findByLawyer_LawyerProfileIdOrderByCreatedAtDesc(Long lawyerProfileId);
 }
