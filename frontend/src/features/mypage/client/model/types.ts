@@ -1,5 +1,9 @@
 // 상담 내역 조회 시 사용
 export interface ClientConsultations {
+  consultations: Consultation[];
+}
+
+export interface Consultation {
   consultationId: number; //상담 id
   scheduledDate: string; // 상담 날짜와 시간
   consultationMethod: string; // 상담 형태
@@ -14,6 +18,10 @@ export interface ClientConsultations {
 
 // 의뢰목록 조회 시 사용
 export interface ClientRequests {
+  requests: Request[];
+}
+
+export interface Request {
   requestId: number; // 의뢰 id
   title: string; // 의뢰 제목
   status: string; // 상담 상태
@@ -23,7 +31,7 @@ export interface ClientRequests {
 }
 
 // 과실비율 분석 조회 시 사용
-export interface Analyses {
+export interface Analysis {
   faultRatioId: number; // 분석결과 id
   fileName: string; // 영상 파일 이름
   falutRatioA: number; // A의 과실비율
