@@ -1,19 +1,22 @@
-import { useState } from 'react';
-
 interface OptionCheckboxProps {
   isPublic: boolean;
   onChangePublic: (value: boolean) => void;
+  isAgree: boolean;
+  onChangeAgree: (value: boolean) => void;
 }
 
-const OptionCheckbox = ({ isPublic, onChangePublic }: OptionCheckboxProps) => {
-  const [isAgree, setIsAgree] = useState(false);
-
+const OptionCheckbox = ({
+  isPublic,
+  onChangePublic,
+  isAgree,
+  onChangeAgree,
+}: OptionCheckboxProps) => {
   const publicCheckbox = () => {
     onChangePublic(!isPublic); // props 함수 호출
   };
 
   const agreeCheckbox = () => {
-    setIsAgree(!isAgree);
+    onChangeAgree(!isAgree);
   };
 
   return (
