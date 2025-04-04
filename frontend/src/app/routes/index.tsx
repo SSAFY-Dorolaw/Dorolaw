@@ -20,58 +20,73 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
+      { path: '/', element: <Main /> },
       {
         path: '/login',
-        element: <Login />,
+        children: [
+          { path: '', element: <Login /> },
+          { path: 'redirect', element: <LoginRedirect /> },
+        ],
       },
       {
-        path: '/login/redirect',
-        element: <LoginRedirect />,
+        path: '/report',
+        children: [
+          { path: '', element: <VideoUpload /> },
+          { path: 'detail', element: <ConsultDetail /> }, // n번 게시글(ex. reportId)로 추가 수정 필요
+        ],
       },
-      { path: '/', element: <Main /> },
-      { path: '/upload', element: <VideoUpload /> },
       {
         path: '/consultation',
         children: [
           {
-            index: true,
+            path: '',
             element: <ConsultUpload />,
           },
-          { path: 'detail', element: <ConsultDetail /> },
-          { path: 'reservation', element: <Reservation /> },
+          { path: ':requestId', element: <ConsultDetail /> },
         ],
       },
       {
         path: '/board',
-        element: <Board />,
+        children: [{ path: '', element: <Board /> }],
       },
       {
-        path: '/mypage',
-        element: <MyPage />,
+        path: '/client',
+        children: [
+          {
+            path: '',
+            element: <MyPage />,
+          },
+          {
+            path: 'consultations',
+            element: <ConsultationList />,
+          },
+          {
+            path: 'reservations',
+            element: <ReservationList />,
+          },
+          {
+            path: 'reviews',
+            element: <ReviewList />,
+          },
+          {
+            path: 'analyses',
+            element: <MyAnalyses />,
+          },
+        ],
       },
       {
-        path: '/client/consultations',
-        element: <ConsultationList />,
-      },
-      {
-        path: '/client/reservations',
-        element: <ReservationList />,
-      },
-      {
-        path: '/client/reviews',
-        element: <ReviewList />,
-      },
-      {
-        path: '/client/analyses',
-        element: <MyAnalyses />,
-      },
-      {
-        path: '/lawyer/mypage',
-        element: <LawyerMypage />,
-      },
-      {
-        path: '/lawyer/mypage/edit',
-        element: <EditLawyerPage />,
+        path: '/lawyer',
+        children: [
+          {
+            path: '',
+            element: <LawyerMypage />,
+          },
+          { path: 'profile', element: <Reservation /> },
+          {
+            path: 'edit',
+            element: <EditLawyerPage />,
+          },
+        ],
       },
     ],
   },

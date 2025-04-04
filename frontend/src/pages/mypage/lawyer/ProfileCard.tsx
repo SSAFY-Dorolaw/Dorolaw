@@ -7,7 +7,7 @@ const ProfileCard = () => {
   const navigate = useNavigate();
 
   const goToEdit = () => {
-    void navigate('/lawyer/mypage/edit');
+    void navigate('/lawyer/edit');
   };
 
   return (
@@ -17,7 +17,6 @@ const ProfileCard = () => {
         <h2 className="my-1 ml-3 text-h2 font-bold text-p1">김승소 변호사</h2>
         <div className="flex justify-between">
           <p className="ml-3 text-bodysmall text-p1">로로 법률사무소</p>
-          {/* <Edit className="mr-2 cursor-pointer" /> */}
         </div>
       </div>
 
