@@ -120,15 +120,12 @@ public class MypageService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         List<Consultation> consultations = consultationRepository
                 .findByLawyer_LawyerProfileIdOrderByCreatedAtDesc(lawyerProfile.getLawyerProfileId());
-
-        if (consultations.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
 
         return consultations.stream()
                 .map(this::convertToResponse)
@@ -136,17 +133,10 @@ public class MypageService {
     }
 
     private LawyerConsultationResponse convertToResponse(Consultation consultation) {
-        String consultationType = consultation.getConsultationType() == ConsultationType.VISIT
-                ? "30분방문" : "30분전화";
 
-        String status;
-        if (consultation.getStatus() == ConsultationStatus.PENDING) {
-            status = "상담전";
-        } else if (consultation.getStatus() == ConsultationStatus.COMPLETED) {
-            status = consultation.getReview() != null ? "후기작성완료" : "상담완료";
-        } else {
-            status = "취소됨";
-        }
+        String consultationType = consultation.getConsultationType().toString();
+
+        String status = consultation.getStatus().toString();
 
         return LawyerConsultationResponse.builder()
                 .consultationId(consultation.getConsultationId())
