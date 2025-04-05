@@ -36,25 +36,25 @@ public class MemberService {
     private final LawyerScheduleRepository lawyerScheduleRepository;
     private final LawyerTagRepository lawyerTagRepository;
 
-        public Object getMemberInfo(String authorizationHeader){
+    public Object getMemberInfo(String authorizationHeader){
 
-            String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-            Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-            String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
+        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
+        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            MemberProfileDto baseProfile = MemberProfileDto.builder()
-                    .memberId(memberId)
-                    .name(member.getName())
-                    .email(member.getEmail())
-                    .phoneNumber(member.getPhoneNumber())
-                    .joinDate(member.getCreatedAt().format(formatter))
-                .profileImage(member.getProfileImage())
-                .role(member.getRole().name())
-                .build();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        MemberProfileDto baseProfile = MemberProfileDto.builder()
+                .memberId(memberId)
+                .name(member.getName())
+                .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
+                .joinDate(member.getCreatedAt().format(formatter))
+            .profileImage(member.getProfileImage())
+            .role(member.getRole().name())
+            .build();
 
         if (memberRole.equals("GENERAL")) {
             return baseProfile.toGeneralProfile();

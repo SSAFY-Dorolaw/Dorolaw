@@ -51,9 +51,9 @@ public class Request {
     @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "request", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private AiReport aiReport;
 
-    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

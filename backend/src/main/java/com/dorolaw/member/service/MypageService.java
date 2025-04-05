@@ -34,7 +34,6 @@ public class MypageService {
     private final LawyerProfileRepository lawyerProfileRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RequestRepository requestRepository;
-//    private final ReqeustAiReportRepository requestAiReportRepository;
     private final AnswerRepository answerRepository;
     private final FaultAnalysisAiReportRepository faultAnalysisAiReportsRepository;
 
@@ -116,9 +115,6 @@ public class MypageService {
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
@@ -153,9 +149,6 @@ public class MypageService {
     public List<LawyerAnsweredInquiryListResponseDto> getAnsweredRequestList(String authorizationHeader){
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));

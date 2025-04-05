@@ -8,6 +8,7 @@ import com.dorolaw.request.dto.response.ReqeustListResDto;
 import com.dorolaw.request.dto.response.RequestCreateResDto;
 import com.dorolaw.request.dto.response.RequestDetailDto;
 import com.dorolaw.request.service.RequestService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,12 @@ import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/requests")
+@RequiredArgsConstructor
 @Slf4j
 public class RequestController {
 
     private final RequestService requestService;
     private final DiagnosisRequestService diagnosisRequestService;
-
-    public RequestController(RequestService requestService, DiagnosisRequestService diagnosisRequestService) {
-        this.requestService = requestService;
-        this.diagnosisRequestService = diagnosisRequestService;
-    }
 
     // 의뢰 등록 API
     @PostMapping
@@ -37,15 +34,15 @@ public class RequestController {
 
     // 의뢰 수정 API
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateRequest(@PathVariable Long id, @RequestBody RequestUpdateDto dto) {
-        requestService.updateRequest(id, dto);
+    public ResponseEntity<Void> updateRequest(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id, @RequestBody RequestUpdateDto dto) {
+        requestService.updateRequest(authorizationHeader, id, dto);
         return ResponseEntity.ok().build();
     }
 
     // 의뢰 삭제 API
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
-        requestService.deleteRequest(id);
+    public ResponseEntity<Void> deleteRequest(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id) {
+        requestService.deleteRequest(authorizationHeader, id);
         return ResponseEntity.ok().build();
     }
 

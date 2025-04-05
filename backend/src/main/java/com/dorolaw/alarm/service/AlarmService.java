@@ -7,21 +7,17 @@ import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AlarmService {
     private final FcmTokenRepository fcmTokenRepository;
     private final AlarmRepository alarmRepository;
     private final ConsultationRepository consultationRepository;
-
-    public AlarmService(FcmTokenRepository fcmTokenRepository, AlarmRepository alarmRepository, ConsultationRepository consultationRepository) {
-        this.fcmTokenRepository = fcmTokenRepository;
-        this.alarmRepository = alarmRepository;
-        this.consultationRepository = consultationRepository;
-    }
     
     // memberId로 fcm 토큰 찾기
     public List<FcmToken> findTokenListByMemberId(Long memberId) {

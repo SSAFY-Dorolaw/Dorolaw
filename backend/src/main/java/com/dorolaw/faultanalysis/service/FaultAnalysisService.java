@@ -11,16 +11,16 @@ import com.dorolaw.faultanalysis.entity.FaultAnalysisAIReport;
 import com.dorolaw.faultanalysis.entity.FaultAnalysisStatus;
 import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisAiReportRepository;
 import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisRepository;
-import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -28,7 +28,6 @@ import java.util.Optional;
 public class FaultAnalysisService {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
     private final FaultAnalysisRepository faultAnalysisRepository;
     private final FaultAnalysisAiReportRepository faultAnalysisAIReportsRepository;
 
@@ -54,32 +53,26 @@ public class FaultAnalysisService {
     }
 
     @Transactional
-    public FaultRatioBoardUpdateResponseDto updateFaultAnalysis(String authorizationHeader, FaultAnalysisUpdateReqDto updateRequestDto) {
-
-        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-
-
-        FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(memberId)
+    public FaultRatioBoardUpdateResponseDto updateFaultAnalysis(String authorizationHeader, Long faultAnalysisId, FaultAnalysisUpdateReqDto updateRequestDto) {
+        // 과실 비율 분석 내역 확인
+        FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(faultAnalysisId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        // 작성자 확인
+        String token = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if (!faultAnalysis.getMemberId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        if(memberId != faultAnalysis.getMemberId()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        if (updateRequestDto.getTitle() != null) {
-            faultAnalysis.setTitle(updateRequestDto.getTitle());
-        }
-
-        if (updateRequestDto.getIsPublic() != null) {
-            faultAnalysis.setIsPublic(updateRequestDto.getIsPublic());
-        }
-
-        faultAnalysis.setUpdatedAt(LocalDateTime.now());
+        // 수정
+        faultAnalysis.setTitle(updateRequestDto.getTitle());
+        faultAnalysis.setIsPublic(updateRequestDto.getIsPublic());
 
         FaultAnalysis updatedAnalysis = faultAnalysisRepository.save(faultAnalysis);
 
+        // 제목, 수정일 return
         return FaultRatioBoardUpdateResponseDto.builder()
                 .title(updatedAnalysis.getTitle())
                 .updatedAt(updatedAnalysis.getUpdatedAt())
@@ -88,21 +81,21 @@ public class FaultAnalysisService {
 
     @Transactional
     public void deleteFaultAnalysis(String authorizationHeader, Long requfaultAnalysisIdstId) {
-
-        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-
-        FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(memberId)
+        // 과실 비율 분석 내역 확인
+        FaultAnalysis faultAnalysis = faultAnalysisRepository.findById(requfaultAnalysisIdstId)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!faultAnalysis.getMemberId().equals(memberId)) {
+        // 작성자 확인
+        String token = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
+
+        if(memberId != faultAnalysis.getMemberId()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-
-        faultAnalysisAIReportsRepository.deleteByFaultAnalysis(faultAnalysis);
-
-        faultAnalysisRepository.delete(faultAnalysis);
+        
+        // 삭제
+        faultAnalysisRepository.deleteById(requfaultAnalysisIdstId);
     }
 
     public FaultRatioBoardResponseDto getFaultAnalysisDetail(Long faultAnalysisId) {
@@ -145,9 +138,10 @@ public class FaultAnalysisService {
         return responseDto;
     }
 
-    public Page<FaultAnalysisListResponseDto> getPublicFaultAnalysisList(Long memberId, Pageable pageable) {
+    public Page<FaultAnalysisListResponseDto> getPublicFaultAnalysisList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<FaultAnalysis> faultAnalysisPage = faultAnalysisRepository.findAllByIsPublicTrueOrderByCreatedAtDesc(pageable);
 
-        Page<FaultAnalysis> faultAnalysisPage = faultAnalysisRepository.findByMemberIdOrIsPublicTrue(memberId, pageable);
         return faultAnalysisPage.map(FaultAnalysisListResponseDto::fromEntity);
     }
 }

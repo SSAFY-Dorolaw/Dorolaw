@@ -5,12 +5,11 @@ import com.dorolaw.member.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mypage")
 @RequiredArgsConstructor
+@RequestMapping("/api/mypage")
 public class MypageController {
 
     private final MypageService mypageService;
@@ -29,7 +28,6 @@ public class MypageController {
             @RequestHeader("Authorization") String authorizationHeader) {
         ClientRequestResponseDto response = mypageService.getClientRequests(authorizationHeader);
         return ResponseEntity.ok(response);
-
     }
 
     // 사용자가 업로드한 과실비율 분석 영상 자료 조회 API
@@ -55,6 +53,6 @@ public class MypageController {
         @RequestHeader("Authorization") String authorizationHeader) {
         List<LawyerAnsweredInquiryListResponseDto> response = mypageService.getAnsweredRequestList(authorizationHeader);
         return ResponseEntity.ok(response);
-        }
+    }
 }
 

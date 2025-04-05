@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FaultAnalysisRepository extends JpaRepository<FaultAnalysis, Long> {
-    Page<FaultAnalysis> findByMemberIdOrIsPublicTrue(Long memberId, Pageable pageable);
+    Page<FaultAnalysis> findAllByIsPublicTrueOrderByCreatedAtDesc(Pageable pageable);
 }
