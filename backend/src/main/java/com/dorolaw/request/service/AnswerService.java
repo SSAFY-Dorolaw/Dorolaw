@@ -1,7 +1,7 @@
 package com.dorolaw.request.service;
 
-import com.dorolaw.request.dto.AnswerCreateDto;
-import com.dorolaw.request.dto.AnswerUpdateDto;
+import com.dorolaw.request.dto.request.AnswerCreateDto;
+import com.dorolaw.request.dto.request.AnswerUpdateDto;
 import com.dorolaw.request.entity.Answer;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.repository.AnswerRepository;

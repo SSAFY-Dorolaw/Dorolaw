@@ -1,19 +1,15 @@
 package com.dorolaw.member.controller;
 
-import com.dorolaw.member.dto.response.AiReportResponseDto;
-import com.dorolaw.member.dto.response.ClientRequestResponseDto;
-import com.dorolaw.member.dto.response.ConsultationResponseDto;
-import com.dorolaw.member.dto.response.LawyerConsultationResponse;
+import com.dorolaw.member.dto.response.*;
 import com.dorolaw.member.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mypage")
 @RequiredArgsConstructor
+@RequestMapping("/api/mypage")
 public class MypageController {
 
     private final MypageService mypageService;
@@ -32,10 +28,10 @@ public class MypageController {
             @RequestHeader("Authorization") String authorizationHeader) {
         ClientRequestResponseDto response = mypageService.getClientRequests(authorizationHeader);
         return ResponseEntity.ok(response);
-
     }
 
-     // 본인이 업로드한 AI 분석자료 조회
+    // 사용자가 업로드한 과실비율 분석 영상 자료 조회 API
+    // 최신순 정렬
     @GetMapping("/clients/reports")
     public ResponseEntity<List<AiReportResponseDto>> getMyReports(
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -50,4 +46,13 @@ public class MypageController {
         List<LawyerConsultationResponse> response = mypageService.getLawyerConsultations(authorizationHeader);
         return ResponseEntity.ok(response);
     }
+
+    // 변호사 - 의뢰답변 작성한 의뢰 리스트
+    @GetMapping("/lawyer/requests")
+    public ResponseEntity<List<LawyerAnsweredInquiryListResponseDto>> getAnsweredRequest(
+        @RequestHeader("Authorization") String authorizationHeader) {
+        List<LawyerAnsweredInquiryListResponseDto> response = mypageService.getAnsweredRequestList(authorizationHeader);
+        return ResponseEntity.ok(response);
+    }
 }
+

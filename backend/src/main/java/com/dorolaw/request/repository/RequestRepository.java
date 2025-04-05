@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    Page<Request> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Request> findAllByIsPublicTrueOrderByCreatedAtDesc(Pageable pageable);
 
     @Query("select distinct r from Request r " +
             "left join fetch r.aiReport " +
