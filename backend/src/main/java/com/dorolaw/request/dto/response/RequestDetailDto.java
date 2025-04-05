@@ -3,11 +3,14 @@ package com.dorolaw.request.dto.response;
 import com.dorolaw.request.dto.AiReportDto;
 import com.dorolaw.request.dto.AnswerDto;
 import com.dorolaw.request.entity.Request;
+import com.dorolaw.request.entity.RequestStatus;
+import com.dorolaw.request.entity.RequestTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,10 @@ public class RequestDetailDto {
     private String description;
     private String question;
     private Boolean isPublic;
+    private RequestStatus status;
+    private RequestTag tag;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private AiReportDto aiReport;
     private List<AnswerDto> answers;
 
@@ -37,6 +44,10 @@ public class RequestDetailDto {
         dto.setDescription(request.getDescription());
         dto.setQuestion(request.getQuestion());
         dto.setIsPublic(request.getIsPublic());
+        dto.setStatus(request.getStatus());
+        dto.setTag(request.getTag());
+        dto.setCreatedAt(request.getCreatedAt());
+        dto.setUpdatedAt(request.getUpdatedAt());
 
         if (request.getAiReport() != null) {
             dto.setAiReport(AiReportDto.fromEntity(request.getAiReport()));

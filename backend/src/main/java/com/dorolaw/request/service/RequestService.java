@@ -1,5 +1,6 @@
 package com.dorolaw.request.service;
 
+import com.dorolaw.alarm.dto.request.RequestAlarmDto;
 import com.dorolaw.request.dto.AiRequestDto;
 import com.dorolaw.request.dto.request.RequestCreateDto;
 import com.dorolaw.request.dto.request.RequestUpdateDto;
@@ -7,6 +8,7 @@ import com.dorolaw.request.dto.response.ReqeustListResDto;
 import com.dorolaw.request.dto.response.RequestDetailDto;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
+import com.dorolaw.request.entity.RequestTag;
 import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
@@ -19,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -42,6 +43,7 @@ public class RequestService {
         request.setQuestion(dto.getQuestion());
         request.setIsPublic(dto.getIsPublic());
         request.setStatus(RequestStatus.PENDING); // 초기 상태 설정
+        request.setTag(RequestTag.NONE);
         Request saved = requestRepository.save(request);
 
         AiRequestDto res = new AiRequestDto();
@@ -61,7 +63,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != request.getMemberId()) {
+        if(memberId.equals(request.getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -85,7 +87,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != request.getMemberId()) {
+        if(!memberId.equals(request.getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -106,5 +108,22 @@ public class RequestService {
         Page<Request> requests = requestRepository.findAllByIsPublicTrueOrderByCreatedAtDesc(pageable);
 
         return requests.map(ReqeustListResDto::fromEntity);
+    }
+    
+    // tag 수정하기
+    @Transactional
+    public void updateTag(RequestAlarmDto requestAlarmDto) {
+        // 의뢰 존재 여부 확인
+        Request request = requestRepository.findById(requestAlarmDto.getRequestId())
+                .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
+
+        // 작성자 확인
+        if(!requestAlarmDto.getMemberId().equals(request.getMemberId())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        // 수정
+        request.setTag(RequestTag.valueOf(requestAlarmDto.getAccidentObject()));
+        requestRepository.save(request);
     }
 }
