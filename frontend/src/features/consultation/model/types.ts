@@ -27,7 +27,7 @@ export interface SuccessResponse {
   requestId: number; // 게시글 고유번호
   memberId: number;
   title: string;
-  filename: string;
+  fileName: string;
   insuranceFaultRatio: string;
   description: string;
   question: string;
