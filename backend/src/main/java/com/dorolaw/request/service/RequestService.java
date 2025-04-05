@@ -1,11 +1,15 @@
 package com.dorolaw.request.service;
 
-import com.dorolaw.faultratioai.dto.request.AiRequestDto;
-import com.dorolaw.request.dto.*;
+import com.dorolaw.request.dto.AiRequestDto;
+import com.dorolaw.request.dto.request.RequestCreateDto;
+import com.dorolaw.request.dto.request.RequestUpdateDto;
+import com.dorolaw.request.dto.response.ReqeustListResDto;
+import com.dorolaw.request.dto.response.RequestDetailDto;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
 import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,8 +38,8 @@ public class RequestService {
         request.setQuestion(dto.getQuestion());
         request.setIsPublic(dto.getIsPublic());
         request.setStatus(RequestStatus.PENDING); // 초기 상태 설정
-
         Request saved = requestRepository.save(request);
+
         AiRequestDto res = new AiRequestDto();
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
@@ -43,6 +47,7 @@ public class RequestService {
         return res;
     }
 
+    @Transactional
     public void updateRequest(Long requestId, RequestUpdateDto dto) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
@@ -56,6 +61,7 @@ public class RequestService {
         requestRepository.save(request);
     }
 
+    @Transactional
     public void deleteRequest(Long requestId) {
         if (!requestRepository.existsById(requestId)) {
             throw new NoSuchElementException("의뢰를 찾을 수 없습니다.");

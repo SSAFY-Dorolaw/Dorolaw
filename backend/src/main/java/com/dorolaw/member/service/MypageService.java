@@ -3,8 +3,8 @@ package com.dorolaw.member.service;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.entity.ConsultationType;
 import com.dorolaw.consultation.repository.ConsultationRepository;
-import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
-import com.dorolaw.faultratioai.reposiroty.FaultAnalysisAiReportsRepository;
+import com.dorolaw.faultanalysis.entity.FaultAnalysisAIReport;
+import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisAiReportRepository;
 import com.dorolaw.member.dto.response.*;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
@@ -36,7 +36,7 @@ public class MypageService {
     private final RequestRepository requestRepository;
 //    private final ReqeustAiReportRepository requestAiReportRepository;
     private final AnswerRepository answerRepository;
-    private final FaultAnalysisAiReportsRepository faultAnalysisAiReportsRepository;
+    private final FaultAnalysisAiReportRepository faultAnalysisAiReportsRepository;
 
     public ConsultationResponseDto getAllConsultations(String authorizationHeader){
 
@@ -97,7 +97,7 @@ public class MypageService {
 
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
-        List<FaultAnalysisAIReports> reports = faultAnalysisAiReportsRepository.findAllByMemberId(memberId);
+        List<FaultAnalysisAIReport> reports = faultAnalysisAiReportsRepository.findAllByMemberId(memberId);
 
         return reports.stream()
                 .map(report -> AiReportResponseDto.builder()
@@ -106,7 +106,7 @@ public class MypageService {
                         .faultRatioA(report.getFaultRatioA())
                         .faultRatioB(report.getFaultRatioB())
                         .reportCreatedAt(report.getCreatedAt())
-                        .isPublic(report.getFaultAnalysis().isPublic())
+                        .isPublic(report.getFaultAnalysis().getIsPublic())
                         .build())
                 .collect(Collectors.toList());
     }

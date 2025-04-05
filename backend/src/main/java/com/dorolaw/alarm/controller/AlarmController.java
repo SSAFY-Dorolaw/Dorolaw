@@ -1,12 +1,12 @@
 package com.dorolaw.alarm.controller;
 
-import com.dorolaw.alarm.dto.RequestAlarmDto;
+import com.dorolaw.alarm.dto.request.RequestAlarmDto;
 import com.dorolaw.alarm.entity.Alarm;
 import com.dorolaw.alarm.entity.FcmToken;
-import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.alarm.service.FcmService;
-import com.dorolaw.faultratioai.service.AiReportService;
+import com.dorolaw.faultanalysis.service.FaultAnalysisAiReportService;
+import com.dorolaw.request.service.AiReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +18,10 @@ import java.util.List;
 @Slf4j
 public class AlarmController {
 
-    private final FcmTokenRepository tokenRepository;
     private final FcmService fcmService;
     private final AlarmService alarmService;
     private final AiReportService requestAiReportService;
-
-    // 테스트용
-    @PostMapping("/test")
-    public String sendNotificationToAll(@RequestBody String body) {
-        List<FcmToken> tokens = tokenRepository.findAll();
-        return sendAlarms(tokens,body);
-    }
+    private final FaultAnalysisAiReportService faultAnalysisAiReportService;
 
     // 의뢰 관련 알림
     @PostMapping("/requests")
@@ -46,10 +39,10 @@ public class AlarmController {
 
     // 과실 비율 분석기 관련 알림
     @PostMapping("/analysis")
-    public String sendAnalysisAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
+    public String sendFaultrationaiAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
         log.info("requestAlarmDto: {}", requestAlarmDto);
         // report 저장
-        requestAiReportService.saveAnalysisReport(requestAlarmDto);
+        faultAnalysisAiReportService.saveAnalysisReport(requestAlarmDto);
         log.info("Ai repor 저장 완료됨");
 
         // 알림 보내기
@@ -76,7 +69,7 @@ public class AlarmController {
 
     // 알림 리스트 조회
     @GetMapping("/myList/{memberId}")
-    public List<Alarm> getMyList(@PathVariable Long memberId) {
+    public List<Alarm> getMyAlarmList(@PathVariable Long memberId) {
         return alarmService.getMyList(memberId);
     }
 }
