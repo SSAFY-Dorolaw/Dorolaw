@@ -16,14 +16,14 @@ public class AiReportDto {
     private Long requestId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String AccidentObject;
-    private String AccidentLocation;
-    private String AccidentLocationCharacteristics;
-    private String DirectionOfA;
-    private String DirectionOfB;
-    private Integer FaultRatioA;
-    private Integer FaultRatioB;
-    private Integer AccidentType;
+    private String accidentObject;
+    private String accidentLocation;
+    private String accidentLocationCharacteristics;
+    private String directionOfA;
+    private String directionOfB;
+    private Integer faultRatioA;
+    private Integer faultRatioB;
+    private Integer accidentType;
 
     public static AiReportDto fromEntity(AiReport aiReport) {
         return new AiReportDto(

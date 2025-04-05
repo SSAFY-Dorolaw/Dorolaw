@@ -1,5 +1,5 @@
 package com.dorolaw.consultation.entity;
 
 public enum ConsultationStatus {
-    COMPLETED, CONFIRMED, CANCELED
+    PENDING, SCHEDULED, COMPLETED, REVIEWD
 }

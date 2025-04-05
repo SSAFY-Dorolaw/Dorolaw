@@ -22,7 +22,7 @@ public class MemberController {
     }
 
     // 회원 정보 수정 API (일반/변호사)
-    @PutMapping("/profile")
+    @PatchMapping("/profile")
     public ResponseEntity<Object> updateProfile(@RequestHeader("Authorization") String authorizationHeader,
                                                 @RequestBody MyPageUpdateRequestDto requestDto) {
         Object updateProfileDto = memberService.updateMemberProfile(authorizationHeader, requestDto);
