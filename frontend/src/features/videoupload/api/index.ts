@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { useAuthStore } from '@/entities/auth/model/store';
+import { useAuthStore, getTokenFromStorage } from '@/entities/auth/model/store';
 import {
   SuccessResponse,
   ConsultSuccessResponse,
@@ -20,18 +20,20 @@ type ApiResponse = SuccessResponse | ConsultSuccessResponse | ErrorResponse;
  * @returns 업로드 결과 응답
  */
 
+/* 영상 업로드 */
 export const uploadVideo = async (
   data: VideoUploadRequest,
   endpoint = '/videos/upload',
 ): Promise<ApiResponse> => {
   try {
-    // 인증 토큰 가져오기
+    // 인증 토큰 가져오기 - 스토어와 로컬 스토리지 모두 확인
     const { accessToken } = useAuthStore.getState();
-    const token = accessToken;
+    // 스토어에 토큰이 없으면 로컬 스토리지에서 직접 가져옴
+    const token = accessToken ?? getTokenFromStorage();
 
     // 디버깅
     console.log('스토어 토큰 상태: ', accessToken ? '토큰 존재' : '토큰 없음');
-    console.log('사용할 토큰: ', token ? '토큰 존재' : '토큰 없음');
+    console.log('로컬 스토리지 토큰: ', token ? '토큰 존재' : '토큰 없음');
 
     // 디버깅 - 업로드할 파일 정보
     console.log('업로드할 파일 정보: ', {
@@ -81,16 +83,19 @@ export const uploadVideo = async (
   }
 };
 
+/* 추가 정보 업로드 */
 export const submitInfo = async (
   data: ConsultInfoRequest,
   endpoint = '/requests',
 ): Promise<ApiResponse> => {
   try {
-    // 인증 토큰 가져오기
+    // 인증 토큰 가져오기 - 스토어와 로컬 스토리지 모두 확인
     const { accessToken } = useAuthStore.getState();
+    // 스토어에 토큰이 없으면 로컬 스토리지에서 직접 가져옴
+    const token = accessToken ?? getTokenFromStorage();
 
     // 디버깅
-    console.log('토큰상태: ', accessToken ? '토큰 존재' : '토큰 없음');
+    console.log('토큰상태: ', token ? '토큰 존재' : '토큰 없음');
     console.log('전송할 데이터: ', data);
 
     // axios 요청
@@ -101,7 +106,7 @@ export const submitInfo = async (
         headers: {
           'Content-Type': 'application/json',
           // 토큰이 있는 경우 인증 헤더 추가
-          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
       },
     );

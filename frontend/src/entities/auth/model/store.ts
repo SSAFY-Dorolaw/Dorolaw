@@ -2,20 +2,23 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { AuthStore } from '@/entities/auth/model/types';
 
+// 로컬 스토리지에서 토큰을 직접 가져오는 함수
+export const getTokenFromStorage = (): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('token');
+  }
+  return null;
+};
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => {
-      // 브라우저에서 localStorage에 접근
-      const getToken = (): string | null => {
-        if (typeof window !== 'undefined') {
-          return localStorage.getItem('token');
-        }
-        return null;
-      };
+      // 초기화 시 로컬 스토리지에서 토큰을 가져와 상태 설정
+      const initialToken = getTokenFromStorage();
 
       return {
-        isLogin: false, // 초기 로그인 상태
-        accessToken: null, // 토큰 상태
+        isLogin: !!initialToken, // 토큰 존재 여부로 로그인 상태 결정
+        accessToken: initialToken, // 초기 토큰 설정
         clientId: null, // 로그인한 사용자 정보
 
         login: (token: string) => {
@@ -40,6 +43,12 @@ export const useAuthStore = create<AuthStore>()(
 
         // 토큰 직접 설정하는 함수
         setToken: (token: string | null) => {
+          if (typeof window !== 'undefined' && token) {
+            localStorage.setItem('token', token);
+          } else if (typeof window !== 'undefined' && !token) {
+            localStorage.removeItem('token');
+          }
+
           set({
             accessToken: token,
             isLogin: !!token,
@@ -50,6 +59,7 @@ export const useAuthStore = create<AuthStore>()(
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
+      // 로컬 스토리지에서 먼저 불러올 항목 지정
     },
   ),
 );
