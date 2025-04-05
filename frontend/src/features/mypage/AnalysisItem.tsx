@@ -1,12 +1,7 @@
-interface AnalysisItemProps {
-  reportId: number;
-  title: string;
-  thumbnailImageUrl: null;
-  accidentalNegligenceRateA: number;
-  accidentalNegligenceRateB: number;
-  accidentPlaceType: number;
-  isPublic: boolean;
-  createdAt: string;
+import { Analysis } from './client/model/types';
+
+interface AnalysisItemProps extends Analysis {
+  onClick?: () => void;
 }
 
 function AnalysisItem({
