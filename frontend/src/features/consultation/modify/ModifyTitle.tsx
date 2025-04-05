@@ -4,7 +4,7 @@ const ModifyTitle = () => {
   const [title, setTitle] = useState<string>('');
 
   return (
-    <div>
+    <div className="mb-3 w-[690px]">
       <input
         type="text"
         value={title}

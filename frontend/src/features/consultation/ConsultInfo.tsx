@@ -6,12 +6,14 @@ import {
   useRequestDetail,
   useDeleteRequest,
 } from '@/features/consultation/model/queries';
-// import ModifyTitle from './modify/ModifyTitle';
-// import ModifyFaultRatio from './modify/ModifyFaultRatio';
-// import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
-// import ModifyQuestion from './modify/ModifyQuestion';
+import { useState } from 'react';
+import ModifyTitle from './modify/ModifyTitle';
+import ModifyFaultRatio from './modify/ModifyFaultRatio';
+import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
+import ModifyQuestion from './modify/ModifyQuestion';
 
 const ConsultInfo = () => {
+  const [editMode, setEditMode] = useState(false);
   const loginUser = useAuthStore((state) => state.clientId); // 로그인 시 받아온 clientId
   const { requestId } = useParams(); // URL에서 requestId 파라미터 가져오기
   const navigate = useNavigate();
@@ -44,13 +46,14 @@ const ConsultInfo = () => {
 
   // 로그인 한 사용자가 작성한 글인지 체크
   const isWriter = loginUser === data?.memberId;
+  console.log(isWriter);
 
   // 영상 데이터 조회
 
   // 게시글 수정모드
-  // const editPost = () => {
-
-  // }
+  const editPost = () => {
+    setEditMode(!editMode);
+  };
 
   // 게시글 삭제
   const deletePost = () => {
@@ -75,19 +78,24 @@ const ConsultInfo = () => {
   return (
     <div className="col-span-7 mb-10">
       <div className="flex w-full justify-start gap-2">
-        <h2>{data?.title}</h2>
-        <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
-          상담완료
-        </div>
+        {!editMode ? (
+          <>
+            <h2>{data?.title}</h2>
+            <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
+              상담완료
+            </div>
+          </>
+        ) : (
+          <ModifyTitle />
+        )}
       </div>
-      {/* <ModifyTitle /> */}
       {isWriter && (
         <div className="icongroup flex justify-end gap-2">
           <Edit
             strokeWidth={3}
             size={24}
             className="cursor-pointer hover:text-green-500"
-            // onClick={editPost}
+            onClick={editPost}
           />
           <RiDeleteBin6Line
             strokeWidth={1}
@@ -102,20 +110,27 @@ const ConsultInfo = () => {
         <div className="rate flex flex-col gap-4">
           <div>
             <h3>받은 과실비율</h3>
-            <p className="mt-2">
-              {data?.aiReport.faultRatioA} : {data?.aiReport.faultRatioB}
-            </p>
-            {/* <ModifyFaultRatio /> */}
+            {!editMode ? (
+              <p className="mt-2">{data?.insuranceFaultRatio}</p>
+            ) : (
+              <ModifyFaultRatio />
+            )}
           </div>
           <div>
             <h3>영상 외 추가정보</h3>
-            <p className="mt-2">{data?.description}</p>
-            {/* <ModifyAdditionalInfo /> */}
+            {!editMode ? (
+              <p className="mt-2">{data?.description}</p>
+            ) : (
+              <ModifyAdditionalInfo />
+            )}
           </div>
           <div>
             <h3>궁금한 점</h3>
-            <p className="mt-2">{data?.question}</p>
-            {/* <ModifyQuestion /> */}
+            {!editMode ? (
+              <p className="mt-2">{data?.question}</p>
+            ) : (
+              <ModifyQuestion />
+            )}
           </div>
         </div>
       </div>
