@@ -6,6 +6,7 @@ import com.dorolaw.alarm.repository.AlarmRepository;
 import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.repository.ConsultationRepository;
+import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,8 @@ public class AlarmService {
     
     // tag로 fcm 토큰 찾기
     public List<FcmToken> findLawyersByTags(String tag) {
-        return fcmTokenRepository.findLawyersByTags(tag);
+        if(tag.equals("차대 이륜차")) tag = "차대이륜차";
+        return fcmTokenRepository.findLawyersByTags(LawyerSpeciality.valueOf(tag));
     }
     
     // 상담id로 fcm 토큰 찾기

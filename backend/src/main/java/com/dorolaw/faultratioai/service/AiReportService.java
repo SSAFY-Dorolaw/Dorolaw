@@ -2,8 +2,10 @@ package com.dorolaw.faultratioai.service;
 
 import com.dorolaw.alarm.dto.RequestAlarmDto;
 import com.dorolaw.faultratioai.entity.AiReport;
+import com.dorolaw.faultratioai.entity.FaultAnalysis;
 import com.dorolaw.faultratioai.entity.FaultAnalysisAIReports;
 import com.dorolaw.faultratioai.reposiroty.FaultAnalysisAiReport;
+import com.dorolaw.faultratioai.reposiroty.FaultAnalysisRepository;
 import com.dorolaw.faultratioai.reposiroty.ReqeustAiReportRepository;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.repository.RequestRepository;
@@ -15,9 +17,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AiReportService {
 
-    private final ReqeustAiReportRepository requestAiReportRepository;
-    private final FaultAnalysisAiReport factAnalysisRepository;
     private final RequestRepository requestRepository;
+    private final FaultAnalysisRepository factAnalysisRepository;
+    private final ReqeustAiReportRepository requestAiReportRepository;
+    private final FaultAnalysisAiReport faultAnalysisAiReport;
 
     public void saveReqeustReport(RequestAlarmDto requestAlarmDto) {
         Request reqeust = requestRepository.getReferenceById(requestAlarmDto.getRequestId());
@@ -36,9 +39,9 @@ public class AiReportService {
     }
 
     public void saveAnalysisReport(RequestAlarmDto requestAlarmDto) {
-        Request reqeust = requestRepository.getReferenceById(requestAlarmDto.getRequestId());
+        FaultAnalysis faultAnalysis = factAnalysisRepository.getReferenceById(requestAlarmDto.getRequestId());
         FaultAnalysisAIReports report = new FaultAnalysisAIReports();
-        report.setRequest(reqeust);
+        report.setFaultAnalysis(faultAnalysis);
         report.setAccidentObject(requestAlarmDto.getAccidentObject());
         report.setAccidentLocation(requestAlarmDto.getAccidentLocation());
         report.setAccidentLocationCharacteristics(requestAlarmDto.getAccidentLocationCharacteristics());
@@ -48,6 +51,6 @@ public class AiReportService {
         report.setFaultRatioB(requestAlarmDto.getFaultRatioB());
         report.setAccidentType(requestAlarmDto.getAccidentType());
 
-        factAnalysisRepository.save(report);
+        faultAnalysisAiReport.save(report);
     }
 }

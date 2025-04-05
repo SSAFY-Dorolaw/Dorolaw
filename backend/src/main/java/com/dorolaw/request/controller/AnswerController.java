@@ -15,10 +15,10 @@ public class AnswerController {
     private final AnswerService answerService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestHeader("Authorization") String authorizationHeader,
+    public ResponseEntity<Long> create(@RequestHeader("Authorization") String authorizationHeader,
                                        @RequestBody AnswerCreateDto dto) {
         answerService.createAnswer(authorizationHeader, dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(dto.getRequestId());
     }
 
     @PutMapping("/{id}")

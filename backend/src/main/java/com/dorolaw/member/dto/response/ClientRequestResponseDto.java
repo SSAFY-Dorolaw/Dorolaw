@@ -23,10 +23,9 @@ public class ClientRequestResponseDto {
     public static class ClientRequestDetail {
         private Long requestId;
         private String title;
-        private String createdAt;
         private String status;
-        private String videoUrl;
-        private AiReport reportUrl;
-        private String faultRatio;
+        private Integer faultRatioA;
+        private Integer faultRatioB;
+        private String createdAt;
     }
 }

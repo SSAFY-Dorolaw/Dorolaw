@@ -63,7 +63,7 @@ public class ConsultationService {
         List<LocalTime> bookedTimes = consultationRepository.findBookedTimesByLawyerAndDate(
                 lawyer.getLawyerProfileId(),
                 availableTimesRequestDto.getConsultationDate(),
-                ConsultationStatus.CONFIRMED
+                ConsultationStatus.SCHEDULED
         );
 
         List<String> availableTimes = generateAvailableTimes(startTime, endTime, bookedTimes);
@@ -105,7 +105,7 @@ public class ConsultationService {
                 .consultationType(ConsultationType.valueOf(requestDto.getConsultationType()))
                 .price(requestDto.getPrice())
                 .additionalQuestion(requestDto.getAdditionalQuestion())
-                .status(ConsultationStatus.CONFIRMED)
+                .status(ConsultationStatus.SCHEDULED)
                 .build();
 
         consultationRepository.save(consultation);

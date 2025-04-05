@@ -8,12 +8,14 @@ import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.alarm.service.FcmService;
 import com.dorolaw.faultratioai.service.AiReportService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/alarms")
 @RequiredArgsConstructor
+@Slf4j
 public class AlarmController {
 
     private final FcmTokenRepository tokenRepository;
@@ -31,8 +33,10 @@ public class AlarmController {
     // 의뢰 관련 알림
     @PostMapping("/requests")
     public String sendReqeustAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
+        log.info("requestAlarmDto: {}", requestAlarmDto);
         // report 저장
         requestAiReportService.saveReqeustReport(requestAlarmDto);
+        log.info("Ai repor 저장 완료됨");
         
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
@@ -43,8 +47,10 @@ public class AlarmController {
     // 과실 비율 분석기 관련 알림
     @PostMapping("/analysis")
     public String sendAnalysisAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
+        log.info("requestAlarmDto: {}", requestAlarmDto);
         // report 저장
         requestAiReportService.saveAnalysisReport(requestAlarmDto);
+        log.info("Ai repor 저장 완료됨");
 
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
