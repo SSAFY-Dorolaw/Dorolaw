@@ -1,5 +1,6 @@
 package com.dorolaw.request.entity;
 
+import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,10 @@ public class Request {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RequestStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RequestTag tag;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
