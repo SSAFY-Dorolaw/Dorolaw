@@ -1,7 +1,6 @@
 package com.dorolaw.request.service;
 
 import com.dorolaw.alarm.dto.request.RequestAlarmDto;
-import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import com.dorolaw.request.dto.AiRequestDto;
 import com.dorolaw.request.dto.request.RequestCreateDto;
 import com.dorolaw.request.dto.request.RequestUpdateDto;
@@ -21,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.NoSuchElementException;
 
 @Service
@@ -63,7 +63,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != request.getMemberId()) {
+        if(memberId.equals(request.getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -87,7 +87,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != request.getMemberId()) {
+        if(!memberId.equals(request.getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -118,7 +118,7 @@ public class RequestService {
                 .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
 
         // 작성자 확인
-        if(requestAlarmDto.getMemberId() != request.getMemberId()) {
+        if(!requestAlarmDto.getMemberId().equals(request.getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
