@@ -46,7 +46,6 @@ const ConsultInfo = () => {
 
   // 로그인 한 사용자가 작성한 글인지 체크
   const isWriter = loginUser === data?.memberId;
-  console.log(isWriter);
 
   // 영상 데이터 조회
 
@@ -65,7 +64,8 @@ const ConsultInfo = () => {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
           // 게시글 목록 페이지로 이동
-          void navigate('/consultation');
+          void navigate('/board', { replace: true }); // 삭제한 페이지로 뒤로가기 못하도록 막음
+          // 이동 후 새로고침 하면 삭제 여부 반영됨
         },
         onError: (error) => {
           console.error('게시글 삭제 실패:', error);
@@ -105,7 +105,13 @@ const ConsultInfo = () => {
           />
         </div>
       )}
-      <div className="video my-4 aspect-video w-full bg-white"></div>
+
+      {/* 영상 재생 부분 */}
+      <div className="video my-4 aspect-video w-full bg-white">
+        <p>동영상</p>
+      </div>
+
+      {/* 추가 정보 3가지 */}
       <div>
         <div className="rate flex flex-col gap-4">
           <div>
