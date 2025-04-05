@@ -1,17 +1,25 @@
 package com.dorolaw.request.service;
 
-import com.dorolaw.faultratioai.dto.request.AiRequestDto;
-import com.dorolaw.request.dto.*;
+import com.dorolaw.request.dto.AiRequestDto;
+import com.dorolaw.request.dto.request.RequestCreateDto;
+import com.dorolaw.request.dto.request.RequestUpdateDto;
+import com.dorolaw.request.dto.response.ReqeustListResDto;
+import com.dorolaw.request.dto.response.RequestDetailDto;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
 import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,8 +42,8 @@ public class RequestService {
         request.setQuestion(dto.getQuestion());
         request.setIsPublic(dto.getIsPublic());
         request.setStatus(RequestStatus.PENDING); // 초기 상태 설정
-
         Request saved = requestRepository.save(request);
+
         AiRequestDto res = new AiRequestDto();
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
@@ -43,10 +51,21 @@ public class RequestService {
         return res;
     }
 
-    public void updateRequest(Long requestId, RequestUpdateDto dto) {
+    @Transactional
+    public void updateRequest(String authorizationHeader, Long requestId, RequestUpdateDto dto) {
+        // 의뢰 존재 여부 확인
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
 
+        // 작성자 확인
+        String token = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
+
+        if(memberId != request.getMemberId()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        
+        // 수정
         request.setTitle(dto.getTitle());
         request.setInsuranceFaultRatio(dto.getInsuranceFaultRatio());
         request.setDescription(dto.getDescription());
@@ -56,10 +75,21 @@ public class RequestService {
         requestRepository.save(request);
     }
 
-    public void deleteRequest(Long requestId) {
-        if (!requestRepository.existsById(requestId)) {
-            throw new NoSuchElementException("의뢰를 찾을 수 없습니다.");
+    @Transactional
+    public void deleteRequest(String authorizationHeader, Long requestId) {
+        // 의뢰 존재 여부 확인
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
+
+        // 작성자 확인
+        String token = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
+
+        if(memberId != request.getMemberId()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+        
+        // 삭제
         requestRepository.deleteById(requestId);
     }
 
@@ -73,7 +103,7 @@ public class RequestService {
 
     public Page<ReqeustListResDto> getRequestList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Request> requests = requestRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Request> requests = requestRepository.findAllByIsPublicTrueOrderByCreatedAtDesc(pageable);
 
         return requests.map(ReqeustListResDto::fromEntity);
     }

@@ -1,7 +1,6 @@
 package com.dorolaw.member.dto.response;
 
 
-import com.dorolaw.faultratioai.entity.AiReport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
