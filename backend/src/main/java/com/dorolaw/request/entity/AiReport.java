@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ai_reports")
+@Table(name = "reqeust_ai_reports")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter

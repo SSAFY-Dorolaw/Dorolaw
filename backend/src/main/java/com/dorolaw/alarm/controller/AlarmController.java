@@ -7,6 +7,7 @@ import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.alarm.service.FcmService;
 import com.dorolaw.faultanalysis.service.FaultAnalysisAiReportService;
 import com.dorolaw.request.service.AiReportService;
+import com.dorolaw.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class AlarmController {
     private final AlarmService alarmService;
     private final AiReportService requestAiReportService;
     private final FaultAnalysisAiReportService faultAnalysisAiReportService;
+    private final RequestService requestService;
 
     // 의뢰 관련 알림
     @PostMapping("/requests")
@@ -30,6 +32,10 @@ public class AlarmController {
         // report 저장
         requestAiReportService.saveReqeustReport(requestAlarmDto);
         log.info("Ai repor 저장 완료됨");
+
+        // request tag 수정
+        requestService.updateTag(requestAlarmDto);
+        log.info("Request tag 추가");
         
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
