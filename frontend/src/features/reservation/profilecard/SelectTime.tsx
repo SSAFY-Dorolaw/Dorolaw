@@ -6,6 +6,7 @@ interface SelectTimeProps {
   onToggle: () => void;
   selectedDate?: Date | null;
   consultingTypeSelected?: boolean;
+  onSelectedTime: (time: string) => void;
 }
 
 interface TimeSlot {
@@ -19,6 +20,7 @@ const SelectTime = ({
   onToggle,
   selectedDate,
   consultingTypeSelected = false,
+  onSelectedTime,
 }: SelectTimeProps) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([]);
@@ -79,7 +81,8 @@ const SelectTime = ({
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    // 시간 선택 시 추가 로직 구현 가능
+    // 선택된 시간을 부모 컴포넌트에 전달하여 selectedDate를 업데이트
+    onSelectedTime(time);
   };
 
   return (
@@ -140,7 +143,7 @@ const SelectTime = ({
                       className={`rounded-md px-3 py-2 text-center transition-colors
                         ${
                           selectedTime === slot.time
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-p5 text-p1'
                             : slot.available
                               ? 'bg-gray-100 hover:bg-gray-200'
                               : 'cursor-not-allowed bg-gray-100 text-gray-400'
