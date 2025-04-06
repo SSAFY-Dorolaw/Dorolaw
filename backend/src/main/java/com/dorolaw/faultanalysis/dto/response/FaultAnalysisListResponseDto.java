@@ -24,7 +24,7 @@ public class FaultAnalysisListResponseDto {
                 .faultAnalysisId(faultAnalysis.getFaultAnalysisId())
                 .title(faultAnalysis.getTitle())
                 .status(faultAnalysis.getStatus().name())
-                .memberId(faultAnalysis.getMemberId())
+                .memberId(faultAnalysis.getMember().getMemberId())
                 .createdAt(faultAnalysis.getCreatedAt())
                 .build();
     }

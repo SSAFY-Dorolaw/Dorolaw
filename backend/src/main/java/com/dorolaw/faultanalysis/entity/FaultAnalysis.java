@@ -1,10 +1,13 @@
 package com.dorolaw.faultanalysis.entity;
 
+import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,8 +21,9 @@ public class FaultAnalysis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long faultAnalysisId;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private String title;

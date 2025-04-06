@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ReqeustAiReportRepository extends JpaRepository<AiReport, Long> {
     @Query("SELECT ar FROM AiReport ar " +
-            "WHERE ar.request.memberId = :memberId " +
+            "WHERE ar.request.member.memberId = :memberId " +
             "ORDER BY ar.createdAt DESC")
     List<AiReport> findAllByMemberId(@Param("memberId") Long memberId);
 }

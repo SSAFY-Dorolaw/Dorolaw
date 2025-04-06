@@ -37,7 +37,7 @@ public class RequestDetailDto {
     public static RequestDetailDto fromEntity(Request request) {
         RequestDetailDto dto = new RequestDetailDto();
         dto.setRequestId(request.getRequestId());
-        dto.setMemberId(request.getMemberId());
+        dto.setMemberId(request.getMember().getMemberId());
         dto.setTitle(request.getTitle());
         dto.setFileName(request.getFileName());
         dto.setInsuranceFaultRatio(request.getInsuranceFaultRatio());

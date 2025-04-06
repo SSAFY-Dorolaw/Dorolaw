@@ -1,11 +1,13 @@
 package com.dorolaw.request.entity;
 
+import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,8 +25,9 @@ public class Answer {
     @JoinColumn(name = "request_id", nullable = false)
     private Request request;
 
-    @Column(nullable = false)
-    private Long lawyerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lawyer_id", nullable = false)
+    private Member lawyer;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;

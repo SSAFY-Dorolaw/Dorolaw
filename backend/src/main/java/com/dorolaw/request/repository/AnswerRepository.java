@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-    List<Answer> findByLawyerId(Long lawyerId);
+    // List<Answer> findByLawyerId(Long lawyerId);
 
     // 변호사 ID로 답변과 연관된 의뢰 정보를 함께 조회 (성능 최적화)
-    @Query("SELECT a FROM Answer a JOIN FETCH a.request WHERE a.lawyerId = :lawyerId ORDER BY a.createdAt DESC")
+    @Query("SELECT a FROM Answer a JOIN FETCH a.request WHERE a.lawyer.memberId = :lawyerId ORDER BY a.createdAt DESC")
     List<Answer> findByLawyerIdWithRequest(@Param("lawyerId") Long lawyerId);
 
 }
