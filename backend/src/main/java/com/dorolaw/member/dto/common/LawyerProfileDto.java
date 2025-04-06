@@ -33,12 +33,29 @@ public class LawyerProfileDto {
     private String lawyerLicenseExam;
     private List<LawyerTagDto> lawyerTags;
 
+    private Long completedConsultationCount;
+    private List<TodayConsultationDto> todayConsultations;
+    private Integer phoneConsultationPrice;
+    private Integer videoConsultationPrice;
+    private Integer visitConsultationPrice;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class TodayConsultationDto {
+        private String scheduledTime;
+        private String clientName;
+        private String consultationType;
+    }
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class LawyerTagDto{
         private String lawyer_specialties;
+        private String description;
     }
 
     @Data

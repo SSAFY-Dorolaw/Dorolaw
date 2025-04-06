@@ -30,6 +30,9 @@ public class MyPageUpdateRequestDto {
     private String bankName;
     private List<EducationUpdateDto> educations;
     private List<CareerUpdateDto> careers;
+    private Integer phoneConsultationPrice;
+    private Integer videoConsultationPrice;
+    private Integer visitConsultationPrice;
 
     @Data
     @NoArgsConstructor

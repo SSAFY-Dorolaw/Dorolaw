@@ -109,16 +109,36 @@ public class LawyerProfile {
     @Column(name = "bank_name", length = 20, nullable = false)
     private String bankName;
 
+    @Column(name = "phone_consultation_price")
+    private Integer phoneConsultationPrice;
+
+    @Column(name = "video_consultation_price")
+    private Integer videoConsultationPrice;
+
+    @Column(name = "visit_consultation_price")
+    private Integer visitConsultationPrice;
+
     public void verifiedLawyer(){
         this.isVerified = true;
         this.verificationDate = LocalDateTime.now();
     }
 
-    public void updateProfile(String officeName, String officePhoneNumber, String officeProvince,
-                              String officeCityDistrict, String officeDetailedAddress, String gender,
-                              String shortIntroduction,
-                              String greeting, String introductionVideoUrl, Long accountNumber,
-                              String bankName) {
+    public void updateProfile(
+            String officeName,
+            String officePhoneNumber,
+            String officeProvince,
+            String officeCityDistrict,
+            String officeDetailedAddress,
+            String gender,
+            String shortIntroduction,
+            String greeting,
+            String introductionVideoUrl,
+            Long accountNumber,
+            String bankName,
+            Integer phoneConsultationPrice,
+            Integer videoConsultationPrice,
+            Integer visitConsultationPrice
+    ) {
         this.officeName = officeName;
         this.officePhoneNumber = officePhoneNumber;
         this.officeProvince = officeProvince;
@@ -130,7 +150,9 @@ public class LawyerProfile {
         this.introductionVideoUrl = introductionVideoUrl;
         this.accountNumber = accountNumber;
         this.bankName = bankName;
-        this.updatedAt = LocalDateTime.now();
+        this.phoneConsultationPrice = phoneConsultationPrice;
+        this.videoConsultationPrice = videoConsultationPrice;
+        this.visitConsultationPrice = visitConsultationPrice;
     }
 
     public void parseAndSetAddress(String fullAddress) {
