@@ -15,6 +15,7 @@ import MyAnalyses from '@/pages/mypage/MyAnalyses';
 import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
 import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
 import LoginRedirect from '@/pages/login/Redirect';
+import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 
 const router = createBrowserRouter([
   {
@@ -81,12 +82,16 @@ const router = createBrowserRouter([
             path: '',
             element: <LawyerMypage />,
           },
-          { path: 'profile', element: <Reservation /> },
+          { path: 'profile/:lawyerId/:requestId', element: <Reservation /> },
           {
             path: 'edit',
             element: <EditLawyerPage />,
           },
         ],
+      },
+      {
+        path: '/reservation/additional-question',
+        element: <AdditionalQuestion />,
       },
     ],
   },
