@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,7 +25,7 @@ public class ReqeustListResDto {
                 request.getRequestId(),
                 request.getTitle(),
                 request.getStatus(),
-                request.getMemberId(),
+                request.getMember().getMemberId(),
                 request.getCreatedAt()
         );
     }

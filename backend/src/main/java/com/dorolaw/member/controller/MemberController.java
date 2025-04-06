@@ -2,6 +2,8 @@ package com.dorolaw.member.controller;
 
 import com.dorolaw.member.dto.request.LawyerBusinessHourRequestDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
+import com.dorolaw.member.dto.request.VerifyLawyerRequestDto;
+import com.dorolaw.member.dto.response.MemberClaimsResponseDto;
 import com.dorolaw.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,8 @@ public class MemberController {
 
     // 변호사 인증 API
     @PostMapping("/lawyer-verification")
-    public ResponseEntity<?> verifyLawyer(@RequestHeader("Authorization") String authorization){
-        memberService.verifyLawyer(authorization);
+    public ResponseEntity<?> verifyLawyer(@RequestBody VerifyLawyerRequestDto request){
+        memberService.verifyLawyer(request);
         return ResponseEntity.ok().build();
     }
 
@@ -44,4 +46,12 @@ public class MemberController {
         memberService.setLawyerBusinessTimes(authorizationHeader, request);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/claims")
+    public ResponseEntity<MemberClaimsResponseDto> getMemberClaims(@RequestHeader("Authorization") String authorizationHeader) {
+        MemberClaimsResponseDto response = memberService.getMemberClaims(authorizationHeader);
+        return ResponseEntity.ok(response);
+    }
+
+
 }
