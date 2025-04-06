@@ -74,7 +74,7 @@ public class MypageService {
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
 
-        List<Request> requests = requestRepository.findByMemberId(memberId);
+        List<Request> requests = requestRepository.findByMember_MemberId(memberId);
 
         List<ClientRequestResponseDto.ClientRequestDetail> clientRequestDetails = requests.stream()
                 .map(request -> ClientRequestResponseDto.ClientRequestDetail.builder()
@@ -160,7 +160,7 @@ public class MypageService {
                 .map(answer -> LawyerAnsweredInquiryListResponseDto.builder()
                         .requestId(answer.getRequest().getRequestId())
                         .title(answer.getRequest().getTitle())
-                        .memberId(answer.getRequest().getMemberId())
+                        .memberId(answer.getRequest().getMember().getMemberId())
                         .requestAnsweredContent(answer.getContent())
                         .answeredAt(answer.getCreatedAt())
                         .isSelected(answer.getIsSelected())

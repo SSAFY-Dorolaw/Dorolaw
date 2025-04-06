@@ -1,5 +1,6 @@
 package com.dorolaw.request.entity;
 
+import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,9 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     private String title;
 

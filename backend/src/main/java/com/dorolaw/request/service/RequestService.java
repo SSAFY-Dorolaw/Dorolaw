@@ -1,6 +1,8 @@
 package com.dorolaw.request.service;
 
 import com.dorolaw.alarm.dto.request.RequestAlarmDto;
+import com.dorolaw.member.entity.Member;
+import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.request.dto.AiRequestDto;
 import com.dorolaw.request.dto.request.RequestCreateDto;
 import com.dorolaw.request.dto.request.RequestUpdateDto;
@@ -29,13 +31,17 @@ public class RequestService {
 
     private final RequestRepository requestRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberRepository memberRepository;
 
     public AiRequestDto createRequest(String authorizationHeader, RequestCreateDto dto) {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.valueOf(jwtTokenProvider.getMemberIdFromJWT(token));
 
+        // 빈 member 등록
+        Member member = memberRepository.getReferenceById(memberId);
+
         Request request = new Request();
-        request.setMemberId(memberId);
+        request.setMember(member);
         request.setTitle(dto.getTitle());
         request.setFileName(dto.getFileName());
         request.setInsuranceFaultRatio(dto.getInsuranceFaultRatio());
@@ -49,7 +55,7 @@ public class RequestService {
         AiRequestDto res = new AiRequestDto();
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
-        res.setMemberId(saved.getMemberId());
+        res.setMemberId(saved.getMember().getMemberId());
         return res;
     }
 
@@ -63,7 +69,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId.equals(request.getMemberId())) {
+        if(!memberId.equals(request.getMember().getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -87,7 +93,7 @@ public class RequestService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(!memberId.equals(request.getMemberId())) {
+        if(!memberId.equals(request.getMember().getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -118,7 +124,7 @@ public class RequestService {
                 .orElseThrow(() -> new NoSuchElementException("의뢰를 찾을 수 없습니다."));
 
         // 작성자 확인
-        if(!requestAlarmDto.getMemberId().equals(request.getMemberId())) {
+        if(!requestAlarmDto.getMemberId().equals(request.getMember().getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 

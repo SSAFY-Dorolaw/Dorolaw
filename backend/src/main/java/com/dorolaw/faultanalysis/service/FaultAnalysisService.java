@@ -11,6 +11,8 @@ import com.dorolaw.faultanalysis.entity.FaultAnalysisAIReport;
 import com.dorolaw.faultanalysis.entity.FaultAnalysisStatus;
 import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisAiReportRepository;
 import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisRepository;
+import com.dorolaw.member.entity.Member;
+import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Optional;
 
 @Service
@@ -30,6 +33,7 @@ public class FaultAnalysisService {
     private final JwtTokenProvider jwtTokenProvider;
     private final FaultAnalysisRepository faultAnalysisRepository;
     private final FaultAnalysisAiReportRepository faultAnalysisAIReportsRepository;
+    private final MemberRepository memberRepository;
 
     // AI 분석 게시판 등록
     @Transactional
@@ -37,8 +41,11 @@ public class FaultAnalysisService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
+        // 빈 member 등록
+        Member member = memberRepository.getReferenceById(memberId);
+
         FaultAnalysis faultAnalysis = new FaultAnalysis();
-        faultAnalysis.setMemberId(memberId);
+        faultAnalysis.setMember(member);
         faultAnalysis.setTitle(dto.getTitle());
         faultAnalysis.setFileName(dto.getFileName());
         faultAnalysis.setIsPublic(dto.getIsPublic());
@@ -48,7 +55,7 @@ public class FaultAnalysisService {
         AiFaultDto res = new AiFaultDto();
         res.setFaultAnalysisId(savedAnalysis.getFaultAnalysisId());
         res.setFileName(savedAnalysis.getFileName());
-        res.setMemberId(savedAnalysis.getMemberId());
+        res.setMemberId(savedAnalysis.getMember().getMemberId());
         return res;
     }
 
@@ -62,7 +69,7 @@ public class FaultAnalysisService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != faultAnalysis.getMemberId()) {
+        if(!memberId.equals(faultAnalysis.getMember().getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -90,7 +97,7 @@ public class FaultAnalysisService {
         String token = jwtTokenProvider.extractToken(authorizationHeader);
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(token));
 
-        if(memberId != faultAnalysis.getMemberId()) {
+        if(!memberId.equals(faultAnalysis.getMember().getMemberId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
@@ -105,7 +112,7 @@ public class FaultAnalysisService {
 
         FaultRatioBoardResponseDto responseDto = FaultRatioBoardResponseDto.builder()
                 .faultAnalysisId(faultAnalysis.getFaultAnalysisId())
-                .memberId(faultAnalysis.getMemberId())
+                .memberId(faultAnalysis.getMember().getMemberId())
                 .title(faultAnalysis.getTitle())
                 .fileName(faultAnalysis.getFileName())
                 .isPublic(faultAnalysis.getIsPublic())

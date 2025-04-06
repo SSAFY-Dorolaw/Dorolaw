@@ -11,11 +11,9 @@ import java.util.Optional;
 
 public interface FaultAnalysisAiReportRepository extends JpaRepository<FaultAnalysisAIReport, Long> {
     @Query("SELECT ar FROM FaultAnalysisAIReport ar " +
-            "WHERE ar.faultAnalysis.memberId = :memberId " +
+            "WHERE ar.faultAnalysis.member.memberId = :memberId " +
             "ORDER BY ar.createdAt DESC")
     List<FaultAnalysisAIReport> findAllByMemberId(@Param("memberId") Long memberId);
 
     Optional<FaultAnalysisAIReport> findByFaultAnalysis(FaultAnalysis faultAnalysis);
-
-    void deleteByFaultAnalysis(FaultAnalysis faultAnalysis);
 }
