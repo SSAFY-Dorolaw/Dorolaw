@@ -1,6 +1,6 @@
-import Calendar from 'react-calendar';
-import { Value } from 'react-calendar/dist/esm/shared/types.js';
+import { Calendar } from '@/components/ui/calendar';
 import { CalendarDays, ChevronUp, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 interface DateProps {
   isOpen: boolean;
@@ -18,21 +18,8 @@ const SelectDate = ({
   onSelectedDate,
 }: DateProps) => {
   // 날짜 선택 함수
-  const dateChange = (value: Value) => {
-    if (!value) return; // null이면 바로 리턴
+  const [date, setDate] = useState<Date | undefined>();
 
-    if (value instanceof Date) {
-      onSelectedDate(value);
-    } else if (
-      Array.isArray(value) &&
-      value.length > 0 &&
-      value[0] instanceof Date
-    ) {
-      onSelectedDate(value[0]);
-    }
-  };
-
-  // 날짜 포매팅 함수
   const formatDate = (date: Date) => {
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -69,13 +56,36 @@ const SelectDate = ({
         </div>
       </div>
       {isOpen && (
-        <div className="mb-3 ml-10 mr-5 flex justify-between">
-          <Calendar
-            onChange={dateChange}
-            value={propSelectedDate}
-            minDate={new Date()} // 오늘 이후 날짜만 선택 가능
-            className="rounded-lg border-2 p-2"
-          />
+        <div className="w-full  px-8">
+          <div className="flex gap-x-2">
+            <div className="size-full flex-1">
+              <Calendar
+                classNames={{
+                  months:
+                    'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
+                  month: 'space-y-4 w-full flex flex-col',
+                  table: 'w-full h-full border-collapse space-y-1',
+                  head_row: '',
+                  row: 'w-full mt-2',
+                }}
+                mode="single"
+                selected={date}
+                onSelect={(newDate) => {
+                  if (newDate) {
+                    setDate(newDate);
+                    onSelectedDate(newDate);
+                  }
+                }}
+                disabled={(day: Date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  // 어제보다 이전 날짜를 비활성화합니다.
+                  return day < today;
+                }}
+                initialFocus
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

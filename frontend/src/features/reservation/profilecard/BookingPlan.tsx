@@ -10,7 +10,7 @@ interface BookingPlanProps {
 const BookingPlan = ({ onClose }: BookingPlanProps) => {
   const [selectConsulting, setSelectConsulting] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [, setSelectedTime] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isConsultingOpen, setIsConsultingOpen] = useState(true);
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [isTimeOpen, setIsTimeOpen] = useState(false);
@@ -47,6 +47,18 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
     setIsTimeOpen(!isTimeOpen);
   };
 
+  const selectTime = (time: string) => {
+    if (selectedDate) {
+      setSelectedTime(time);
+      // "HH:MM" 형식의 문자열을 분해
+      const [hours, minutes] = time.split(':').map(Number);
+      // 기존의 날짜를 복사하여 선택한 시간으로 업데이트
+      const updatedDate = new Date(selectedDate);
+      updatedDate.setHours(hours, minutes, 0, 0);
+      setSelectedDate(updatedDate);
+    }
+  };
+
   const isConsultingTypeSelected = selectConsulting !== '';
 
   return (
@@ -56,7 +68,7 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
           className="ml-auto mr-3 w-fit cursor-pointer font-bold"
           onClick={onClose}
         >
-          X
+          ✕
         </p>
         {/* 전화상담 선택 */}
         <SelectConsultingType
@@ -81,11 +93,18 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
           onToggle={toggleTime}
           selectedDate={selectedDate}
           consultingTypeSelected={isConsultingTypeSelected}
+          onSelectedTime={selectTime}
         />
       </div>
       {/* 예약 버튼 */}
-      <div className="rounded-b-[10px] bg-p5 p-4">
-        <button className="w-full bg-p5 text-body text-white">
+      <div
+        className={`rounded-b-[10px] p-4 ${!selectedDate || !selectedTime ? 'bg-gray-300' : 'bg-p5'}`}
+      >
+        <button
+          disabled={!selectedDate || !selectedTime}
+          className="w-full text-body text-white"
+          onClick={() => console.log(selectedDate, selectConsulting)}
+        >
           상담 예약하기
         </button>
       </div>
