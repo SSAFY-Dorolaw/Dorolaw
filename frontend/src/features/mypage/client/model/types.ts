@@ -32,8 +32,10 @@ export interface Request {
 
 // 과실비율 분석 조회 시 사용
 export interface Analysis {
-  faultRatioId: number; // 분석결과 id
-  fileName: string; // 영상 파일 이름
-  falutRatioA: number; // A의 과실비율
-  faultRatioB: number; // B의 과실비율
+  reportId: number;
+  fileName: string;
+  faultRatioA: number;
+  faultRatioB: number;
+  reportCreatedAt: string;
+  isPublic: boolean;
 }

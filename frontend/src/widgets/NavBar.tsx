@@ -1,9 +1,18 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
-import { FaUserCircle } from 'react-icons/fa';
+import { ClipboardList, LogOut, User } from 'lucide-react';
+import { FaBalanceScale, FaUserCircle } from 'react-icons/fa';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ClientProfile } from '@/entities/clients/model/types';
 import { clientApi } from '@/entities/clients/api/clientApi';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { BsFiletypeAi } from 'react-icons/bs';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -29,20 +38,47 @@ function NavBar() {
   const AuthComponent = () => {
     return clientProfile ? (
       <div className="flex items-center gap-6">
-        <NavLink to="/client">
-          <div className="flex items-center gap-2">
-            {clientProfile ? (
-              <img
-                src={clientProfile?.profileImage}
-                className="size-[36px] rounded-full"
-                alt="profile image"
-              />
-            ) : (
-              <FaUserCircle size={36} />
-            )}
-            <div>{clientProfile?.name} 님</div>
-          </div>
-        </NavLink>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className="flex items-center gap-2">
+              {clientProfile ? (
+                <img
+                  src={clientProfile?.profileImage}
+                  className="size-[36px] rounded-full"
+                  alt="profile image"
+                />
+              ) : (
+                <FaUserCircle size={36} />
+              )}
+              <div>{clientProfile?.name} 님</div>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="font-bold text-p4">
+            <DropdownMenuLabel className="text-p5">
+              My Account
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => void navigate('/client')}>
+              <User />
+              <span>마이페이지</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => void navigate('/client/requests')}>
+              <ClipboardList />
+              <span>나의 의뢰내역</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => void navigate('/client/consultations')}
+            >
+              <FaBalanceScale />
+              <span>나의 상담내역</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => void navigate('/client/analyses')}>
+              <BsFiletypeAi />
+              <span>AI 과실비율 분석내역</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <LogOut
           strokeWidth={3}
           className="cursor-pointer"
