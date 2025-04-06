@@ -1,5 +1,6 @@
 package com.dorolaw.alarm.controller;
 
+import com.dorolaw.alarm.dto.request.AnalysisAlarmDto;
 import com.dorolaw.alarm.dto.request.RequestAlarmDto;
 import com.dorolaw.alarm.entity.Alarm;
 import com.dorolaw.alarm.entity.FcmToken;
@@ -11,6 +12,7 @@ import com.dorolaw.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -45,15 +47,15 @@ public class AlarmController {
 
     // 과실 비율 분석기 관련 알림
     @PostMapping("/analysis")
-    public String sendFaultrationaiAlarms(@RequestBody RequestAlarmDto requestAlarmDto) {
-        log.info("requestAlarmDto: {}", requestAlarmDto);
+    public String sendFaultrationaiAlarms(@RequestBody AnalysisAlarmDto analysisAlarmDto) {
+        log.info("requestAlarmDto: {}", analysisAlarmDto);
         // report 저장
-        faultAnalysisAiReportService.saveAnalysisReport(requestAlarmDto);
+        faultAnalysisAiReportService.saveAnalysisReport(analysisAlarmDto);
         log.info("Ai repor 저장 완료됨");
 
         // 알림 보내기
-        List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        return sendAlarms(tokens,requestAlarmDto.getContent());
+        List<FcmToken> tokens = alarmService.findTokenListByMemberId(analysisAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
+        return sendAlarms(tokens,analysisAlarmDto.getContent());
     }
 
     // 상담 예약 확인 알림 - 일반인, 변호사 - 백엔드
