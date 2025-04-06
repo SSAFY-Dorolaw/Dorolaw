@@ -1,6 +1,7 @@
 package com.dorolaw.security.oauth;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class CustomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     private final DefaultOAuth2AuthorizationRequestResolver delegate;
@@ -36,7 +38,8 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
             HttpServletRequest request, OAuth2AuthorizationRequest authorizationRequest) {
 
         // role 값을 추출
-        String role = request.getParameter("role");
+        String role = request.getParameter("state");
+        log.info("나의 role!!!!! " + role);
 
         // role 정보를 추가 파라미터로 저장
         Map<String, Object> additionalParameters = new HashMap<>(
