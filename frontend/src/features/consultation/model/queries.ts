@@ -71,7 +71,7 @@ export const useDeleteRequest = () => {
       // 삭제 성공 시 쿼리 무효화
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['request', requestId] }),
-        // queryClient.invalidateQueries({ queryKey: ['requests'] }), // 목록 쿼리가 있다면 함께 무효화
+        queryClient.invalidateQueries({ queryKey: ['consultList'] }), // 목록 쿼리가 있다면 함께 무효화
       ]);
     },
   });

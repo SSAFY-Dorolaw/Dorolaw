@@ -11,6 +11,7 @@ import ModifyTitle from './modify/ModifyTitle';
 import ModifyFaultRatio from './modify/ModifyFaultRatio';
 import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
 import ModifyQuestion from './modify/ModifyQuestion';
+import { useQueryClient } from '@tanstack/react-query';
 
 const ConsultInfo = () => {
   const [editMode, setEditMode] = useState(false);
@@ -18,6 +19,7 @@ const ConsultInfo = () => {
   const { requestId } = useParams(); // URL에서 requestId 파라미터 가져오기
   const navigate = useNavigate();
   const deleteRequestMutation = useDeleteRequest();
+  const queryClient = useQueryClient();
 
   // API 호출
   const {
@@ -63,8 +65,12 @@ const ConsultInfo = () => {
       deleteRequestMutation.mutate(Number(requestId), {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
+
+          // 쿼리 클라이언트에 직접 접근하여 무효와 완료 확인
+          void queryClient.invalidateQueries({ queryKey: ['requests'] });
+
           // 게시글 목록 페이지로 이동
-          void navigate('/board', { replace: true }); // 삭제한 페이지로 뒤로가기 못하도록 막음
+          void navigate('/board'); // 삭제한 페이지로 뒤로가기 못하도록 막음
           // 이동 후 새로고침 하면 삭제 여부 반영됨
         },
         onError: (error) => {
