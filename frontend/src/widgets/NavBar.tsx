@@ -8,11 +8,13 @@ import { clientApi } from '@/entities/clients/api/clientApi';
 function NavBar() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const token = localStorage.getItem('token');
 
   // 캐시된 client 프로필 데이터 읽기
   const { data: clientProfile } = useQuery<ClientProfile>({
     queryKey: ['client', 'profile'],
     queryFn: clientApi.getProfile,
+    enabled: !!token,
   });
 
   const handleLogout = () => {
@@ -21,13 +23,13 @@ function NavBar() {
     queryClient.removeQueries({ queryKey: ['client', 'profile'] });
     localStorage.clear();
     // 로그아웃 후 로그인 페이지로 이동하거나 메인 페이지로 이동
-    void navigate('/login');
+    void navigate('/');
   };
 
   const AuthComponent = () => {
     return clientProfile ? (
       <div className="flex items-center gap-6">
-        <NavLink to="/mypage">
+        <NavLink to="/client">
           <div className="flex items-center gap-2">
             {clientProfile ? (
               <img
@@ -62,8 +64,8 @@ function NavBar() {
     <nav className="sticky top-0 z-10 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1">
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-20 font-semibold xl:w-[1200px]">
         <div className="flex justify-between gap-20">
-          <NavLink to="/upload">AI 과실비율 측정</NavLink>
-          <NavLink to="/consultation">의뢰하기</NavLink>
+          <NavLink to="/report">AI 과실비율 측정</NavLink>
+          <NavLink to="/consultation">변호사 상담신청</NavLink>
           <NavLink to="/board">게시판</NavLink>
         </div>
         <AuthComponent />

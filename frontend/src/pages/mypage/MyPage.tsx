@@ -4,7 +4,7 @@ import ClientInfo from '@/features/mypage/client/ui/ClientInfo';
 import { clientApi } from '@/entities/clients/api/clientApi';
 
 const MyPage = () => {
-  // 마이페이지 작업업
+  // 마이페이지 작업
   const {
     data: clientProfile,
     isLoading,

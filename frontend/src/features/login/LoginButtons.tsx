@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import loginButton from '@/shared/assets/images/kakao_login.svg';
 
 interface LoginButtonProps {
   role: string;
@@ -17,12 +18,12 @@ const LoginButton = ({ role }: LoginButtonProps) => {
 
   return (
     <div>
-      <button
+      <img
+        src={loginButton}
+        alt="카카오 로그인"
         onClick={() => void mutate()}
-        className="rounded-md bg-yellow-400 px-4 py-2 font-medium text-black transition-colors hover:bg-yellow-500"
-      >
-        카카오 로그인
-      </button>
+        className="cursor-pointer"
+      />
     </div>
   );
 };

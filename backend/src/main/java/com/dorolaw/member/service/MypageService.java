@@ -41,12 +41,19 @@ public class MypageService {
 
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
+        String role = (String) memberInfo.get("memberRole");
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-        LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        List<Consultation> consultations = consultationRepository.findByClientOrLawyer(member, lawyerProfile);
+        List<Consultation> consultations;
+
+        if ("LAWYER".equals(role)) {
+            LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+            consultations = consultationRepository.findByClientOrLawyer(member, lawyerProfile);
+        } else {
+            consultations = consultationRepository.findByClient_MemberId(memberId);
+        }
 
         List<ConsultationResponseDto.ConsultationDetail> consultationDetails = consultations.stream()
                 .map(consultation -> ConsultationResponseDto.ConsultationDetail.builder()
