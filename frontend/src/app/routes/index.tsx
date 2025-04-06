@@ -8,8 +8,8 @@ import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
 import Reservation from '@/pages/reservation/Reservation';
-import ConsultationList from '@/pages/mypage/MyConsultations';
-import ReservationList from '@/pages/mypage/MyReservations';
+import MyRequests from '@/pages/mypage/MyRequests';
+import MyConsultations from '@/pages/mypage/MyConsultations';
 import ReviewList from '@/pages/mypage/MyReviews';
 import MyAnalyses from '@/pages/mypage/MyAnalyses';
 import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
@@ -57,12 +57,12 @@ const router = createBrowserRouter([
             element: <MyPage />,
           },
           {
-            path: 'consultations',
-            element: <ConsultationList />,
+            path: 'requests',
+            element: <MyRequests />,
           },
           {
-            path: 'reservations',
-            element: <ReservationList />,
+            path: 'consultations',
+            element: <MyConsultations />,
           },
           {
             path: 'reviews',

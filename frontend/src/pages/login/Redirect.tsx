@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClientProfile } from '@/entities/clients/model/queries';
+import { useAuthStore } from '@/entities/auth/model/store';
 
 function LoginRedirect() {
   const navigate = useNavigate();
+  const setClientId = useAuthStore((state) => state.setClientId);
 
   const token = new URL(window.location.toString()).searchParams.get('token');
   useEffect(() => {
@@ -23,11 +25,13 @@ function LoginRedirect() {
   }, [isError, navigate]);
 
   useEffect(() => {
-    if (isSuccess) {
-      console.log(data);
+    if (isSuccess && data) {
+      // 데이터
+      setClientId(data.clientId);
+
       void navigate('/');
     }
-  }, [isSuccess, navigate, data]);
+  }, [isSuccess, navigate, data, setClientId]);
 
   if (isLoading) {
     return (

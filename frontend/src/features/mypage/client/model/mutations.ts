@@ -5,6 +5,7 @@ import {
   ClientProfileUpdate,
 } from '@/entities/clients/model/types';
 
+// 마이페이지 - 정보 수정
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
