@@ -10,4 +10,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  // 서비스 워커 파일을 빌드 디렉토리에 복사
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
 });

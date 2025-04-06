@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ConsultationBookResponseDto {
     private Long consultationId;
+    private Long requestId;
     private String status;
     private String scheduledDate;
     private LawyerInfo lawyer;
