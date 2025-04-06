@@ -81,17 +81,21 @@ const Board = () => {
         </nav>
       </main>
       <nav>
-        {data && (
-          <Pagenation
-            pageInfo={{
-              number: data.number,
-              totalPages: data.totalPages,
-              first: data.first,
-              last: data.last,
-            }}
-            onPageChange={pageChange}
-          />
-        )}
+        {data &&
+          'number' in data &&
+          'totalPages' in data &&
+          'first' in data &&
+          'last' in data && (
+            <Pagenation
+              pageInfo={{
+                number: data.number,
+                totalPages: data.totalPages,
+                first: data.first,
+                last: data.last,
+              }}
+              onPageChange={pageChange}
+            />
+          )}
       </nav>
     </div>
   );
