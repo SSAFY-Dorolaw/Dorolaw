@@ -50,15 +50,14 @@ public class ConsultationController {
     // 상담 후기 조회 API
     @GetMapping("/reviews/{consultationId}")
     public ResponseEntity<ReviewResponseDto> getReviews(
-            @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long consultationId){
         ReviewResponseDto response = consultationService.getReviews(consultationId);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/lawyer-profile/{lawyerId}")
-    public ResponseEntity<Object> getLawyerProfile(@PathVariable Long lawyerId) {
-        Object responseDto = consultationService.getMemberInfo(lawyerId);
+    @GetMapping("/lawyer-profile/{memberId}")
+    public ResponseEntity<Object> getLawyerProfile(@PathVariable Long memberId) {
+        Object responseDto = consultationService.getMemberInfo(memberId);
         return ResponseEntity.ok(responseDto);
     }
 }

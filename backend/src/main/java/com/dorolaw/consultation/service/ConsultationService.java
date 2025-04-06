@@ -21,6 +21,9 @@ import com.dorolaw.member.entity.lawyer.LawyerSchedule;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.member.service.MemberService;
+import com.dorolaw.request.entity.Request;
+import com.dorolaw.request.entity.RequestStatus;
+import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,6 +49,7 @@ public class ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ReviewRepository reviewRepository;
     private final MemberService memberService;
+    private final RequestRepository requestRepository;
 
     public AvailableTimesResponseDto getAvailableTimes(
             Long lawyerId,
@@ -94,15 +98,19 @@ public class ConsultationService {
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
         Member client = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        // 기본 요청 생성
-//        Request request = Request.builder()
-//                .member(client)
-//                .status(Request.Status.PENDING)
-//                .build();
+        Request request = requestRepository.findById(requestDto.getRequestId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+
+        if (!request.getMember().getMemberId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        request.setStatus(RequestStatus.SCHEDULED);
+        requestRepository.save(request);
 
         // 상담 생성
         Consultation consultation = Consultation.builder()
-//                .request(request)
+                .request(request)
                 .lawyer(lawyer)
                 .client(client)
                 .consultationDate(LocalDate.parse(requestDto.getScheduledDate()))
@@ -117,6 +125,7 @@ public class ConsultationService {
 
         return ConsultationBookResponseDto.builder()
                 .consultationId(consultation.getConsultationId())
+                .requestId(request.getRequestId())
                 .status(consultation.getStatus().name())
                 .scheduledDate(consultation.getConsultationDate() + " " + consultation.getScheduledTime())
                 .lawyer(ConsultationBookResponseDto.LawyerInfo.builder()
