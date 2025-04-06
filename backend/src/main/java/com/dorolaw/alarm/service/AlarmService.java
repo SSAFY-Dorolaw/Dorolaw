@@ -9,6 +9,7 @@ import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class AlarmService {
     // 알람 내역 저장
     public void save(FcmToken token, String body) {
         Alarm alarm = Alarm.builder()
-                .receiveMemberId(token.getMember().getMemberId())
+                .receiveMember(token.getMember())
                 .isRead(false)
                 .content(body)
                 .build();
@@ -51,6 +52,6 @@ public class AlarmService {
     
     // memberId로 알람 조회하기
     public List<Alarm> getMyList(Long memberId) {
-        return alarmRepository.findByReceiveMemberIdOrderByCreatedAtDesc(memberId);
+        return alarmRepository.findByReceiveMember_MemberIdOrderByCreatedAtDesc(memberId);
     }
 }
