@@ -9,7 +9,7 @@ const ModifyTitle = () => {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="mt-3 h-[35px] w-full rounded-[5px] pl-[10px]"
+        className="mt-3 h-[35px] w-[300px] rounded-[5px] pl-[10px]"
       />
     </div>
   );

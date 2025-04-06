@@ -48,6 +48,7 @@ const ConsultInfo = () => {
   const isWriter = loginUser === data?.memberId;
 
   // 영상 데이터 조회
+  console.log(data?.fileName);
 
   // 게시글 수정모드
   const editPost = () => {
@@ -112,7 +113,20 @@ const ConsultInfo = () => {
 
       {/* 영상 재생 부분 */}
       <div className="video my-4 aspect-video w-full bg-white">
-        <p>동영상</p>
+        {data?.fileName ? (
+          <video
+            src={`https://j12a501.p.ssafy.io/videos/${data.fileName}`}
+            controls
+            className="size-full object-contain"
+            // poster="/path-to-thumbnail-image.jpg" // 썸네일 이미지 경로
+          >
+            브라우저가 비디오 태그를 지원하지 않습니다.
+          </video>
+        ) : (
+          <div className="flex size-full items-center justify-center text-gray-500">
+            업로드된 영상이 없습니다.
+          </div>
+        )}
       </div>
 
       {/* 추가 정보 3가지 */}
