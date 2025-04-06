@@ -1,6 +1,6 @@
 package com.dorolaw.faultanalysis.service;
 
-import com.dorolaw.alarm.dto.request.RequestAlarmDto;
+import com.dorolaw.alarm.dto.request.AnalysisAlarmDto;
 import com.dorolaw.faultanalysis.entity.FaultAnalysis;
 import com.dorolaw.faultanalysis.entity.FaultAnalysisAIReport;
 import com.dorolaw.faultanalysis.reposiroty.FaultAnalysisAiReportRepository;
@@ -17,8 +17,8 @@ public class FaultAnalysisAiReportService {
     private final FaultAnalysisAiReportRepository faultAnalysisAiReportRepository;
 
     @Transactional
-    public void saveAnalysisReport(RequestAlarmDto requestAlarmDto) {
-        FaultAnalysis faultAnalysis = faultAnalysisRepository.getReferenceById(requestAlarmDto.getRequestId());
+    public void saveAnalysisReport(AnalysisAlarmDto requestAlarmDto) {
+        FaultAnalysis faultAnalysis = faultAnalysisRepository.getReferenceById(requestAlarmDto.getFaultAnalysisId());
         FaultAnalysisAIReport report = new FaultAnalysisAIReport();
         report.setFaultAnalysis(faultAnalysis);
         report.setAccidentObject(requestAlarmDto.getAccidentObject());
