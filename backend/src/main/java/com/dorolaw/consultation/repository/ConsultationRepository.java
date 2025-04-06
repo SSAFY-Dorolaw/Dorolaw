@@ -25,4 +25,8 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     List<Consultation> findByClientOrLawyer(Member client, LawyerProfile lawyer);
 
     List<Consultation> findByLawyer_LawyerProfileIdOrderByCreatedAtDesc(Long lawyerProfileId);
+
+    Long countByLawyer_LawyerProfileIdAndStatus(Long lawyerProfileId, ConsultationStatus status);
+
+    List<Consultation> findByLawyer_LawyerProfileIdAndConsultationDateOrderByScheduledTime(Long lawyerProfileId, LocalDate consultationDate);
 }
