@@ -58,7 +58,7 @@ public class FaultratioaiController {
     }
 
     // AI 분석 게시판 목록 조회
-    @GetMapping("/list/{memberId}")
+    @GetMapping("/list")
     public ResponseEntity<Page<FaultAnalysisListResponseDto>> getPublicFaultRatioBoardList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
