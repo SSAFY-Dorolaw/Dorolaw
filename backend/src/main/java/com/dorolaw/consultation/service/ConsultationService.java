@@ -13,14 +13,18 @@ import com.dorolaw.consultation.entity.ConsultationType;
 import com.dorolaw.consultation.entity.Review;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.consultation.repository.ReviewRepository;
+import com.dorolaw.member.dto.common.LawyerProfileDto;
+import com.dorolaw.member.dto.common.MemberProfileDto;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.entity.lawyer.LawyerSchedule;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
+import com.dorolaw.member.service.MemberService;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,6 +45,7 @@ public class ConsultationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final ConsultationRepository consultationRepository;
     private final ReviewRepository reviewRepository;
+    private final MemberService memberService;
 
     public AvailableTimesResponseDto getAvailableTimes(
             Long lawyerId,
@@ -215,5 +220,33 @@ public class ConsultationService {
                         bookedTime.equals(timeToCheck) ||
                                 (bookedTime.isAfter(timeToCheck) && bookedTime.isBefore(timeToCheck.plusMinutes(30)))
                 );
+    }
+
+    public Object getMemberInfo(Long memberId){
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        String memberRole = member.getRole().name();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        MemberProfileDto baseProfile = MemberProfileDto.builder()
+                .memberId(memberId)
+                .name(member.getName())
+                .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
+                .joinDate(member.getCreatedAt().format(formatter))
+                .profileImage(member.getProfileImage())
+                .role(member.getRole().name())
+                .build();
+
+        if (memberRole.equals("GENERAL")) {
+            return baseProfile.toGeneralProfile();
+        } else if (memberRole.equals("LAWYER") || memberRole.equals("CERTIFIED_LAWYER")){
+            LawyerProfileDto lawyerProfileDto = memberService.getLawyerAdditionalInfo(memberId);
+            return baseProfile.toLawyerProfile(lawyerProfileDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 }

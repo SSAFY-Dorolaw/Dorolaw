@@ -55,4 +55,10 @@ public class ConsultationController {
         ReviewResponseDto response = consultationService.getReviews(consultationId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/lawyer-profile/{lawyerId}")
+    public ResponseEntity<Object> getLawyerProfile(@PathVariable Long lawyerId) {
+        Object responseDto = consultationService.getMemberInfo(lawyerId);
+        return ResponseEntity.ok(responseDto);
+    }
 }

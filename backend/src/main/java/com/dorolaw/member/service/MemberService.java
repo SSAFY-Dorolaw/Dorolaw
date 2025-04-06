@@ -298,7 +298,7 @@ public class MemberService {
         lawyerProfileRepository.save(lawyerProfile);
     }
 
-    private LawyerProfileDto getLawyerAdditionalInfo(Long memberId) {
+    public LawyerProfileDto getLawyerAdditionalInfo(Long memberId) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
