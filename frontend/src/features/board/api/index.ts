@@ -2,6 +2,7 @@ import {
   Contents,
   SuccessResponse,
   ErrorResponse,
+  AnalysisSuccess,
 } from '@/features/board/model/types';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -31,18 +32,45 @@ export const getConsultList = async (
   }
 };
 
+export const getAnalysisList = async (
+  page: number,
+): Promise<AnalysisSuccess> => {
+  try {
+    // API 엔드포인트
+    const endpoint = '/fault-analysis/list';
+    const url = `${API_URL}${endpoint}?page=${page}`;
+
+    const response = await axios.get<AnalysisSuccess>(url);
+    return response.data;
+  } catch (error) {
+    console.error('API 요청 에러 발생: ', error);
+    throw error;
+  }
+};
+
 /**
  * 게시판 목록 조회 쿼리 훅
  * @param page 페이지 번호
  * @returns 쿼리 결과
  */
 
-export const useConsultListQuery = (page: number) => {
+export const useConsultListQuery = (page: number, isEnabled = true) => {
   return useQuery({
     queryKey: ['consultList', page],
     queryFn: () => getConsultList(page),
     staleTime: 5 * 60 * 1000, // 5분 동안 데이터 유지
     placeholderData: keepPreviousData, // 페이지 전환 시 이전 데이터 유지
+    enabled: isEnabled,
+  });
+};
+
+export const useAnalysisListQuery = (page: number, isEnabled = true) => {
+  return useQuery({
+    queryKey: ['analysisList', page],
+    queryFn: () => getAnalysisList(page),
+    staleTime: 5 * 60 * 1000, // 5분 동안 데이터 유지
+    placeholderData: keepPreviousData, // 페이지 전환 시 이전 데이터 유지
+    enabled: isEnabled,
   });
 };
 

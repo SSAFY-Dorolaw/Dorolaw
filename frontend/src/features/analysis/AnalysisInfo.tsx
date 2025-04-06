@@ -7,16 +7,14 @@ import {
   useDeleteRequest,
 } from '@/features/consultation/model/queries';
 import { useState } from 'react';
-import ModifyTitle from './modify/ModifyTitle';
-import ModifyFaultRatio from './modify/ModifyFaultRatio';
-import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
-import ModifyQuestion from './modify/ModifyQuestion';
+import ModifyTitle from '../consultation/modify/ModifyTitle';
+import ModifyFaultRatio from '../consultation/modify/ModifyFaultRatio';
 import { useQueryClient } from '@tanstack/react-query';
 
-const ConsultInfo = () => {
+const AnalysisInfo = () => {
   const [editMode, setEditMode] = useState(false);
   const loginUser = useAuthStore((state) => state.clientId); // 로그인 시 받아온 clientId
-  const { requestId } = useParams(); // URL에서 requestId 파라미터 가져오기
+  const { faultAnalysisId } = useParams(); // URL에서 requestId 파라미터 가져오기
   const navigate = useNavigate();
   const deleteRequestMutation = useDeleteRequest();
   const queryClient = useQueryClient();
@@ -26,7 +24,7 @@ const ConsultInfo = () => {
     data,
     isLoading: queryLoading,
     isError,
-  } = useRequestDetail(Number(requestId));
+  } = useRequestDetail(Number(faultAnalysisId));
 
   if (queryLoading) {
     return (
@@ -57,11 +55,11 @@ const ConsultInfo = () => {
 
   // 게시글 삭제
   const deletePost = () => {
-    if (!requestId) return;
+    if (!faultAnalysisId) return;
 
     // 사용자에게 삭제 확인 메시지 표시
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
-      deleteRequestMutation.mutate(Number(requestId), {
+      deleteRequestMutation.mutate(Number(faultAnalysisId), {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
 
@@ -128,7 +126,7 @@ const ConsultInfo = () => {
         )}
       </div>
 
-      {/* 추가 정보 3가지 */}
+      {/* 받은 과실비율 */}
       <div>
         <div className="rate flex flex-col gap-4">
           <div>
@@ -139,26 +137,10 @@ const ConsultInfo = () => {
               <ModifyFaultRatio />
             )}
           </div>
-          <div>
-            <h3>영상 외 추가정보</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.description}</p>
-            ) : (
-              <ModifyAdditionalInfo />
-            )}
-          </div>
-          <div>
-            <h3>궁금한 점</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.question}</p>
-            ) : (
-              <ModifyQuestion />
-            )}
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ConsultInfo;
+export default AnalysisInfo;

@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         path: '/report',
         children: [
           { path: '', element: <VideoUpload /> },
-          { path: 'detail', element: <ConsultDetail /> }, // n번 게시글(ex. reportId)로 추가 수정 필요
+          { path: ':faultAnalysisId', element: <ConsultDetail /> },
         ],
       },
       {

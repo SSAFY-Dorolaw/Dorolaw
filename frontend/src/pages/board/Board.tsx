@@ -1,4 +1,8 @@
-import { useConsultListQuery } from '@/features/board/api';
+import AnalysisList from '@/features/board/AnalysisList';
+import {
+  useAnalysisListQuery,
+  useConsultListQuery,
+} from '@/features/board/api';
 import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import Pagenation from '@/widgets/Pagenation';
@@ -6,14 +10,29 @@ import { useState } from 'react';
 
 const Board = () => {
   const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [consultPage, setConsultPage] = useState<number>(0);
+  const [analysisPage, setAnalysisPage] = useState<number>(0);
 
-  // Tanstack Query로 데이터 가져오기
-  const { data, isLoading } = useConsultListQuery(currentPage);
+  /* Tanstack Query로 데이터 가져오기 */
+  // 의뢰글
+  const { data: consultData, isLoading: isConsultLoading } =
+    useConsultListQuery(consultPage, isConsultTab);
+
+  // 분석글
+  const { data: analysisData, isLoading: isAnalysisLoading } =
+    useAnalysisListQuery(analysisPage, !isConsultTab);
+
+  // 현재 탭에 따른 데이터와 로딩 상태
+  const data = isConsultTab ? consultData : analysisData;
+  const isLoading = isConsultTab ? isConsultLoading : isAnalysisLoading;
 
   // 페이지 변경 핸들러
   const pageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+    if (isConsultTab) {
+      setConsultPage(newPage);
+    } else {
+      setAnalysisPage(newPage);
+    }
   };
 
   return (
@@ -53,8 +72,10 @@ const Board = () => {
             </header>
             {isLoading ? (
               <div className="flex justify-center py-10">로딩 중...</div>
+            ) : isConsultTab ? (
+              <ConsultList data={consultData} />
             ) : (
-              <ConsultList currentPage={currentPage} />
+              <AnalysisList data={analysisData} />
             )}
           </div>
         </nav>
