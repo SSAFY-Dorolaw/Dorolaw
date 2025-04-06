@@ -1,12 +1,7 @@
 function ReportTab() {
   return (
     <>
-      <div className="my-2 justify-self-start">
-        <button className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1">
-          PDF 다운로드
-        </button>
-      </div>
-      <div className="mx-4 aspect-[210/297] bg-white p-4 drop-shadow-[0_0_2px_rgba(0,0,0,0.25)]">
+      <div className="mx-4 mt-5 aspect-[210/297] bg-white p-4 drop-shadow-[0_0_2px_rgba(0,0,0,0.25)]">
         <p>
           의뢰인1234님의 사고_1942458 분석 결과 사고 개요 및 상황 일시·장소:
           2023년 3월 15일, 이면도로 교차로(신호등·보행자 많음). 영상 정보:
@@ -25,6 +20,11 @@ function ReportTab() {
           조사·전문가 의견 등에 따라 달라질 수 있음. 교통 전문 변호사·보험사
           보상담당자 등과 추가 상담 필요.
         </p>
+      </div>
+      <div className="my-2 mt-5 flex justify-center">
+        <button className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1">
+          PDF 다운로드
+        </button>
       </div>
     </>
   );

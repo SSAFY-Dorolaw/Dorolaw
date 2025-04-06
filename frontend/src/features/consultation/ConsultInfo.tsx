@@ -44,8 +44,6 @@ const ConsultInfo = () => {
     );
   }
 
-  console.log(data?.fileName); // 디버깅
-
   // 로그인 한 사용자가 작성한 글인지 체크
   const isWriter = loginUser === data?.memberId;
 
