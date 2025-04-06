@@ -1,7 +1,34 @@
+import { Career, Education, LawyerTags } from '@/entities/lawyers/model/types';
 import star from '@/shared/assets/images/star.png';
 import { useState } from 'react';
 
-const MyCareer = () => {
+interface CareerProps {
+  name: string;
+  officeName: string;
+  averageRating: number;
+  officeAddress: string;
+  lawyerTags: LawyerTags[];
+  // officePhoneNumber: string;
+  // oneLineIntro: string;
+  greetingMessage: string;
+  education: Education[];
+  career: Career[];
+  lawyerLicenseNumber: string;
+  lawyerLicenseExam: string | null;
+}
+
+const MyCareer = ({
+  name,
+  officeName,
+  averageRating,
+  officeAddress,
+  lawyerTags,
+  greetingMessage,
+  education,
+  career,
+  lawyerLicenseNumber,
+  lawyerLicenseExam,
+}: CareerProps) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const careerPopup = () => {
@@ -19,13 +46,13 @@ const MyCareer = () => {
     <div className="mx-[50px] mb-8 flex justify-between">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
-          <h3 className="m-0 text-h3 font-bold">김승소 변호사</h3>
+          <h3 className="m-0 text-h3 font-bold">{name} 변호사</h3>
           <div className="flex items-center">
             <img src={star} alt="별점" className="ml-6 size-4" />
-            <span className="ml-2 text-caption text-g4">4.8</span>
+            <span className="ml-2 text-caption text-g4">{averageRating}</span>
           </div>
         </div>
-        <p className="mt-2 text-bodysmall text-gray-500">로로 법률사무소</p>
+        <p className="mt-2 text-bodysmall text-gray-500">{officeName}</p>
         <p className="text-caption text-gray-500">
           서울특별시 강남구 테헤란로 212 14층 1401호
         </p>
@@ -34,11 +61,14 @@ const MyCareer = () => {
       <div onClick={careerPopup} className="mt-2 flex cursor-pointer flex-col">
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">분야</span>
-          <span className="text-sm font-medium">접촉사고, 뺑소니</span>
+          <span className="text-sm font-medium">
+            {lawyerTags[0].lawyer_specialties}{' '}
+            {lawyerTags[1].lawyer_specialties}
+          </span>
         </div>
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">자격</span>
-          <span className="text-sm font-medium">42회 사법시험 (2000)</span>
+          <span className="text-sm font-medium">{lawyerLicenseExam}</span>
         </div>
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">학력</span>
