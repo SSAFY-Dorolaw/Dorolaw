@@ -21,14 +21,13 @@ function AnalysisReportTab() {
 
     // PDF 옵션
     const options = {
-      filename: `사고분석리포트_${faultAnalysisId}.pdf`,
+      filename: `사고 분석 리포트_${faultAnalysisId}.pdf`,
       page: {
         format: 'A4',
         orientation: 'portrait' as Orientation,
         margins: { top: 20, right: 20, bottom: 20, left: 20 },
       },
       overrides: {
-        // 메타데이터 (필요 없다고 판단되면 지울 예정)
         pdf: {
           title: `AI 과실 분석 리포트_${faultAnalysisId}`,
           author: '교통사고 분석 시스템',
