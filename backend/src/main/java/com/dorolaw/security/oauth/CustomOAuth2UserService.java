@@ -7,6 +7,7 @@ import com.dorolaw.member.entity.MemberStatus;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +53,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String phoneNumber = (String) kakaoAccount.get("phone_number");
         String profileImage = (String) profile.get("profile_image_url");
 
-        // query parameter 방식으로 전달된 role 값을 추가 파라미터에서 가져오기
-        String roleString = (String) userRequest.getAdditionalParameters().get("role");
+        // 쿠키에서 role 값을 읽어오기
+        String roleString = "";
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("role".equals(cookie.getName())) {
+                    roleString = cookie.getValue();
+                    break;
+                }
+            }
+        }
         MemberRole role = "LAWYER".equalsIgnoreCase(roleString) ? MemberRole.LAWYER : MemberRole.GENERAL;
 
         // 회원가입 여부 확인
