@@ -1,9 +1,10 @@
-import UploadArea from '@/features/analysis/UploadArea';
+import UploadArea from '@/features/videoupload/UploadArea';
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import UploadTitle, {
   UploadTitleRef,
 } from '@/features/videoupload/UploadTitle';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 
 const VideoUpload = () => {
@@ -12,6 +13,8 @@ const VideoUpload = () => {
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [isAgree, setIsAgree] = useState(false);
+
+  const navigate = useNavigate();
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -58,8 +61,9 @@ const VideoUpload = () => {
       if ('fileName' in response) {
         // 성공하면
         setSuccess(true);
-        console.log('업로드 성공: ', response);
-      } else if ('message' in response) {
+        void navigate(`/report/${boardResponse.faultAnalysisId}`);
+        console.log('업로드 성공: ', boardResponse);
+      } else if ('message' in boardResponse) {
         // 실패하면
         setError(response.message);
       }

@@ -5,8 +5,9 @@ import Pagenation from '@/widgets/Pagenation';
 import { useState } from 'react';
 
 const Board = () => {
-  const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isConsultTab, setIsConsultTab] = useState<boolean>(false);
+  const [consultPage, setConsultPage] = useState<number>(0);
+  const [analysisPage, setAnalysisPage] = useState<number>(0);
 
   // Tanstack Query로 데이터 가져오기
   const { data, isLoading } = useConsultListQuery(currentPage);
@@ -30,23 +31,23 @@ const Board = () => {
             <header className="flex w-full rounded-t-[10px]">
               <div
                 className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
-                onClick={() => setIsConsultTab(true)}
-              >
-                <h3
-                  className={`${isConsultTab ? 'underline decoration-2 underline-offset-[calc(0.75em+2px)]' : 'text-p3'}`}
-                >
-                  의뢰 게시판
-                </h3>
-                <hr />
-              </div>
-              <div
-                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
                 onClick={() => setIsConsultTab(false)}
               >
                 <h3
                   className={`${isConsultTab ? 'text-p3' : 'underline decoration-2 underline-offset-[calc(0.75em+2px)]'}`}
                 >
                   AI 분석 게시판
+                </h3>
+                <hr />
+              </div>
+              <div
+                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
+                onClick={() => setIsConsultTab(true)}
+              >
+                <h3
+                  className={`${isConsultTab ? 'underline decoration-2 underline-offset-[calc(0.75em+2px)]' : 'text-p3'}`}
+                >
+                  의뢰 게시판
                 </h3>
                 <hr />
               </div>
