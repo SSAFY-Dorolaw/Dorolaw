@@ -1,11 +1,12 @@
-import { useLawyerProfile } from '@/entities/lawyers/model/queries';
+import { useLawyerMyProfile } from '@/entities/lawyers/model/queries';
 import ProfileCard from './ProfileCard';
 import ProfileDetail from './ProfileDetail';
 // import axios from 'axios';
 // import { LawyerProfile } from '@/entities/lawyers/model/types';
 
 const LawyerMypage = () => {
-  const { data, isPending, isError } = useLawyerProfile();
+  const { data, isPending, isError } = useLawyerMyProfile();
+  console.log(data);
 
   if (isPending) return <div>로딩중...</div>;
   if (isError) return <div>에러!</div>;
@@ -59,6 +60,7 @@ const LawyerMypage = () => {
           lawyerLicenseExam={data?.lawyerLicenseExam}
           education={data?.education}
           career={data?.career}
+          completedConsultationCount={data.completedConsultationCount}
         />
       </section>
     </div>

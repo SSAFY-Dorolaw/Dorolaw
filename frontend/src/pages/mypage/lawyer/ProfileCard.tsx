@@ -51,7 +51,11 @@ const ProfileCard = ({
         </div>
 
         {/* 비용 */}
-        <Fee />
+        <Fee
+          phoneConsultationPrice={phoneConsultationPrice}
+          videoConsultationPrice={videoConsultationPrice}
+          visitConsultationPrice={videoConsultationPrice}
+        />
 
         {/* 내 일정 */}
         <div>

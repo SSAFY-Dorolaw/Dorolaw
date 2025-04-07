@@ -3,17 +3,16 @@ import star from '@/shared/assets/images/star.png';
 import { useState } from 'react';
 
 interface CareerProps {
-  name: string;
-  officeName: string;
-  averageRating: number;
-  officeAddress: string;
+  name: string | null;
+  officeName: string | null;
+  averageRating: number | null;
+  officeAddress: string | null;
   lawyerTags: LawyerTags[];
   // officePhoneNumber: string;
   // oneLineIntro: string;
-  greetingMessage: string;
   education: Education[];
   career: Career[];
-  lawyerLicenseNumber: string;
+  lawyerLicenseNumber: string | null;
   lawyerLicenseExam: string | null;
 }
 
@@ -23,7 +22,6 @@ const MyCareer = ({
   averageRating,
   officeAddress,
   lawyerTags,
-  greetingMessage,
   education,
   career,
   lawyerLicenseNumber,
@@ -53,18 +51,17 @@ const MyCareer = ({
           </div>
         </div>
         <p className="mt-2 text-bodysmall text-gray-500">{officeName}</p>
-        <p className="text-caption text-gray-500">
-          서울특별시 강남구 테헤란로 212 14층 1401호
-        </p>
+        <p className="text-caption text-gray-500">{officeAddress}</p>
       </div>
 
       <div onClick={careerPopup} className="mt-2 flex cursor-pointer flex-col">
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">분야</span>
-          <span className="text-sm font-medium">
-            {lawyerTags[0].lawyer_specialties}{' '}
-            {lawyerTags[1].lawyer_specialties}
-          </span>
+          {lawyerTags?.map((elem, index) => (
+            <span className="text-sm font-medium" key={index}>
+              {elem.lawyer_specialties}
+            </span>
+          ))}
         </div>
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">자격</span>
@@ -73,7 +70,7 @@ const MyCareer = ({
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">학력</span>
           <span className="text-sm font-medium">
-            서울대학교 법학대학원 박사
+            {education[0]?.school} {education[0]?.degree}
           </span>
         </div>
       </div>
@@ -83,12 +80,12 @@ const MyCareer = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-h3 font-bold">김승소 변호사 이력</h3>
+              <h3 className="text-h3 font-bold">{name} 변호사 이력</h3>
               <button
                 onClick={closePopup}
                 className="text-gray-500 hover:text-gray-700"
               >
-                X
+                ✕
               </button>
             </div>
 
@@ -96,25 +93,27 @@ const MyCareer = ({
               <div>
                 <h4 className="mb-2 text-body">경력</h4>
                 <ul className="space-y-2 text-caption">
-                  <li>2020 ~ 현재: 로로 법률사무소 대표 변호사</li>
-                  <li>2015 ~ 2020: 서울중앙지방법원 판사</li>
-                  <li>2010 ~ 2015: 대형 로펌 A 변호사</li>
-                  <li>2005 ~ 2010: 서울지방검찰청 검사</li>
+                  {career?.map((elem, index) => (
+                    <li className="text-sm font-medium" key={index}>
+                      {elem.years}: {elem.company} {elem.position}
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               <div>
                 <h4 className="mb-2 text-body">자격</h4>
-                <p className="text-caption">42회 사법시험 합격 (2000)</p>
-                <p className="text-caption">32기 사법연수원 수료 (2003)</p>
+                <p className="text-caption">{lawyerLicenseExam} 합격</p>
               </div>
 
               <div>
                 <h4 className="mb-2 text-body">학력</h4>
                 <ul className="space-y-1 text-caption">
-                  <li>서울대학교 법학대학원 박사 (2008)</li>
-                  <li>서울대학교 법학대학원 석사 (2005)</li>
-                  <li>서울대학교 법학과 학사 (1998)</li>
+                  {education?.map((elem, index) => (
+                    <li key={index}>
+                      {elem.school} {elem.degree} {`(${elem.graduationYear})`}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

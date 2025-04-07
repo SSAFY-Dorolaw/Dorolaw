@@ -11,13 +11,14 @@ interface ProfileDetailProps {
   officeName: string;
   oneLineIntro: string;
   greetingMessage: string;
-  averageRating: number;
+  averageRating: number | null;
   officeAddress: string;
   lawyerTags: LawyerTags[];
-  lawyerLicenseNumber: string;
-  lawyerLicenseExam: string;
+  lawyerLicenseNumber: string | null;
+  lawyerLicenseExam: string | null;
   education: Education[];
   career: Career[];
+  completedConsultationCount: number;
 }
 
 const ProfileDetail = ({
@@ -32,6 +33,7 @@ const ProfileDetail = ({
   lawyerLicenseExam,
   education,
   career,
+  completedConsultationCount,
 }: ProfileDetailProps) => {
   return (
     <div>
@@ -46,7 +48,6 @@ const ProfileDetail = ({
           averageRating={averageRating}
           officeAddress={officeAddress}
           lawyerTags={lawyerTags}
-          greetingMessage={greetingMessage}
           education={education}
           career={career}
           lawyerLicenseNumber={lawyerLicenseNumber}
@@ -55,19 +56,19 @@ const ProfileDetail = ({
         <hr />
 
         {/* 관심 태그 */}
-        <MyExpert />
+        <MyExpert greetingMessage={greetingMessage} lawyerTags={lawyerTags} />
         <hr />
 
         {/* 최근 상담 */}
-        <MyConsult />
+        <MyConsult completedConsultationCount={completedConsultationCount} />
         <hr />
 
         {/* 상담 후기 */}
-        <MyReview />
-        <hr />
+        {/* <MyReview />
+        <hr /> */}
 
         {/* 지도 */}
-        <MyOffice />
+        {/* <MyOffice /> */}
       </div>
     </div>
   );
