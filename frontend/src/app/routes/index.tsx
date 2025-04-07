@@ -101,6 +101,10 @@ const router = createBrowserRouter([
             element: <MyRequests />,
           },
           {
+            path: 'consultations',
+            element: <MyConsultations />,
+          },
+          {
             path: 'edit',
             element: <EditLawyerPage />,
             loader: requireAuth,
