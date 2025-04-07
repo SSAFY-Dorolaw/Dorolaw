@@ -9,16 +9,16 @@ export interface ReportInfoRequest {
 export interface AIReport {
   reportId: number;
   faultAnalysisId: number;
-  createAt: string;
-  updatedAt: string;
-  accidentObject: string;
   accidentLocation: string;
   accidentLocationCharacteristics: string;
+  accidentObject: string;
+  accidentType: number;
   directionOfA: string;
   directionOfB: string;
   faultRatioA: number;
   faultRatioB: number;
-  accidentType: number;
+  createAt: string;
+  updatedAt: string;
 }
 
 // 분석 게시글 상세 데이터 인터페이스
