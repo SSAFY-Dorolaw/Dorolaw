@@ -1,10 +1,22 @@
 import LoginButton from '@/features/login/LoginButtons';
 import LoginTab from '@/features/login/LoginTab';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const Login = () => {
   const [isLawyerTab, setIsLawyerTab] = useState<boolean>(false);
   const role = isLawyerTab ? 'LAWYER' : 'GENERAL';
+  const [searchParams] = useSearchParams();
+
+  // URL에서 redirectTo 파라미터 가져오기
+  const redirectTo = searchParams.get('redirectTo') ?? '/';
+
+  useEffect(() => {
+    if (redirectTo && redirectTo !== '/') {
+      // 로컬 스토리지에 원래 가려던 경로 저장
+      localStorage.setItem('redirectAfterLogin', redirectTo);
+    }
+  }, [redirectTo]);
 
   return (
     <div className="my-auto flex flex-col items-center justify-center bg-gray-100">

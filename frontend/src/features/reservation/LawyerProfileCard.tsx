@@ -37,7 +37,7 @@ const LawyerProfileCard = () => {
           </div>
 
           {/* 요금 정보 */}
-          <Fee />
+          {/* <Fee /> */}
 
           {/* 예약 버튼 */}
           <div className="rounded-[10px] bg-p5 p-4">

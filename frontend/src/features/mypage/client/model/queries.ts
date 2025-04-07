@@ -9,9 +9,9 @@ import { clientMypageApi } from '@/features/mypage/client/api/api';
 
 // 쿼리 키 정의
 export const clientMypageKeys = {
-  myConsultations: ['myConsultations'] as const,
-  myRequests: ['myRequests'] as const,
-  myAnalyses: ['myAnalyses'] as const,
+  myConsultations: ['client', 'myConsultations'] as const,
+  myRequests: ['client', 'myRequests'] as const,
+  myAnalyses: ['client', 'myAnalyses'] as const,
 };
 
 // 상담 조회 쿼리 훅

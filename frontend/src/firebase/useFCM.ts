@@ -77,16 +77,16 @@ const useFCM = () => {
         }
 
         setToken(fcmToken);
-        console.log('FCM 토큰:', fcmToken);
+        // console.log('FCM 토큰:', fcmToken);
 
         // 5. 백엔드에 토큰 전송
         const storedToken = localStorage.getItem('fcmToken');
-        console.log(
-          '🔍 현재 저장된 토큰:',
-          storedToken?.substring(0, 10) + '...',
-        );
-        console.log('🔍 새 토큰:', fcmToken.substring(0, 10) + '...');
-        console.log('🔍 토큰 비교:', storedToken !== fcmToken);
+        // console.log(
+        //   '🔍 현재 저장된 토큰:',
+        //   storedToken?.substring(0, 10) + '...',
+        // );
+        // console.log('🔍 새 토큰:', fcmToken.substring(0, 10) + '...');
+        // console.log('🔍 토큰 비교:', storedToken !== fcmToken);
 
         // 조건 체크를 더 명확하게 합니다
         if (!storedToken) {
