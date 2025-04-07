@@ -1,8 +1,11 @@
-import { useRef, useState, useCallback } from 'react';
+import { useUploadStore } from '@/features/videoupload/model/uploadStore';
+import { useRef, useCallback } from 'react';
 
 const UploadArea = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  // zustand 스토어에서 상태와 액션 가져오기
+  const { selectedFile, isDragging, setIsDragging, handleFile } =
+    useUploadStore();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropAreaRef = useRef<HTMLDivElement>(null);
 
@@ -13,21 +16,15 @@ const UploadArea = () => {
     }
   };
 
-  const handleFile = (file: File) => {
-    // 비디오 파일인지 확인
-    if (file.type.startsWith('video/')) {
-      setSelectedFile(file);
-    } else {
-      alert('비디오 파일만 업로드 가능합니다.');
-    }
-  };
-
   // 드래그 이벤트 핸들러
-  const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
+  const handleDragEnter = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(true);
+    },
+    [setIsDragging],
+  );
 
   const handleDragOver = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -37,25 +34,31 @@ const UploadArea = () => {
         setIsDragging(true);
       }
     },
-    [isDragging],
+    [isDragging, setIsDragging],
   );
 
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
+  const handleDragLeave = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+    },
+    [setIsDragging],
+  );
 
-  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
 
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      handleFile(files[0]);
-    }
-  }, []);
+      const files = e.dataTransfer.files;
+      if (files && files.length > 0) {
+        handleFile(files[0]);
+      }
+    },
+    [setIsDragging, handleFile],
+  );
 
   return (
     <div className="mx-auto mt-3 flex h-[420px] w-[800px]  items-center justify-center">
