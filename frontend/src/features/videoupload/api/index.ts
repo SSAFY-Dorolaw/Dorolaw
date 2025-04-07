@@ -64,10 +64,6 @@ export const uploadVideo = async (
       },
     );
 
-    // 디버깅
-    console.log('토큰: ', token);
-    console.log('보내는 데이터: ', formData);
-
     // 성공 응답 확인
     console.log('응답 상태: ', response.status);
     console.log('응답 데이터: ', response.data);

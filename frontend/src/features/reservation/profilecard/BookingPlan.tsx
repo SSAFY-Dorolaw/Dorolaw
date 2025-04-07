@@ -2,34 +2,18 @@ import { useState } from 'react';
 import SelectConsultingType from '@/features/reservation/profilecard/SelectConsultingType';
 import SelectDate from './SelectDate';
 import SelectTime from './SelectTime';
-import { useNavigate, useParams } from 'react-router-dom';
 
 interface BookingPlanProps {
   onClose: () => void;
 }
 
 const BookingPlan = ({ onClose }: BookingPlanProps) => {
-  const { lawyerId, requestId } = useParams();
   const [selectConsulting, setSelectConsulting] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isConsultingOpen, setIsConsultingOpen] = useState(true);
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [isTimeOpen, setIsTimeOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const getPrice = () => {
-    switch (selectConsulting) {
-      case '15분 전화상담':
-        return 50000;
-      case '20분 화상상담':
-        return 70000;
-      case '30분 방문상담':
-        return 100000;
-      default:
-        return 0;
-    }
-  };
 
   const handleSelectConsulting = (option: string) => {
     setSelectConsulting(option);
@@ -73,28 +57,6 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
       updatedDate.setHours(hours, minutes, 0, 0);
       setSelectedDate(updatedDate);
     }
-  };
-
-  const handleMoveToAdditionalInfo = () => {
-    console.log({
-      lawyerId,
-      requestId, // Include the requestId in the navigation state
-      scheduledDate: selectedDate,
-      scheduledTime: selectedTime,
-      consultationType: selectConsulting,
-      price: getPrice(),
-    });
-    // Navigate to additional info page with necessary params
-    void navigate('/reservation/additional-question', {
-      state: {
-        lawyerId,
-        requestId, // Include the requestId in the navigation state
-        scheduledDate: selectedDate,
-        scheduledTime: selectedTime,
-        consultationType: selectConsulting,
-        price: getPrice(),
-      },
-    });
   };
 
   const isConsultingTypeSelected = selectConsulting !== '';
@@ -141,7 +103,7 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
         <button
           disabled={!selectedDate || !selectedTime}
           className="w-full text-body text-white"
-          onClick={handleMoveToAdditionalInfo}
+          onClick={() => console.log(selectedDate, selectConsulting)}
         >
           상담 예약하기
         </button>
