@@ -1,3 +1,4 @@
+import ReportTab from '@/features/consultation/report/ReportTab';
 import { useState } from 'react';
 
 function AnalysisCard() {
@@ -18,6 +19,7 @@ function AnalysisCard() {
             </h3>
           </div>
         </header>
+        <ReportTab />
       </div>
     </div>
   );

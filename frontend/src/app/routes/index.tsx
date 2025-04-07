@@ -5,6 +5,7 @@ import Main from '@/pages/mainpage/Main';
 import VideoUpload from '@/pages/analysis/VideoUpload';
 import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
+import AnalysisDetail from '@/pages/analysis/AnalysisDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
 import Reservation from '@/pages/reservation/Reservation';
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
         path: '/report',
         children: [
           { path: '', element: <VideoUpload />, loader: requireAuth },
-          { path: ':faultAnalysisId', element: <ConsultDetail /> },
+          { path: ':faultAnalysisId', element: <AnalysisDetail /> },
         ],
       },
       {
