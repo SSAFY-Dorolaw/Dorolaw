@@ -22,3 +22,16 @@ export interface Requests {
   isSelected: boolean;
   requestStatus: string;
 }
+
+export interface Consultations {
+  consultationId: number;
+  clientName: string;
+  requestId: number;
+  requestTitle: string;
+  requestContent: string;
+  additionalQuestion: string;
+  consultationStatus: string;
+  consultationDate: string;
+  consultationTime: string;
+  consultationType: string;
+}

@@ -9,9 +9,9 @@ const LoginButton = ({ role }: LoginButtonProps) => {
   const { mutate } = useMutation({
     mutationFn: () => {
       document.cookie = `role=${role}; path=/`;
-      window.location.href = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+      window.location.href = `${import.meta.env.VITE_KAKAO_REDIRECT_URI}?role=${encodeURIComponent(role)}`;
 
-      // 리다이렉트되기 전에 mutationFn이 Promise를 반환하도록 함
+      // 리다이렉트되기 전에 mutationFn이 Promise를 반환하도록 함git
       return Promise.resolve();
     },
   });
