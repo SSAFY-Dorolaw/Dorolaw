@@ -1,15 +1,44 @@
 import React from 'react';
 import ConsultItem from '@/features/board/ConsultItem';
+import { useConsultListQuery } from './api';
 import { useNavigate } from 'react-router-dom';
-import { Contents, SuccessResponse } from '@/features/board/model/types';
+import { Contents } from '@/features/board/model/types';
 
 // currentPage를 props로 받도록 함
 interface ConsultListProps {
-  data?: SuccessResponse;
+  currentPage: number;
 }
 
-const ConsultList = ({ data }: ConsultListProps) => {
+const ConsultList = ({ currentPage = 0 }: ConsultListProps) => {
   const navigate = useNavigate();
+
+  /* Tanstack Query로 데이터 가져오기 */
+  const { data, isLoading, isError } = useConsultListQuery(currentPage);
+
+  /**
+   * < 에러 방지를 위해 적어야 하는 내용들 >
+   * Tanstack Query로 데이터 가져올 때,
+   * data가 로드되기 전에는 타입이 undefined
+   * 아래 내용들을 적지 않으면 타입 에러 발생 (렌더링도 안 됨)
+   */
+
+  // 로딩 중 표시
+  if (isLoading) {
+    return (
+      <div className="mt-10 py-8 text-center">
+        <p>데이터를 불러오는 중입니다...</p>
+      </div>
+    );
+  }
+
+  // 에러 발생 시 표시
+  if (isError) {
+    return (
+      <div className="mt-10 py-8 text-center text-red-500">
+        <p>데이터를 불러오는 중 오류가 발생했습니다.</p>
+      </div>
+    );
+  }
 
   // 데이터가 없다면
   if (!data?.content || data.content.length === 0) {

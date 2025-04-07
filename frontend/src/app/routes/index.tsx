@@ -5,7 +5,6 @@ import Main from '@/pages/mainpage/Main';
 import VideoUpload from '@/pages/analysis/VideoUpload';
 import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
-import AnalysisDetail from '@/pages/analysis/AnalysisDetail';
 import Board from '@/pages/board/Board';
 import MyPage from '@/pages/mypage/MyPage';
 import Reservation from '@/pages/reservation/Reservation';
@@ -15,9 +14,7 @@ import ReviewList from '@/pages/mypage/MyReviews';
 import MyAnalyses from '@/pages/mypage/MyAnalyses';
 import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
 import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
-import LoginRedirect from '@/pages/login/LoginRedirect';
-import { requireAuth } from '@/entities/auth/authUtils';
-import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
+import LoginRedirect from '@/pages/login/Redirect';
 
 const router = createBrowserRouter([
   {
@@ -34,8 +31,8 @@ const router = createBrowserRouter([
       {
         path: '/report',
         children: [
-          { path: '', element: <VideoUpload />, loader: requireAuth },
-          { path: ':faultAnalysisId', element: <AnalysisDetail /> },
+          { path: '', element: <VideoUpload /> },
+          { path: 'detail', element: <ConsultDetail /> }, // n번 게시글(ex. reportId)로 추가 수정 필요
         ],
       },
       {
@@ -44,7 +41,6 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <ConsultUpload />,
-            loader: requireAuth,
           },
           { path: ':requestId', element: <ConsultDetail /> },
         ],
@@ -59,27 +55,22 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <MyPage />,
-            loader: requireAuth,
           },
           {
             path: 'requests',
             element: <MyRequests />,
-            loader: requireAuth,
           },
           {
             path: 'consultations',
             element: <MyConsultations />,
-            loader: requireAuth,
           },
           {
             path: 'reviews',
             element: <ReviewList />,
-            loader: requireAuth,
           },
           {
             path: 'analyses',
             element: <MyAnalyses />,
-            loader: requireAuth,
           },
         ],
       },
@@ -89,23 +80,13 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <LawyerMypage />,
-            loader: requireAuth,
           },
-          {
-            path: 'profile/:lawyerId/:requestId',
-            element: <Reservation />,
-            loader: requireAuth,
-          },
+          { path: 'profile', element: <Reservation /> },
           {
             path: 'edit',
             element: <EditLawyerPage />,
-            loader: requireAuth,
           },
         ],
-      },
-      {
-        path: '/reservation/additional-question',
-        element: <AdditionalQuestion />,
       },
     ],
   },
