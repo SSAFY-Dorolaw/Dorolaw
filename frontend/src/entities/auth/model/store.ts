@@ -20,6 +20,7 @@ export const useAuthStore = create<AuthStore>()(
         isLogin: !!initialToken, // 토큰 존재 여부로 로그인 상태 결정
         accessToken: initialToken, // 초기 토큰 설정
         clientId: null, // 로그인한 사용자 정보
+        role: null,
 
         login: (token: string) => {
           // localStorage에 저장
@@ -39,6 +40,11 @@ export const useAuthStore = create<AuthStore>()(
         // clientId 설정 함수
         setClientId: (id: number | null) => {
           set({ clientId: id });
+        },
+
+        // lawyerId 설정 함수
+        setRole: (role: string | null) => {
+          set({ role: role });
         },
 
         // 토큰 직접 설정하는 함수

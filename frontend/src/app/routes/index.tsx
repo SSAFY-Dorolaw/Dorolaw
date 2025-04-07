@@ -83,6 +83,10 @@ const router = createBrowserRouter([
           },
           { path: 'profile', element: <Reservation /> },
           {
+            path: 'requests',
+            element: <MyRequests />,
+          },
+          {
             path: 'edit',
             element: <EditLawyerPage />,
           },
