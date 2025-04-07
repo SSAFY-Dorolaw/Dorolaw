@@ -7,6 +7,7 @@ import com.dorolaw.member.entity.MemberStatus;
 import com.dorolaw.member.entity.lawyer.LawyerProfile;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import jakarta.servlet.http.Cookie;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -53,17 +54,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String phoneNumber = (String) kakaoAccount.get("phone_number");
         String profileImage = (String) profile.get("profile_image_url");
 
-        // 쿠키에서 role 값을 읽어오기
-        String roleString = "";
+        // additionalParameters에서 role 값을 가져오기
+        // 현재 요청에서 쿠키 가져오기
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("role".equals(cookie.getName())) {
+        Cookie[] cookies = request.getCookies();
+
+        String roleString = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("oauth2_role".equals(cookie.getName())) {
                     roleString = cookie.getValue();
+                    log.info("나의 롤!!!!: {}", roleString);
                     break;
                 }
             }
         }
+        log.info("나의 롤!!!!: {}", roleString);
         MemberRole role = "LAWYER".equalsIgnoreCase(roleString) ? MemberRole.LAWYER : MemberRole.GENERAL;
 
         // 회원가입 여부 확인
@@ -88,7 +94,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 lawyerProfileRepository.save(lawyerProfile);
             }
         }
-        
+
         // 인가정보 담기
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole().name()));
 
@@ -98,7 +104,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         customAttributes.put("role", member.getRole().name());
         customAttributes.put("name", name);
         customAttributes.put("profileImage", profileImage);
-        
+
         // 인증, 인가
         return new DefaultOAuth2User(authorities, customAttributes, "id");
     }
