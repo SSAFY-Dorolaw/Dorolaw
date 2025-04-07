@@ -29,7 +29,17 @@ function LoginRedirect() {
       // 데이터
       setClientId(data.clientId);
 
-      void navigate('/');
+      // 로그인 후 리다이렉트할 경로 확인
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+
+      // 리다이렉트 경로 있으면 해당 경로로, 없으면 홈으로
+      if (redirectPath) {
+        // 리다이렉트 후 로컬 스토리지에서 해당 항목 제거
+        localStorage.removeItem('redirectAfterLogin');
+        void navigate(redirectPath);
+      } else {
+        void navigate('/');
+      }
     }
   }, [isSuccess, navigate, data, setClientId]);
 
