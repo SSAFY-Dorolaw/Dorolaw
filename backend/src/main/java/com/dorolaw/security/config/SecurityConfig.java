@@ -2,6 +2,7 @@ package com.dorolaw.security.config;
 
 import com.dorolaw.security.jwt.JwtAuthenticationFilter;
 import com.dorolaw.security.jwt.JwtAuthenticationSuccessHandler;
+import com.dorolaw.security.oauth.CustomOAuth2AuthorizationRequestResolver;
 import com.dorolaw.security.oauth.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -34,14 +37,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public HttpSessionOAuth2AuthorizationRequestRepository authorizationRequestRepository() {
+        return new HttpSessionOAuth2AuthorizationRequestRepository();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   ClientRegistrationRepository clientRegistrationRepository) throws Exception {
         http
                 // CSRF 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
                 // CORS 설정 활성화
                 .cors(Customizer.withDefaults())
                 // JWT를 사용하므로 세션은 STATELESS
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         // 모든 정적 리소스 및 기본 URL 허용
                         .requestMatchers("/**").permitAll()
@@ -50,6 +59,8 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
                                 .baseUri("/api/oauth2/authorization")
+                                .authorizationRequestResolver(new CustomOAuth2AuthorizationRequestResolver(clientRegistrationRepository))
+                                .authorizationRequestRepository(authorizationRequestRepository())
                         )
                         .redirectionEndpoint(endpoint -> endpoint
                                 .baseUri("/api/login/oauth2/code/*")
