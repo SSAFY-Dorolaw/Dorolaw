@@ -1,10 +1,15 @@
 package com.dorolaw.member.service;
 
+import com.dorolaw.consultation.entity.Consultation;
+import com.dorolaw.consultation.entity.ConsultationStatus;
+import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.member.dto.request.LawyerBusinessHourRequestDto;
 import com.dorolaw.consultation.repository.ReviewRepository;
 import com.dorolaw.member.dto.common.LawyerProfileDto;
 import com.dorolaw.member.dto.common.MemberProfileDto;
 import com.dorolaw.member.dto.request.MyPageUpdateRequestDto;
+import com.dorolaw.member.dto.request.VerifyLawyerRequestDto;
+import com.dorolaw.member.dto.response.MemberClaimsResponseDto;
 import com.dorolaw.member.entity.lawyer.*;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.repository.LawyerProfileRepository;
@@ -18,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,26 +42,27 @@ public class MemberService {
     private final ReviewRepository reviewRepository;
     private final LawyerScheduleRepository lawyerScheduleRepository;
     private final LawyerTagRepository lawyerTagRepository;
+    private final ConsultationRepository consultationRepository;
 
-        public Object getMemberInfo(String authorizationHeader){
+    public Object getMemberInfo(String authorizationHeader){
 
-            String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-            Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-            String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
+        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
+        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
 
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            MemberProfileDto baseProfile = MemberProfileDto.builder()
-                    .memberId(memberId)
-                    .name(member.getName())
-                    .email(member.getEmail())
-                    .phoneNumber(member.getPhoneNumber())
-                    .joinDate(member.getCreatedAt().format(formatter))
-                .profileImage(member.getProfileImage())
-                .role(member.getRole().name())
-                .build();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        MemberProfileDto baseProfile = MemberProfileDto.builder()
+                .memberId(memberId)
+                .name(member.getName())
+                .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
+                .joinDate(member.getCreatedAt().format(formatter))
+            .profileImage(member.getProfileImage())
+            .role(member.getRole().name())
+            .build();
 
         if (memberRole.equals("GENERAL")) {
             return baseProfile.toGeneralProfile();
@@ -66,6 +74,7 @@ public class MemberService {
         }
     }
 
+    @Transactional
     public Object updateMemberProfile(String authorizationHeader, MyPageUpdateRequestDto requestDto){
 
         String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
@@ -92,6 +101,7 @@ public class MemberService {
         return getProfileResponse(member, memberRole);
     }
 
+    @Transactional
     private void updateLawyerProfile(Member member, MyPageUpdateRequestDto requestDto) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(member.getMemberId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
@@ -101,7 +111,6 @@ public class MemberService {
             lawyerProfile.parseAndSetAddress(requestDto.getOfficeAddress());
         }
 
-        // 기존 필드 값들을 먼저 가져옴
         String officeName = lawyerProfile.getOfficeName();
         String officePhoneNumber = lawyerProfile.getOfficePhoneNumber();
         String officeProvince = lawyerProfile.getOfficeProvince();
@@ -113,6 +122,9 @@ public class MemberService {
         String introVideo = lawyerProfile.getIntroductionVideoUrl();
         Long accountNumber = lawyerProfile.getAccountNumber();
         String bankName = lawyerProfile.getBankName();
+        Integer phoneConsultationPrice = lawyerProfile.getPhoneConsultationPrice();
+        Integer videoConsultationPrice = lawyerProfile.getVideoConsultationPrice();
+        Integer visitConsultationPrice = lawyerProfile.getVisitConsultationPrice();
 
         if (requestDto.getOfficeName() != null) {
             officeName = requestDto.getOfficeName();
@@ -146,6 +158,19 @@ public class MemberService {
             bankName = requestDto.getBankName();
         }
 
+        // 상담 유형별 가격 업데이트
+        if (requestDto.getPhoneConsultationPrice() != null) {
+            phoneConsultationPrice = requestDto.getPhoneConsultationPrice();
+        }
+
+        if (requestDto.getVideoConsultationPrice() != null) {
+            videoConsultationPrice = requestDto.getVideoConsultationPrice();
+        }
+
+        if (requestDto.getVisitConsultationPrice() != null) {
+            visitConsultationPrice = requestDto.getVisitConsultationPrice();
+        }
+
         // 모든 필드를 updateProfile 메소드에 전달
         lawyerProfile.updateProfile(
                 officeName,
@@ -158,7 +183,10 @@ public class MemberService {
                 greetingMessage,
                 introVideo,
                 accountNumber,
-                bankName
+                bankName,
+                phoneConsultationPrice,
+                videoConsultationPrice,
+                visitConsultationPrice
         );
 
         if (requestDto.getEducations() != null) {
@@ -253,18 +281,12 @@ public class MemberService {
     }
 
     @Transactional
-    public void verifyLawyer(String authorizationHeader){
+    public void verifyLawyer(VerifyLawyerRequestDto request){
 
-        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
-        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
-        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
+        Long memberId = request.getMemberId();
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-
-        if (memberRole.equals("CERTIFIED_LAWYER")){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
 
         member.setRole(CERTIFIED_LAWYER);
         memberRepository.save(member);
@@ -276,7 +298,7 @@ public class MemberService {
         lawyerProfileRepository.save(lawyerProfile);
     }
 
-    private LawyerProfileDto getLawyerAdditionalInfo(Long memberId) {
+    public LawyerProfileDto getLawyerAdditionalInfo(Long memberId) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
@@ -286,14 +308,71 @@ public class MemberService {
         Long reviewCount = reviewRepository.countByLawyerId(memberId);
         Float averageRating = reviewRepository.calculateAverageRatingByLawyerId(memberId);
 
+        Long completedConsultationCount = consultationRepository.countByLawyer_LawyerProfileIdAndStatus(
+                lawyerProfile.getLawyerProfileId(),
+                ConsultationStatus.COMPLETED);
+
+        LocalDate today = LocalDate.now();
+        List<Consultation> todayConsultations = consultationRepository.findByLawyer_LawyerProfileIdAndConsultationDateOrderByScheduledTime(
+                lawyerProfile.getLawyerProfileId(),
+                today);
+
+        List<LawyerProfileDto.TodayConsultationDto> todayConsultationDtos = new ArrayList<>();
+        if (todayConsultations != null && !todayConsultations.isEmpty()) {
+            todayConsultationDtos = todayConsultations.stream()
+                    .map(consultation -> {
+                        Member client = memberRepository.findById(consultation.getClient().getMemberId())
+                                .orElse(new Member()); // 클라이언트를 찾지 못할 경우 기본 Member 객체 사용
+
+                        return LawyerProfileDto.TodayConsultationDto.builder()
+                                .scheduledTime(consultation.getScheduledTime().toString())
+                                .clientName(client.getName())
+                                .consultationType(consultation.getConsultationType().name())
+                                .build();
+                    })
+                    .collect(Collectors.toList());
+        }
+
         List<LawyerTag> lawyerTags = lawyerTagRepository.findByLawyerId(lawyer);
         List<LawyerProfileDto.LawyerTagDto> lawyerTagDtos = new ArrayList<>();
 
         if (lawyerTags != null && !lawyerTags.isEmpty()) {
             lawyerTagDtos = lawyerTags.stream()
-                    .map(tag -> LawyerProfileDto.LawyerTagDto.builder()
-                            .lawyer_specialties(tag.getLawyerSpeciality().name())
-                            .build())
+                    .map(tag -> {
+                        String tagDescription = "";
+                        // 태그 유형에 따른 설명 추가
+                        switch(tag.getLawyerSpeciality()) {
+                            case ALL:
+                                tagDescription = "모든 사건";
+                                break;
+                            case NONE:
+                                tagDescription = "없음";
+                                break;
+                            case 차대차:
+                                tagDescription = "차량 간 충돌 사고";
+                                break;
+                            case 차대보행자:
+                                tagDescription = "차량과 보행자 사고";
+                                break;
+                            case 차대자전거:
+                                tagDescription = "차량과 자전거 사고";
+                                break;
+                            case 차대이륜차:
+                                tagDescription = "차량과 이륜차 사고";
+                                break;
+                            case 고속도로:
+                                tagDescription = "고속도로 관련 사고";
+                                break;
+                            default:
+                                tagDescription = "";
+                                break;
+                        }
+
+                        return LawyerProfileDto.LawyerTagDto.builder()
+                                .lawyer_specialties(tag.getLawyerSpeciality().name())
+                                .description(tagDescription)
+                                .build();
+                    })
                     .collect(Collectors.toList());
         }
 
@@ -317,8 +396,13 @@ public class MemberService {
                 .lawyerLicenseNumber(lawyerProfile.getAttorneyLicenseNumber())
                 .lawyerLicenseExam(lawyerProfile.getQualificationExam())
                 .lawyerTags(lawyerTagDtos)
+                // 새로 추가한 필드
+                .completedConsultationCount(completedConsultationCount)
+                .todayConsultations(todayConsultationDtos)
+                .phoneConsultationPrice(lawyerProfile.getPhoneConsultationPrice())
+                .videoConsultationPrice(lawyerProfile.getVideoConsultationPrice())
+                .visitConsultationPrice(lawyerProfile.getVisitConsultationPrice())
                 .build();
-
     }
 
 
@@ -358,5 +442,22 @@ public class MemberService {
                 request.getSunday_end_time()
         );
         lawyerScheduleRepository.save(schedule);
+    }
+
+    public MemberClaimsResponseDto getMemberClaims(String authorizationHeader) {
+
+        String extractToken = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberIdFromJWT(extractToken));
+        String memberRole = jwtTokenProvider.getRoleFromJWT(extractToken);
+
+        if ("LAWYER".equals(memberRole)) {
+            // 변호사인 경우 lawyerId도 조회하여 포함
+            LawyerProfile lawyer = lawyerProfileRepository.findByMember_MemberId(memberId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+            return new MemberClaimsResponseDto(memberId, memberRole, lawyer.getLawyerProfileId());
+        } else {
+            // 일반 사용자인 경우
+            return new MemberClaimsResponseDto(memberId, memberRole);
+        }
     }
 }

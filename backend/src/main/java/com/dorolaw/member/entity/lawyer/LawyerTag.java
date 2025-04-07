@@ -2,11 +2,19 @@ package com.dorolaw.member.entity.lawyer;
 
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "lawyer_tags")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,15 +31,15 @@ public class LawyerTag {
     private LawyerSpeciality lawyerSpeciality;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lawyerId", nullable = false)
+    @JoinColumn(name = "lawyer_id", nullable = false)
     private Member lawyerId;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreatedDate
+    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(0)")
-    @Builder.Default
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @LastModifiedDate
+    @Column(nullable = false, columnDefinition = "DATETIME(0)")
+    private LocalDateTime updatedAt;
 
 }

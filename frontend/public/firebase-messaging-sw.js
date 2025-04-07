@@ -50,7 +50,7 @@ self.addEventListener('message', (event) => {
         });
     });
 
-    // console.log('Firebase 메시징이 백그라운드 모드로 초기화되었습니다.');
+    console.log('Firebase 메시징이 백그라운드 모드로 초기화되었습니다.');
   }
 });
 

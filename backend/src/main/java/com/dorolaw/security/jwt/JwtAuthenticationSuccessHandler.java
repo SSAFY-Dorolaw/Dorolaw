@@ -1,14 +1,13 @@
 package com.dorolaw.security.jwt;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -32,13 +31,11 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         // memberId와 role 추출
         Long memberId = null;
         String role = null;
-        String profileImage = null;
 
         if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
             DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
             memberId = (Long) oauthUser.getAttributes().get("memberId"); // OAuth2User에서 memberId 가져오기
             role = (String) oauthUser.getAttributes().get("role"); // role 가져오기
-            profileImage = (String) oauthUser.getAttributes().get("profileImage");
         }
 
         if (memberId == null || role == null) {

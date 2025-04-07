@@ -19,13 +19,12 @@ body {
   margin: 0;
   display: flex;
   font-family: 'PretendardVariable';
-  @apply text-p5;
+  color: p5;
 }
 
 @layer base {
   body {
     @apply text-p5;
-    font-family: 'PretendardVariable', 'SBAggroB';
   }
   :root {
     --background: 0 0% 100%;
@@ -165,6 +164,8 @@ h3 {
   font-size: 0.87em;
   font-weight: 500;
 }
+
+
 
 @layer base {
   * {

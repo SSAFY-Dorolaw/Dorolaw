@@ -2,17 +2,23 @@ package com.dorolaw.member.entity.lawyer;
 
 import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "lawyer_profile")
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -55,7 +61,7 @@ public class LawyerProfile {
     private String officeCityDistrict;
 
     // 기타 상세 주소
-    @Column(name = "office_detailed_address", length = 255, nullable = false)
+    @Column(name = "office_detailed_address", nullable = false)
     private String officeDetailedAddress;
 
     @Column(name = "region", length = 50)
@@ -70,7 +76,7 @@ public class LawyerProfile {
     @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "short_introduction", length = 255)
+    @Column(name = "short_introduction")
     private String shortIntroduction;
 
     @Column(name = "greeting", length = 100)
@@ -89,12 +95,12 @@ public class LawyerProfile {
     @Column(name = "verification_date")
     private LocalDateTime verificationDate;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     @CreatedDate
+    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(0)")
     @LastModifiedDate
+    @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime updatedAt;
 
     @Column(name = "account_number", nullable = false)
@@ -103,20 +109,36 @@ public class LawyerProfile {
     @Column(name = "bank_name", length = 20, nullable = false)
     private String bankName;
 
-    @OneToMany(mappedBy = "lawyerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<LawyerAccidentInterest> interests = new ArrayList<>();
+    @Column(name = "phone_consultation_price")
+    private Integer phoneConsultationPrice;
+
+    @Column(name = "video_consultation_price")
+    private Integer videoConsultationPrice;
+
+    @Column(name = "visit_consultation_price")
+    private Integer visitConsultationPrice;
 
     public void verifiedLawyer(){
         this.isVerified = true;
         this.verificationDate = LocalDateTime.now();
     }
 
-    public void updateProfile(String officeName, String officePhoneNumber, String officeProvince,
-                              String officeCityDistrict, String officeDetailedAddress, String gender,
-                              String shortIntroduction,
-                              String greeting, String introductionVideoUrl, Long accountNumber,
-                              String bankName) {
+    public void updateProfile(
+            String officeName,
+            String officePhoneNumber,
+            String officeProvince,
+            String officeCityDistrict,
+            String officeDetailedAddress,
+            String gender,
+            String shortIntroduction,
+            String greeting,
+            String introductionVideoUrl,
+            Long accountNumber,
+            String bankName,
+            Integer phoneConsultationPrice,
+            Integer videoConsultationPrice,
+            Integer visitConsultationPrice
+    ) {
         this.officeName = officeName;
         this.officePhoneNumber = officePhoneNumber;
         this.officeProvince = officeProvince;
@@ -128,7 +150,9 @@ public class LawyerProfile {
         this.introductionVideoUrl = introductionVideoUrl;
         this.accountNumber = accountNumber;
         this.bankName = bankName;
-        this.updatedAt = LocalDateTime.now();
+        this.phoneConsultationPrice = phoneConsultationPrice;
+        this.videoConsultationPrice = videoConsultationPrice;
+        this.visitConsultationPrice = visitConsultationPrice;
     }
 
     public void parseAndSetAddress(String fullAddress) {

@@ -8,6 +8,7 @@ import com.dorolaw.security.jwt.JwtTokenProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +16,11 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Service
+@RequiredArgsConstructor
 public class FcmService {
     private final FcmTokenRepository tokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
-
-    public FcmService(FcmTokenRepository tokenRepository, JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository) {
-        this.tokenRepository = tokenRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.memberRepository = memberRepository;
-    }
 
     public String sendNotification(String token, String body) {
         Message message = Message.builder()

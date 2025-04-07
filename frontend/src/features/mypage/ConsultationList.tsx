@@ -1,7 +1,7 @@
 import ConsultationItem from '@/features/mypage/ConsultationItem';
 import { useNavigate } from 'react-router-dom';
 import { useMyConsultations } from './client/model/queries';
-import logo from '@/shared/assets/images/logo.svg';
+// import { ClientConsultations } from './client/model/types';
 
 function ConsultationList() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function ConsultationList() {
   //       clientName: '한동민',
   //       lawyerId: 1,
   //       lawyerName: '한동민',
-  //       requestId: 2,
+  //       requestId: 1,
   //       requestTitle: 'Sample Request ww',
   //     },
   //     {
@@ -40,7 +40,7 @@ function ConsultationList() {
   //       clientName: '한동민',
   //       lawyerId: 1,
   //       lawyerName: '한동민',
-  //       requestId: 3,
+  //       requestId: 1,
   //       requestTitle: 'Sample Request asdf',
   //     },
   //   ],
@@ -52,47 +52,24 @@ function ConsultationList() {
   if (error) return <div>정보를 불러오는데 실패했습니다!</div>;
 
   return (
-    <>
-      {data.consultations.length ? (
-        <div className="my-10 space-y-4">
-          {data?.consultations.map((consultation) => (
-            <ConsultationItem
-              key={consultation.consultationId}
-              consultationId={consultation.consultationId}
-              scheduledDate={consultation.scheduledDate}
-              consultationMethod={consultation.consultationMethod}
-              status={consultation.status}
-              clientId={consultation.clientId}
-              clientName={consultation.clientName}
-              lawyerId={consultation.lawyerId}
-              lawyerName={consultation.lawyerName}
-              requestId={consultation.requestId}
-              requestTitle={consultation.requestTitle}
-              onClick={() =>
-                void navigate(`/consultation/${consultation.requestId}`)
-              }
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-16 shadow-sm">
-          <img src={logo} className="h-full items-center" alt="logo" />
-          <h2 className="mb-3 text-2xl font-bold">
-            아직 신청한 상담이 없습니다!
-          </h2>
-          <p className="mb-6 text-gray-600">
-            영상과 함께 사건을 의뢰하고 교통사고 전문 변호사에게 상담을
-            받아보세요.
-          </p>
-          <button
-            onClick={() => void navigate('/client/requests')}
-            className="hover:opacity980 rounded-lg bg-p5 px-6 py-3 font-medium text-p1 transition hover:text-y5"
-          >
-            나의 의뢰내역 조회하기
-          </button>
-        </div>
-      )}
-    </>
+    <div className="my-10 space-y-4">
+      {data?.consultations.map((consultation) => (
+        <ConsultationItem
+          key={consultation.consultationId}
+          consultationId={consultation.consultationId}
+          scheduledDate={consultation.scheduledDate}
+          consultationMethod={consultation.consultationMethod}
+          status={consultation.status}
+          clientId={consultation.clientId}
+          clientName={consultation.clientName}
+          lawyerId={consultation.lawyerId}
+          lawyerName={consultation.lawyerName}
+          requestId={consultation.requestId}
+          requestTitle={consultation.requestTitle}
+          onClick={() => void navigate('/consultation/detail')}
+        />
+      ))}
+    </div>
   );
 }
 

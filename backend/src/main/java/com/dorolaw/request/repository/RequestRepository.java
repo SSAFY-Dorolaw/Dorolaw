@@ -1,6 +1,5 @@
 package com.dorolaw.request.repository;
 
-import com.dorolaw.member.entity.Member;
 import com.dorolaw.request.entity.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    Page<Request> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Request> findAllByIsPublicTrueOrderByCreatedAtDesc(Pageable pageable);
 
     @Query("select distinct r from Request r " +
             "left join fetch r.aiReport " +
@@ -22,5 +21,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where r.requestId = :requestId")
     Optional<Request> findRequestDetail(@Param("requestId") Long requestId);
 
-    List<Request> findByMemberId(Long memberId);
+    List<Request> findByMember_MemberId(Long memberId);
 }

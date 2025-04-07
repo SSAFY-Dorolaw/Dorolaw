@@ -13,7 +13,7 @@ export const registerServiceWorker =
       const registration = await navigator.serviceWorker.register(
         '/firebase-messaging-sw.js',
       );
-      // console.log('FCM 서비스 워커가 등록되었습니다:', registration);
+      console.log('FCM 서비스 워커가 등록되었습니다:', registration);
 
       // 서비스 워커가 활성화될 때까지 기다림
       await navigator.serviceWorker.ready;
@@ -24,7 +24,7 @@ export const registerServiceWorker =
           type: 'SET_FIREBASE_CONFIG',
           config: firebaseConfig,
         });
-        // console.log('Firebase 구성이 서비스 워커에 전달되었습니다');
+        console.log('Firebase 구성이 서비스 워커에 전달되었습니다');
       }
 
       return registration;
