@@ -3,32 +3,29 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useAuthStore } from '@/entities/auth/model/store';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  useRequestDetail,
-  useDeleteRequest,
-} from '@/features/consultation/model/queries';
+  useDeleteAnalysis,
+  useAnalysisDetail,
+} from '@/features/analysis/model/queries';
 import { useState } from 'react';
-import ModifyTitle from './modify/ModifyTitle';
-import ModifyFaultRatio from './modify/ModifyFaultRatio';
-import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
-import ModifyQuestion from './modify/ModifyQuestion';
+import ModifyTitle from '../consultation/modify/ModifyTitle';
+import ModifyFaultRatio from '../consultation/modify/ModifyFaultRatio';
 import { useQueryClient } from '@tanstack/react-query';
 
-const ConsultInfo = () => {
+const AnalysisInfo = () => {
   const [editMode, setEditMode] = useState(false);
   const loginUser = useAuthStore((state) => state.clientId); // 로그인 시 받아온 clientId
-  const { requestId } = useParams(); // URL에서 requestId 파라미터 가져오기
+  const { faultAnalysisId } = useParams(); // URL에서 requestId 파라미터 가져오기
   const navigate = useNavigate();
-  const deleteRequestMutation = useDeleteRequest();
+  const deleteAnalysisMutation = useDeleteAnalysis();
   const queryClient = useQueryClient();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // API 호출
-  const {
-    data,
-    isLoading: queryLoading,
-    isError,
-  } = useRequestDetail(Number(requestId));
+  const { data, isLoading, isError } = useAnalysisDetail(
+    Number(faultAnalysisId),
+  );
 
-  if (queryLoading) {
+  if (isLoading) {
     return (
       <div className="col-span-7 mb-10 flex items-center justify-center">
         데이터 호출 중
@@ -36,7 +33,7 @@ const ConsultInfo = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
       <div className="col-span-7 mb-10 flex items-center justify-center">
         <p>오류 발생</p>
@@ -47,9 +44,6 @@ const ConsultInfo = () => {
   // 로그인 한 사용자가 작성한 글인지 체크
   const isWriter = loginUser === data?.memberId;
 
-  // 영상 데이터 조회
-  console.log(data?.fileName);
-
   // 게시글 수정모드
   const editPost = () => {
     setEditMode(!editMode);
@@ -57,16 +51,16 @@ const ConsultInfo = () => {
 
   // 게시글 삭제
   const deletePost = () => {
-    if (!requestId) return;
+    if (!faultAnalysisId) return;
 
     // 사용자에게 삭제 확인 메시지 표시
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
-      deleteRequestMutation.mutate(Number(requestId), {
+      deleteAnalysisMutation.mutate(Number(faultAnalysisId), {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
 
           // 쿼리 클라이언트에 직접 접근하여 무효와 완료 확인
-          void queryClient.invalidateQueries({ queryKey: ['requests'] });
+          void queryClient.invalidateQueries({ queryKey: ['analysisDetail'] });
 
           // 게시글 목록 페이지로 이동
           void navigate('/board'); // 삭제한 페이지로 뒤로가기 못하도록 막음
@@ -87,7 +81,7 @@ const ConsultInfo = () => {
           <>
             <h2>{data?.title}</h2>
             <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
-              상담완료
+              분석완료
             </div>
           </>
         ) : (
@@ -115,7 +109,7 @@ const ConsultInfo = () => {
       <div className="video my-4 aspect-video w-full bg-white">
         {data?.fileName ? (
           <video
-            src={`https://j12a501.p.ssafy.io/api/videos/${data.fileName}`}
+            src={`${API_URL}/videos/${data.fileName}`}
             controls
             className="size-full object-contain"
           >
@@ -128,31 +122,18 @@ const ConsultInfo = () => {
         )}
       </div>
 
-      {/* 추가 정보 3가지 */}
+      {/* 받은 과실비율 */}
       <div>
         <div className="rate flex flex-col gap-4">
           <div>
             <h3>받은 과실비율</h3>
             {!editMode ? (
-              <p className="mt-2">{data?.insuranceFaultRatio}</p>
+              <div className="mt-2 flex gap-4">
+                <p>A차량: {data?.aiReport?.faultRatioA}%</p>
+                <p>B차량: {data?.aiReport?.faultRatioB}%</p>
+              </div>
             ) : (
               <ModifyFaultRatio />
-            )}
-          </div>
-          <div>
-            <h3>영상 외 추가정보</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.description}</p>
-            ) : (
-              <ModifyAdditionalInfo />
-            )}
-          </div>
-          <div>
-            <h3>궁금한 점</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.question}</p>
-            ) : (
-              <ModifyQuestion />
             )}
           </div>
         </div>
@@ -161,4 +142,4 @@ const ConsultInfo = () => {
   );
 };
 
-export default ConsultInfo;
+export default AnalysisInfo;

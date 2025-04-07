@@ -23,7 +23,7 @@ const MyPage = () => {
   return (
     <div className="w-full">
       <header>
-        <h2>마이 페이지</h2>
+        <h2>마이페이지</h2>
       </header>
       <main>
         <ClientInfo
