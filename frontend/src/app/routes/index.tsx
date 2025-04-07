@@ -16,6 +16,7 @@ import LawyerMypage from '@/pages/mypage/lawyer/LawyerMypage';
 import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
 import LoginRedirect from '@/pages/login/LoginRedirect';
 import { requireAuth } from '@/entities/auth/authUtils';
+import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 
 const router = createBrowserRouter([
   {
@@ -89,13 +90,21 @@ const router = createBrowserRouter([
             element: <LawyerMypage />,
             loader: requireAuth,
           },
-          { path: 'profile', element: <Reservation />, loader: requireAuth },
+          {
+            path: 'profile/:lawyerId/:requestId',
+            element: <Reservation />,
+            loader: requireAuth,
+          },
           {
             path: 'edit',
             element: <EditLawyerPage />,
             loader: requireAuth,
           },
         ],
+      },
+      {
+        path: '/reservation/additional-question',
+        element: <AdditionalQuestion />,
       },
     ],
   },
