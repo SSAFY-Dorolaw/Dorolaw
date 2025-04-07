@@ -35,7 +35,7 @@ public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
         if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
             DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
             memberId = (Long) oauthUser.getAttributes().get("memberId"); // OAuth2User에서 memberId 가져오기
-            role = (String) request.getAttribute("role"); // role 가져오기
+            role = (String) oauthUser.getAttributes().get("role"); // role 가져오기
         }
 
         if (memberId == null || role == null) {
