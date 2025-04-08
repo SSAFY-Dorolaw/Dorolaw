@@ -1,6 +1,6 @@
 const MainFunctions = () => {
   return (
-    <section className="flex justify-between">
+    <section className="mt-10 flex justify-between">
       <article className="flex h-[320px] w-[384px] items-center justify-center rounded-[10px] bg-white">
         <div className="flex flex-col items-center text-center">
           <img src="/accident_analysis.png" alt="사고 분석" />
