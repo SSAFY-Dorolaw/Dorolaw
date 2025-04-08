@@ -5,7 +5,22 @@ import AiAnalysis from '@/features/mainpage/AiAnalysis';
 import LawyerConsulting from '@/features/mainpage/LawyerConsulting';
 import LawyerRegist from '@/features/mainpage/LawyerRegist';
 
+import { useEffect } from 'react';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
+import './Main.css';
+
 const Main = () => {
+  // 컴포넌트 마운트 시 AOS 초기화 또는 refresh
+  useEffect(() => {
+    Aos.init({
+      duration: 0,
+      once: false,
+      mirror: true,
+    });
+  }, []);
+
   return (
     <>
       {/* 상단 이미지 & 버튼 */}

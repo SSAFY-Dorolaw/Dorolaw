@@ -2,15 +2,12 @@ import { useNavigate } from 'react-router-dom';
 
 const MainHeader = () => {
   const navigate = useNavigate();
-
   const goToReport = () => {
     void navigate('/report');
   };
-
   const goToConsultation = () => {
     void navigate('/consultation');
   };
-
   return (
     <header className="inset-x-0 w-screen leading-[0]">
       <img
@@ -18,7 +15,6 @@ const MainHeader = () => {
         src="/main_img.png"
         alt="메인이미지"
       />
-
       {/* 이미지 위에 오버레이 텍스트 */}
       <div className="absolute inset-0 mt-10 flex flex-col items-center justify-center pt-20 text-white">
         <section className="mb-10 mt-[-100px]">
@@ -33,7 +29,6 @@ const MainHeader = () => {
             AI 과실 비율 분석, 변호사 상담까지 연결!
           </p>
         </section>
-
         {/* 버튼 컨테이너 */}
         <nav className="flex space-x-6">
           {/* 첫 번째 버튼 */}
@@ -43,7 +38,6 @@ const MainHeader = () => {
           >
             AI 과실비율 분석 시작하기
           </button>
-
           {/* 두 번째 버튼 */}
           <button
             onClick={goToConsultation}
