@@ -53,7 +53,10 @@ public class ConsultationService {
 
     public AvailableTimesResponseDto getAvailableTimes(
             Long lawyerId,
-            AvailableTimesRequestDto availableTimesRequestDto){
+            String consultationDate){
+
+        LocalDate date = LocalDate.parse(consultationDate);
+        String dayOfWeek = date.getDayOfWeek().toString().substring(0, 3);
 
         LawyerProfile lawyer = lawyerProfileRepository.findByMember_MemberId(lawyerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
@@ -62,8 +65,8 @@ public class ConsultationService {
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        LocalTime startTime = getStartTimeForDay(schedule, availableTimesRequestDto.getDayOfWeek());
-        LocalTime endTime = getEndTimeForDay(schedule, availableTimesRequestDto.getDayOfWeek());
+        LocalTime startTime = getStartTimeForDay(schedule, dayOfWeek);
+        LocalTime endTime = getEndTimeForDay(schedule, dayOfWeek);
 
         if (startTime == null || endTime == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -71,7 +74,7 @@ public class ConsultationService {
 
         List<LocalTime> bookedTimes = consultationRepository.findBookedTimesByLawyerAndDate(
                 lawyer.getLawyerProfileId(),
-                availableTimesRequestDto.getConsultationDate(),
+                date,
                 ConsultationStatus.SCHEDULED
         );
 
@@ -81,7 +84,7 @@ public class ConsultationService {
                 .lawyerId(lawyer.getLawyerProfileId())
                 .AvailableTimes(Arrays.asList(
                         AvailableTimesResponseDto.AvailableTimesDto.builder()
-                                .date(availableTimesRequestDto.getConsultationDate().toString())
+                                .date(date.toString())
                                 .Times(availableTimes)
                                 .build()
                 ))
