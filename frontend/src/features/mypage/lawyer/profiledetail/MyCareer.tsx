@@ -1,4 +1,4 @@
-import { Career, Education, LawyerTags } from '@/entities/lawyers/model/types';
+import { Career, Education, LawyerTag } from '@/entities/lawyers/model/types';
 import star from '@/shared/assets/images/star.png';
 import { useState } from 'react';
 
@@ -7,11 +7,11 @@ interface CareerProps {
   officeName: string | null;
   averageRating: number | null;
   officeAddress: string | null;
-  lawyerTags: LawyerTags[];
+  lawyerTags: LawyerTag[];
   // officePhoneNumber: string;
   // oneLineIntro: string;
-  education: Education[];
-  career: Career[];
+  educations: Education[];
+  careers: Career[];
   lawyerLicenseNumber: string | null;
   lawyerLicenseExam: string | null;
 }
@@ -22,8 +22,8 @@ const MyCareer = ({
   averageRating,
   officeAddress,
   lawyerTags,
-  education,
-  career,
+  educations,
+  careers,
   lawyerLicenseNumber,
   lawyerLicenseExam,
 }: CareerProps) => {
@@ -70,7 +70,7 @@ const MyCareer = ({
         <div className="mb-2 flex">
           <span className="w-16 text-sm text-g4">학력</span>
           <span className="text-sm font-medium">
-            {education[0]?.school} {education[0]?.degree}
+            {educations[0]?.school} {educations[0]?.degree}
           </span>
         </div>
       </div>
@@ -93,7 +93,7 @@ const MyCareer = ({
               <div>
                 <h4 className="mb-2 text-body">경력</h4>
                 <ul className="space-y-2 text-caption">
-                  {career?.map((elem, index) => (
+                  {careers?.map((elem, index) => (
                     <li className="text-sm font-medium" key={index}>
                       {elem.years}: {elem.company} {elem.position}
                     </li>
@@ -103,13 +103,13 @@ const MyCareer = ({
 
               <div>
                 <h4 className="mb-2 text-body">자격</h4>
-                <p className="text-caption">{lawyerLicenseExam} 합격</p>
+                <p className="text-caption">{lawyerLicenseExam}</p>
               </div>
 
               <div>
                 <h4 className="mb-2 text-body">학력</h4>
                 <ul className="space-y-1 text-caption">
-                  {education?.map((elem, index) => (
+                  {educations?.map((elem, index) => (
                     <li key={index}>
                       {elem.school} {elem.degree} {`(${elem.graduationYear})`}
                     </li>

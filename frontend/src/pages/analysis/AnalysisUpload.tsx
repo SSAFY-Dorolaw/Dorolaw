@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { uploadInfo } from '@/features/analysis/api';
 
-const VideoUpload = () => {
+const AnalysisUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -90,7 +90,7 @@ const VideoUpload = () => {
       if ('fileName' in boardResponse) {
         // 성공하면
         setSuccess(true);
-        void navigate(`/report/${boardResponse.faultAnalysisId}`);
+        void navigate(`/board`);
         console.log('업로드 성공: ', boardResponse);
       } else if ('message' in boardResponse) {
         // 실패하면
@@ -149,4 +149,4 @@ const VideoUpload = () => {
   );
 };
 
-export default VideoUpload;
+export default AnalysisUpload;

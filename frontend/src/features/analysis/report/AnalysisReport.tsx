@@ -1,12 +1,12 @@
 import { useRef } from 'react';
-import { AiReport } from '../model/types';
+import { AIReport } from '../model/types';
 import { formatDate } from '@/shared/lib/utils/dateFormatter';
 
-interface ReportProps {
-  aiReport: AiReport;
+interface AccidentReportProps {
+  aiReport: AIReport;
 }
 
-const Report = ({ aiReport }: ReportProps) => {
+const AccidentReport = ({ aiReport }: AccidentReportProps) => {
   const reportRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -17,7 +17,7 @@ const Report = ({ aiReport }: ReportProps) => {
       <header>
         <h2 className="mb-5 text-xl font-bold">사고 상황 분석 리포트</h2>
         <time className="mb-3 block text-right text-sm text-gray-500">
-          작성일: {formatDate(aiReport.createdAt)}
+          작성일: {formatDate(aiReport.createAt)}
         </time>
       </header>
 
@@ -102,4 +102,4 @@ const Report = ({ aiReport }: ReportProps) => {
   );
 };
 
-export default Report;
+export default AccidentReport;
