@@ -115,10 +115,9 @@ const ConsultInfo = () => {
       <div className="video my-4 aspect-video w-full bg-white">
         {data?.fileName ? (
           <video
-            src={`https://j12a501.p.ssafy.io/videos/${data.fileName}`}
+            src={`https://j12a501.p.ssafy.io/api/videos/${data.fileName}`}
             controls
             className="size-full object-contain"
-            // poster="/path-to-thumbnail-image.jpg" // 썸네일 이미지 경로
           >
             브라우저가 비디오 태그를 지원하지 않습니다.
           </video>

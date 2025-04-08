@@ -1,10 +1,11 @@
-import UploadArea from '@/features/analysis/UploadArea';
+import UploadArea from '@/features/videoupload/UploadArea';
 import UploadTitle, {
   UploadTitleRef,
 } from '@/features/videoupload/UploadTitle';
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { submitInfo } from '@/features/videoupload/api';
 
@@ -20,6 +21,7 @@ const ConsultUpload = () => {
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [isAgree, setIsAgree] = useState(false);
+  const navigate = useNavigate();
 
   // 추가 정보 객체로 분리
   const [additionalData, setAdditionalData] = useState<AdditionalData>({
@@ -112,6 +114,7 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
+        void navigate(`/consultation/${infoResponse.requestId}`);
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면

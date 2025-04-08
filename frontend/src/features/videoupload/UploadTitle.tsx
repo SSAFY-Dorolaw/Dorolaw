@@ -1,4 +1,5 @@
-import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useUploadStore } from '@/features/videoupload/model/uploadStore';
+import { useRef, forwardRef, useImperativeHandle } from 'react';
 
 // 외부에서 접근할 수 있는 메서드를 정의하는 인터페이스
 export interface UploadTitleRef {
@@ -7,8 +8,8 @@ export interface UploadTitleRef {
 }
 
 const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [title, setTitle] = useState<string>('');
+  const { selectedFile, title, setTitle, handleFile, setSelectedFile } =
+    useUploadStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 외부에서 ref를 통해 selectedFile에 접근할 수 있도록 함
@@ -26,7 +27,7 @@ const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
   const fileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setSelectedFile(files[0]);
+      handleFile(files[0]);
     }
   };
 
@@ -61,9 +62,22 @@ const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
             <h2 className="text-h2 font-bold text-p5">사고 영상 업로드</h2>
             <p className="text-caption text-red-500">* 필수</p>
           </div>
-          <p className="text-g3">
-            영상을 업로드하면 AI가 과실 비율을 분석합니다.
-          </p>
+          {/* 선택된 파일 표시 및 삭제 */}
+          {selectedFile ? (
+            <p className="mt-5 flex items-center">
+              <span>파일명: {selectedFile.name}</span>
+              <span
+                className="ml-3 cursor-pointer text-red-700"
+                onClick={removeFile}
+              >
+                x
+              </span>
+            </p>
+          ) : (
+            <p className="text-g3">
+              영상을 업로드하면 AI가 과실 비율을 분석합니다.
+            </p>
+          )}
         </div>
 
         {/* 숨겨진 file input */}
@@ -82,19 +96,6 @@ const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
           파일 업로드
         </button>
       </section>
-
-      {/* 선택된 파일 표시 및 삭제 */}
-      {selectedFile && (
-        <p className="mt-5 flex items-center">
-          <span>파일명: {selectedFile.name}</span>
-          <span
-            className="ml-3 cursor-pointer text-red-700"
-            onClick={removeFile}
-          >
-            x
-          </span>
-        </p>
-      )}
     </div>
   );
 });

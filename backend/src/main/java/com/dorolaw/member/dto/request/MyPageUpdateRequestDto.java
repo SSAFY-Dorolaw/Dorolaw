@@ -28,6 +28,8 @@ public class MyPageUpdateRequestDto {
     private String introVideo;
     private String accountNumber;
     private String bankName;
+    private String lawyerLicenseNumber;
+    private String lawyerLicenseExam;
     private List<EducationUpdateDto> educations;
     private List<CareerUpdateDto> careers;
     private Integer phoneConsultationPrice;
