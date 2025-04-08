@@ -1,4 +1,5 @@
 import Fee from '@/features/consultation/Fee';
+import LawyerImg from '@/shared/assets/images/sskim.png';
 import BookingPlan from '@/features/reservation/profilecard/BookingPlan';
 import { useState } from 'react';
 
@@ -27,16 +28,16 @@ const LawyerProfileCard = () => {
       ) : (
         <div>
           {/* 프로필 이미지 */}
-          <div className="flex justify-center rounded-b-[10px] bg-white p-4">
+          <div className="flex h-[300px] justify-center rounded-b-[10px] bg-white">
             <img
-              src=""
+              src={LawyerImg}
               alt="변호사 프로필 이미지"
-              className="h-64 object-cover"
+              className="h-full object-cover"
             />
           </div>
 
           {/* 요금 정보 */}
-          <Fee />
+          {/* <Fee /> */}
 
           {/* 예약 버튼 */}
           <div className="rounded-[10px] bg-p5 p-4">

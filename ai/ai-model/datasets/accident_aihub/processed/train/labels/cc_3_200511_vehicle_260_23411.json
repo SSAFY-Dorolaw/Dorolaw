@@ -1,0 +1,26 @@
+{
+	"info": {
+		"name": "accident",
+		"description": "",
+		"url": ""
+	},
+	"video": {
+		"video_name": "cc_3_200511_vehicle_260_23411",
+		"video_date": "200222",
+		"filming_way": "cc",
+		"video_point_of_view": 3,
+		"accident_negligence_rate": 20,
+		"traffic_accident_type": 34,
+		"accident_object": 0,
+		"accident_place": 1,
+		"accident_place_feature": 11,
+		"vehicle_a_progress_info": 27,
+		"vehicle_b_progress_info": 30,
+		"damage_location": "",
+		"related_laws": "",
+		"violation_of_law": "",
+		"additional_elements": "",
+		"violation_factor": "",
+		"weather": ""
+	}
+}

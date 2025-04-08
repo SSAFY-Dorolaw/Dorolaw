@@ -1,8 +1,22 @@
-import { useState, useRef } from 'react';
+import { useUploadStore } from '@/features/videoupload/model/uploadStore';
+import { useRef, forwardRef, useImperativeHandle } from 'react';
 
-const UploadTitle = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+// 외부에서 접근할 수 있는 메서드를 정의하는 인터페이스
+export interface UploadTitleRef {
+  getSelectedFile: () => File | null;
+  getTitle: () => string;
+}
+
+const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
+  const { selectedFile, title, setTitle, handleFile, setSelectedFile } =
+    useUploadStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 외부에서 ref를 통해 selectedFile에 접근할 수 있도록 함
+  useImperativeHandle(ref, () => ({
+    getSelectedFile: () => selectedFile,
+    getTitle: () => title,
+  }));
 
   const uploadButtonClick = () => {
     if (fileInputRef.current) {
@@ -13,7 +27,7 @@ const UploadTitle = () => {
   const fileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setSelectedFile(files[0]);
+      handleFile(files[0]);
     }
   };
 
@@ -34,6 +48,8 @@ const UploadTitle = () => {
         </div>
         <input
           type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
           className="mt-3 h-[35px] w-full rounded-[5px] pl-[10px]"
         />
@@ -46,9 +62,22 @@ const UploadTitle = () => {
             <h2 className="text-h2 font-bold text-p5">사고 영상 업로드</h2>
             <p className="text-caption text-red-500">* 필수</p>
           </div>
-          <p className="text-g3">
-            영상을 업로드하면 AI가 과실 비율을 분석합니다.
-          </p>
+          {/* 선택된 파일 표시 및 삭제 */}
+          {selectedFile ? (
+            <p className="mt-5 flex items-center">
+              <span>파일명: {selectedFile.name}</span>
+              <span
+                className="ml-3 cursor-pointer text-red-700"
+                onClick={removeFile}
+              >
+                x
+              </span>
+            </p>
+          ) : (
+            <p className="text-g3">
+              영상을 업로드하면 AI가 과실 비율을 분석합니다.
+            </p>
+          )}
         </div>
 
         {/* 숨겨진 file input */}
@@ -67,21 +96,10 @@ const UploadTitle = () => {
           파일 업로드
         </button>
       </section>
-
-      {/* 선택된 파일 표시 및 삭제 */}
-      {selectedFile && (
-        <p className="mt-5 flex items-center">
-          <span>파일명: {selectedFile.name}</span>
-          <span
-            className="ml-3 cursor-pointer text-red-700"
-            onClick={removeFile}
-          >
-            x
-          </span>
-        </p>
-      )}
     </div>
   );
-};
+});
+
+UploadTitle.displayName = 'UploadTitle';
 
 export default UploadTitle;

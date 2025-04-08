@@ -1,0 +1,26 @@
+{
+    "info": {
+        "name": "accident",
+        "description": "",
+        "url": ""
+    },
+    "video": {
+        "video_name": "bb_3_161101_vehicle_247_24287",
+        "video_date": "161101",
+        "filming_way": "bb",
+        "video_point_of_view": 3,
+        "accident_negligence_rate": 100,
+        "traffic_accident_type": 71,
+        "accident_object": 0,
+        "accident_place": 2,
+        "accident_place_feature": 49,
+        "vehicle_a_progress_info": 169,
+        "vehicle_b_progress_info": 165,
+        "damage_location": "",
+        "related_laws": "",
+        "violation_of_law": "",
+        "additional_elements": "",
+        "violation_factor": "",
+        "weather": ""
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "info": {
+        "name": "accident",
+        "description": "",
+        "url": ""
+    },
+    "video": {
+        "video_name": "bb_1_140613_vehicle_244_24835",
+        "video_date": "140613",
+        "filming_way": "bb",
+        "video_point_of_view": 1,
+        "accident_negligence_rate": 30,
+        "traffic_accident_type": 93,
+        "accident_object": 0,
+        "accident_place": 2,
+        "accident_place_feature": 48,
+        "vehicle_a_progress_info": 138,
+        "vehicle_b_progress_info": 139,
+        "damage_location": "",
+        "related_laws": "",
+        "violation_of_law": "",
+        "additional_elements": "",
+        "violation_factor": "",
+        "weather": ""
+    }
+}

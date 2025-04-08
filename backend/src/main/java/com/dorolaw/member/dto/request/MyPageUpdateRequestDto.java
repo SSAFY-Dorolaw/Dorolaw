@@ -1,5 +1,6 @@
 package com.dorolaw.member.dto.request;
 
+import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,6 @@ import java.util.List;
 public class MyPageUpdateRequestDto {
 
     // 공통
-    private String name;
     private String phoneNumber;
     private String profileImage;
 
@@ -22,14 +22,19 @@ public class MyPageUpdateRequestDto {
     private String officePhoneNumber;
     private String officeAddress;
     private String gender;
-    private String specialties;
+    private List<LawyerSpeciality> specialties;
     private String oneLineIntro;
     private String greetingMessage;
     private String introVideo;
     private String accountNumber;
     private String bankName;
+    private String lawyerLicenseNumber;
+    private String lawyerLicenseExam;
     private List<EducationUpdateDto> educations;
     private List<CareerUpdateDto> careers;
+    private Integer phoneConsultationPrice;
+    private Integer videoConsultationPrice;
+    private Integer visitConsultationPrice;
 
     @Data
     @NoArgsConstructor

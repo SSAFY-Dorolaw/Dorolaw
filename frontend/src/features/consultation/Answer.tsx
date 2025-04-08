@@ -8,10 +8,10 @@ function Answer() {
         <div className="profile">
           <FaUserCircle size={32} />
         </div>
-        <div className="typo-body-small mx-2">김승소 변호사</div>
+        <div className="typo-body mx-2">김승소 변호사</div>
         <div className="reservation">
-          <button className="rounded-[10px] bg-p5 px-2 text-p1">
-            상담 예약하기
+          <button className="ml-3 rounded-[10px] bg-p5 px-2 text-bodysmall text-p1">
+            상담 예약
           </button>
           <hr />
         </div>

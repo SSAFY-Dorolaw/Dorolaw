@@ -1,10 +1,40 @@
-import ArticleList from '@/features/board/ConsultList';
+import AnalysisList from '@/features/board/AnalysisList';
+import {
+  useAnalysisListQuery,
+  useConsultListQuery,
+} from '@/features/board/api';
+import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
+import Pagenation from '@/widgets/Pagenation';
 import { useState } from 'react';
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 const Board = () => {
-  const [isConsultTab, setIsConsultTab] = useState<boolean>(true);
+  const [isConsultTab, setIsConsultTab] = useState<boolean>(false);
+  const [consultPage, setConsultPage] = useState<number>(0);
+  const [analysisPage, setAnalysisPage] = useState<number>(0);
+
+  /* Tanstack Query로 데이터 가져오기 */
+  // 의뢰글
+  const { data: consultData, isLoading: isConsultLoading } =
+    useConsultListQuery(consultPage, isConsultTab);
+
+  // 분석글
+  const { data: analysisData, isLoading: isAnalysisLoading } =
+    useAnalysisListQuery(analysisPage, !isConsultTab);
+
+  // 현재 탭에 따른 데이터와 로딩 상태
+  const data = isConsultTab ? consultData : analysisData;
+  const isLoading = isConsultTab ? isConsultLoading : isAnalysisLoading;
+
+  // 페이지 변경 핸들러
+  const pageChange = (newPage: number) => {
+    if (isConsultTab) {
+      setConsultPage(newPage);
+    } else {
+      setAnalysisPage(newPage);
+    }
+  };
+
   return (
     <div className="flex max-w-[1200px] flex-col gap-4 xl:w-[1200px]">
       <header>
@@ -18,18 +48,7 @@ const Board = () => {
           <div className="max-h-full">
             <header className="flex w-full rounded-t-[10px]">
               <div
-                className="w-full rounded-t-[10px] text-center"
-                onClick={() => setIsConsultTab(true)}
-              >
-                <h3
-                  className={`${isConsultTab ? 'underline decoration-2 underline-offset-[calc(0.75em+2px)]' : 'text-p3'}`}
-                >
-                  의뢰 게시판
-                </h3>
-                <hr />
-              </div>
-              <div
-                className="w-full rounded-t-[10px] text-center"
+                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
                 onClick={() => setIsConsultTab(false)}
               >
                 <h3
@@ -39,25 +58,44 @@ const Board = () => {
                 </h3>
                 <hr />
               </div>
+              <div
+                className="mx-20 w-full cursor-pointer rounded-t-[10px] text-center"
+                onClick={() => setIsConsultTab(true)}
+              >
+                <h3
+                  className={`${isConsultTab ? 'underline decoration-2 underline-offset-[calc(0.75em+2px)]' : 'text-p3'}`}
+                >
+                  의뢰 게시판
+                </h3>
+                <hr />
+              </div>
             </header>
-            <ArticleList />
+            {isLoading ? (
+              <div className="flex justify-center py-10">로딩 중...</div>
+            ) : isConsultTab ? (
+              <ConsultList data={consultData} />
+            ) : (
+              <AnalysisList data={analysisData} />
+            )}
           </div>
         </nav>
       </main>
       <nav>
-        <div className="mx-auto my-10 flex items-center justify-center gap-4">
-          <IoChevronBack size={12} />
-          <p>1</p>
-          <p>2</p>
-          <p>3</p>
-          <p>4</p>
-          <p>5</p>
-          <p>6</p>
-          <p>7</p>
-          <p>8</p>
-          <p>9</p>
-          <IoChevronForward size={12} />
-        </div>
+        {data &&
+          'number' in data &&
+          'totalPages' in data &&
+          'first' in data &&
+          'last' in data && (
+            <Pagenation
+              pageInfo={{
+                number: data.number,
+                totalPages: data.totalPages,
+                first: data.first,
+                last: data.last,
+              }}
+              onPageChange={pageChange}
+            />
+          )}
       </nav>
     </div>
   );

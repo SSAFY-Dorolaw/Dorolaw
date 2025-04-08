@@ -1,12 +1,13 @@
 package com.dorolaw.request.entity;
 
-import com.dorolaw.faultratioai.entity.AiReport;
+import com.dorolaw.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     private String title;
 
@@ -44,6 +46,10 @@ public class Request {
     @Column(nullable = false)
     private RequestStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RequestTag tag;
+
     @CreatedDate
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
@@ -52,9 +58,9 @@ public class Request {
     @Column(nullable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "request", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "request", cascade = CascadeType.ALL)
     private AiReport aiReport;
 
-    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

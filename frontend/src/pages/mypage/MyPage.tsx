@@ -1,34 +1,37 @@
-import ClientInfo from '@/features/mypage/ClientInfo';
-
-interface Client {
-  clientId: number;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  joinDate: string;
-  profileImage: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import { ClientProfile } from '@/entities/clients/model/types';
+import ClientInfo from '@/features/mypage/client/ui/ClientInfo';
+import { clientApi } from '@/entities/clients/api/clientApi';
 
 const MyPage = () => {
-  const client: Client = {
-    clientId: 1, // long
-    name: '한민이', // string
-    email: 'han@example.com', // string
-    phoneNumber: '010-1234-5678', // string
-    joinDate: '2025-03-12 15:00', // string
-    profileImage: 'https://example.com/profiles/user123.jpg', // string
-  };
+  // 마이페이지 작업
+  const {
+    data: clientProfile,
+    isLoading,
+    error,
+  } = useQuery<ClientProfile>({
+    queryKey: ['client', 'profile'],
+    queryFn: clientApi.getProfile,
+  });
+
+  console.log(clientProfile);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred</div>;
+  if (!clientProfile) return <div>No client data available.</div>;
+
   return (
     <div className="w-full">
       <header>
-        <h2>마이 페이지</h2>
+        <h2>마이페이지</h2>
       </header>
       <main>
         <ClientInfo
-          clientId={client.clientId}
-          name={client.name}
-          phoneNumber={client.phoneNumber}
-          email={client.email}
+          clientId={clientProfile.clientId}
+          name={clientProfile.name}
+          phoneNumber={clientProfile.phoneNumber}
+          email={clientProfile.email}
+          profileImage={clientProfile.profileImage}
         />
       </main>
     </div>

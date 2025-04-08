@@ -6,8 +6,12 @@ services:
       dockerfile: Dockerfile
     expose:
       - "8080"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
+    depends_on:
+      - rabbitmq
     networks:
       - app-network
 
@@ -24,6 +28,10 @@ services:
     image: ai:latest
     expose:
       - "5000"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
+    depends_on:
+      - rabbitmq
     networks:
       - app-network
     command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
@@ -57,15 +65,81 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    ports:
-      - "5672:5672"      # 메시지 브로커 포트
-      - "15672:15672"    # 웹 관리 콘솔 포트
+    expose:
+      - "5672"      # 메시지 브로커 포트
+      - "15672"     # 웹 관리 콘솔 포트
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - app-network
 
+  # 호스트 모니터링
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    expose:
+      - "9100"
+    networks:
+      - app-network
+
+  # 컨테이너 모니터링
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cadvisor
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    expose:
+      - "8080"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      # 필요 시 데이터 보존하려면 아래처럼 볼륨 추가 가능
+      # - ./prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=https://j12a501.p.ssafy.io/prometheus'
+      - '--web.route-prefix=/prometheus'
+    expose:
+      - "9090"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+      - frontend
+      - ai
+      - nginx
+      - rabbitmq
+      - node-exporter
+      - cadvisor
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+    expose:
+      - "3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app-network
+    depends_on:
+      - prometheus
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  grafana_data:

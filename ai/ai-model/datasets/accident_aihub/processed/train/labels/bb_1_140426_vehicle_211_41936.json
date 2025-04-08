@@ -1,0 +1,26 @@
+{
+    "info": {
+        "name": "accident",
+        "description": "",
+        "url": ""
+    },
+    "video": {
+        "video_name": "bb_1_140426_vehicle_211_41936",
+        "video_date": "140426",
+        "filming_way": "bb",
+        "video_point_of_view": 1,
+        "accident_negligence_rate": 25,
+        "traffic_accident_type": 127,
+        "accident_object": 0,
+        "accident_place": 5,
+        "accident_place_feature": 22,
+        "vehicle_a_progress_info": 57,
+        "vehicle_b_progress_info": 65,
+        "damage_location": "",
+        "related_laws": "",
+        "violation_of_law": "",
+        "additional_elements": "",
+        "violation_factor": "",
+        "weather": ""
+    }
+}

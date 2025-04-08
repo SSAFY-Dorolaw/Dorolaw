@@ -1,5 +1,5 @@
 import AnswerTab from '@/features/consultation/AnswerTab';
-import ReportTab from '@/features/consultation/ReportTab';
+import ReportTab from '@/features/consultation/report/ReportTab';
 import { useState } from 'react';
 
 function ConsultationCard() {

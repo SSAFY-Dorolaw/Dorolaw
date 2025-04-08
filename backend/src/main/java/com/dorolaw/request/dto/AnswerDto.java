@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +21,7 @@ public class AnswerDto {
     public static AnswerDto fromEntity(Answer answer) {
         AnswerDto dto = new AnswerDto();
         dto.setAnswerId(answer.getAnswerId());
-        dto.setLawyerId(answer.getLawyerId());
+        dto.setLawyerId(answer.getLawyer().getMemberId());
         dto.setContent(answer.getContent());
         dto.setCreatedAt(answer.getCreatedAt());
         return dto;
