@@ -7,7 +7,7 @@ import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
-import { submitInfo } from '@/features/videoupload/api';
+import { submitBoardInfo } from '@/features/board/model/queries';
 
 interface AdditionalData {
   faultRatio?: string;
@@ -98,7 +98,7 @@ const ConsultUpload = () => {
       });
 
       // 2) 파일 업로드 성공 후 추가 정보 전송
-      const infoResponse = await submitInfo(
+      const infoResponse = await submitBoardInfo(
         {
           title: title,
           fileName: uploadResponse.fileName,
@@ -114,7 +114,7 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        void navigate(`/consultation/${infoResponse.requestId}`);
+        void navigate(`/board`);
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면

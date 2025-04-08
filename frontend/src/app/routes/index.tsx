@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/widgets/Layout';
 import Login from '@/pages/login/Login';
 import Main from '@/pages/mainpage/Main';
-import VideoUpload from '@/pages/analysis/VideoUpload';
+import VideoUpload from '@/pages/analysis/AnalysisUpload';
 import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import AnalysisDetail from '@/pages/analysis/AnalysisDetail';
