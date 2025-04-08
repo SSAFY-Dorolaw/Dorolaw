@@ -403,6 +403,7 @@ public class MemberService {
                 .averageRating(averageRating)
                 .introVideo(lawyerProfile.getIntroductionVideoUrl())
                 .accountNumber(lawyerProfile.getAccountNumber())
+                .bankName(lawyerProfile.getBankName())
                 .educations(lawyerProfile.getEducations().stream().map(edu ->
                         new LawyerProfileDto.EducationDto(edu.getSchool(), edu.getDegree(), edu.getGraduationYear())
                 ).collect(Collectors.toList()))
