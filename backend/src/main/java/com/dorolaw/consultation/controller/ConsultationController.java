@@ -20,12 +20,11 @@ public class ConsultationController {
     private final ConsultationService consultationService;
 
     // 예약 가능한 특정일 시간 조회 API
-    @GetMapping("/{lawyerId}/available-times")
+    @GetMapping("/{lawyerId}/available-times/{consultationDate}")
     public ResponseEntity<AvailableTimesResponseDto> getAvailableTimes(
-            @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long lawyerId,
-            @RequestBody AvailableTimesRequestDto notAvailableTimesRequestDto){
-        AvailableTimesResponseDto response = consultationService.getAvailableTimes(lawyerId,notAvailableTimesRequestDto);
+            @PathVariable String consultationDate){
+        AvailableTimesResponseDto response = consultationService.getAvailableTimes(lawyerId,consultationDate);
         return ResponseEntity.ok(response);
     }
 
