@@ -28,6 +28,7 @@ public class LawyerProfileDto {
     private Float averageRating;
     private String introVideo;
     private String accountNumber;
+    private String bankName;
     private List<EducationDto> educations;
     private List<CareerDto> careers;
     private String lawyerLicenseNumber;
