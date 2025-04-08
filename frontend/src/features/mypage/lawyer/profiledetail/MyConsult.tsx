@@ -10,8 +10,8 @@ const MyConsult = ({ completedConsultationCount }: ConsultProps) => {
 
   const { data, isPending, isSuccess, isError } = useLawyerRequests();
 
-  if (isPending) return <div>기다려</div>;
-  if (isError) return <div>껒</div>;
+  if (isPending) return <div>로딩중</div>;
+  if (isError) return <div>에러</div>;
   if (isSuccess)
     return (
       <div className="mx-[50px] my-8">
