@@ -12,6 +12,8 @@ export interface AiReport {
   faultRatioA: number;
   faultRatioB: number;
   accidentType: number;
+  createAt: string;
+  faultAnalysisId: number;
 }
 
 // 답변 인터페이스

@@ -1,10 +1,49 @@
 import { useParams } from 'react-router-dom';
+import { useRef } from 'react';
 import { useRequestDetail } from '@/features/consultation/model/queries';
-import { formatDate } from '@/shared/lib/utils/dateFormatter';
+import generatePDF from 'react-to-pdf';
+import AccidentReport from '@/features/analysis/report/AnalysisReport';
+
+type Orientation = 'portrait' | 'p' | 'landscape' | 'l';
 
 function ReportTab() {
   const { requestId } = useParams();
   const { data, isLoading, isError } = useRequestDetail(Number(requestId));
+
+  // PDF로 변환할 보고서 영역 설정
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  // PDF 생성 함수
+  const downloadPDF = async () => {
+    if (!reportRef.current) return;
+
+    // PDF 옵션
+    const options = {
+      filename: `변호사 상담용 사고 분석 리포트_${requestId}.pdf`,
+      page: {
+        format: 'A4',
+        orientation: 'portrait' as Orientation,
+        margins: { top: 20, right: 20, bottom: 20, left: 20 },
+      },
+      overrides: {
+        pdf: {
+          title: `AI 과실 분석 리포트_${requestId}`,
+          author: '교통사고 분석 시스템',
+          subject: '교통사고 과실비율 분석',
+          creator: '교통사고 분석 시스템',
+        },
+      },
+    };
+
+    try {
+      // PDF 생성 및 다운로드
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await generatePDF(reportRef, options);
+    } catch (error) {
+      console.error('PDF 생성 중 오류 발생: ', error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -26,96 +65,14 @@ function ReportTab() {
 
   return (
     <>
-      <article className="mx-4 mt-5 aspect-[210/297] overflow-y-auto bg-white p-6 drop-shadow-[0_0_2px_rgba(0,0,0,0.25)]">
-        <header>
-          <h3 className="text-p9 mb-5 text-xl font-bold">
-            사고 상황 분석 리포트
-          </h3>
-          <div className="mb-3 text-right text-sm text-gray-500">
-            작성일: {formatDate(aiReport.createdAt)}
-          </div>
-        </header>
-
-        <section className="mb-6 rounded-lg bg-gray-50 p-4">
-          <h4 className="mb-2 font-semibold">사고 유형 분석</h4>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">사고 대상</p>
-              <p className="font-medium">{aiReport.accidentObject}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">사고 장소</p>
-              <p className="font-medium">{aiReport.accidentLocation}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">사고 특성</p>
-              <p className="font-medium">
-                {aiReport.accidentLocationCharacteristics}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">사고 유형</p>
-              <p className="font-medium">유형 {aiReport.accidentType}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-6">
-          <h4 className="mb-2 font-semibold">차량 이동 방향</h4>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">A차량(본인)</p>
-              <p className="font-medium">{aiReport.directionOfA}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">B차량(상대방)</p>
-              <p className="font-medium">{aiReport.directionOfB}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-6">
-          <h4 className="mb-2 font-semibold">AI 과실비율 분석</h4>
-          <div className="flex items-center justify-center rounded-lg bg-p5 p-4 text-center">
-            <div className="w-1/2 border-r border-gray-300 pr-4">
-              <p className="text-sm text-y5">본인(A)</p>
-              <p className="text-2xl font-bold text-p1">
-                {aiReport.faultRatioA}%
-              </p>
-            </div>
-            <div className="w-1/2 pl-4">
-              <p className="text-sm text-y5">상대방(B)</p>
-              <p className="text-2xl font-bold text-p1">
-                {aiReport.faultRatioB}%
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-4">
-          <h4 className="mb-2 font-semibold">분석 결과</h4>
-          <p className="rounded-lg bg-gray-50 p-4 text-sm">
-            본 사고는 {aiReport.accidentObject} 유형으로,{' '}
-            {aiReport.accidentLocation}에서 발생한
-            {aiReport.accidentLocationCharacteristics} 사고입니다. A차량(본인)은{' '}
-            {aiReport.directionOfA}
-            상태였으며, B차량(상대방)은 {aiReport.directionOfB} 상황이었습니다.
-            이에 따라 AI 분석 결과 과실비율은 {aiReport.faultRatioA}:
-            {aiReport.faultRatioB}로 산정되었습니다.
-          </p>
-        </section>
-
-        <footer className="mt-6 border-t pt-4">
-          <h3 className="font-semibold">참고 사항</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            본 과실비율은 AI 분석 결과로, 실제 결정은 현장 조사·전문가 의견 등에
-            따라 달라질 수 있습니다. 교통 전문 변호사·보험사 보상담당자 등과
-            추가 상담이 필요할 수 있습니다.
-          </p>
-        </footer>
-      </article>
+      <div ref={reportRef}>
+        <AccidentReport aiReport={aiReport} />
+      </div>
       <nav className="my-2 mt-5 flex justify-center">
-        <button className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1">
+        <button
+          className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1"
+          onClick={downloadPDF}
+        >
           PDF 다운로드
         </button>
       </nav>
