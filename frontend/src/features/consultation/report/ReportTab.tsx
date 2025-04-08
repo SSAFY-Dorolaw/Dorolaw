@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useRef } from 'react';
 import { useRequestDetail } from '@/features/consultation/model/queries';
 import generatePDF from 'react-to-pdf';
-import AccidentReport from '@/features/analysis/report/AnalysisReport';
+import Report from './Report';
 
 type Orientation = 'portrait' | 'p' | 'landscape' | 'l';
 
@@ -65,9 +65,9 @@ function ReportTab() {
 
   return (
     <>
-      <div ref={reportRef}>
-        <AccidentReport aiReport={aiReport} />
-      </div>
+      <article ref={reportRef}>
+        <Report aiReport={aiReport} />
+      </article>
       <nav className="my-2 mt-5 flex justify-center">
         <button
           className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1"
