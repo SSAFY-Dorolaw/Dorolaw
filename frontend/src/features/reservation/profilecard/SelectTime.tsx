@@ -1,5 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import apiClient from '@/shared/api/api-client';
+
+interface AvailableTimesResponse {
+  lawyerId: number;
+  availableTimes: [
+    {
+      date: string;
+      times: string[];
+    },
+  ];
+}
 
 interface SelectTimeProps {
   isOpen: boolean;
@@ -24,59 +37,63 @@ const SelectTime = ({
 }: SelectTimeProps) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const { lawyerId } = useParams();
 
   const isDisabled = !consultingTypeSelected || !selectedDate;
 
   // 날짜 변경 시 해당 날짜의 상담 가능한 시간 불러오는 함수
   useEffect(() => {
     if (selectedDate) {
-      fetchAvailableTimeSlots(selectedDate); // 임시 데이터 사용
+      void fetchAvailableTimeSlots(selectedDate); // 임시 데이터 사용
     }
   }, [selectedDate]);
 
   // 날짜별 가능한 시간대 호출하는 함수 (실제로는 API 호출)
-  const fetchAvailableTimeSlots = (date: Date) => {
-    const dayOfWeek = date.getDay(); // 예시 데이터 (API 호출 시 변경)
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+  const fetchAvailableTimeSlots = async (date: Date): Promise<TimeSlot[]> => {
+    setIsLoading(true);
+    setError(null);
 
-    // 기본 시간대 (평일)
-    let slots: TimeSlot[] = [
-      { id: 1, time: '09:00', available: true },
-      { id: 2, time: '10:00', available: true },
-      { id: 3, time: '11:00', available: true },
-      { id: 4, time: '13:00', available: true },
-      { id: 5, time: '14:00', available: true },
-      { id: 6, time: '15:00', available: true },
-      { id: 7, time: '16:00', available: true },
-      { id: 8, time: '17:00', available: true },
-    ];
+    try {
+      // 날짜를 YYYY-MM-DD 형식으로 변환
+      const consultationDate = date.toISOString().split('T')[0];
+      console.log(consultationDate);
 
-    // 주말인 경우 다른 시간대 제공
-    if (isWeekend) {
-      slots = [
-        { id: 1, time: '10:00', available: true },
-        { id: 2, time: '11:00', available: true },
-        { id: 3, time: '12:00', available: true },
-        { id: 4, time: '13:00', available: false }, // 예약 불가능한 시간 예시
-        { id: 5, time: '14:00', available: true },
-        { id: 6, time: '15:00', available: true },
-      ];
+      const url = `${import.meta.env.VITE_API_URL}/counseling/${lawyerId}/available-times/${consultationDate}`;
+
+      // API 호출
+      const response = await apiClient.get<AvailableTimesResponse>(url);
+
+      if (response.status !== 200) {
+        throw new Error(`API 호출 실패: ${response.status}`);
+      }
+
+      const availableTimes = response.data.availableTimes;
+
+      // 응답 데이터에서 상담 가능 시간 추출
+
+      const slots: TimeSlot[] = availableTimes[0].times.map(
+        (time: string, index: number) => ({
+          id: index + 1,
+          time: time,
+          available: true,
+        }),
+      );
+
+      console.log('상담 가능 시간 조회 결과:', slots);
+      setAvailableTimeSlots(slots);
+      return slots;
+    } catch (error) {
+      console.error('상담 가능 시간을 불러오는 중 오류가 발생했습니다:', error);
+      setError('상담 가능 시간을 불러오는 중 오류가 발생했습니다.');
+
+      // 오류 발생 시 빈 배열 반환
+      setAvailableTimeSlots([]);
+      return [];
+    } finally {
+      setIsLoading(false);
     }
-
-    // 특정 날짜에 대한 특별 케이스 (예: 공휴일)
-    const dateString = date.toISOString().split('T')[0];
-    if (dateString === '2025-04-01') {
-      // 예시 날짜
-      slots = [
-        { id: 1, time: '10:00', available: false },
-        { id: 2, time: '11:00', available: false },
-        { id: 3, time: '14:00', available: true },
-        { id: 4, time: '15:00', available: true },
-        { id: 5, time: '16:00', available: true },
-      ];
-    }
-
-    setAvailableTimeSlots(slots);
   };
 
   const handleTimeSelect = (time: string) => {
@@ -155,7 +172,7 @@ const SelectTime = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-gray-500">
+                <p className="my-10 text-center text-gray-500">
                   가능한 시간이 없습니다
                 </p>
               )}
