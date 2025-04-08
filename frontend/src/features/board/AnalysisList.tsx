@@ -17,7 +17,7 @@ const AnalysisList = ({ data }: AnalysisListProps) => {
   // 데이터가 없다면
   if (!data?.content || data.content.length === 0) {
     return (
-      <div>
+      <div className="mt-10 py-8 text-center">
         <p>표시할 데이터가 없습니다.</p>
       </div>
     );

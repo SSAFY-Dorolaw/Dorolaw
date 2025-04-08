@@ -33,7 +33,22 @@ export interface PageInfo {
   unpaged: boolean;
 }
 
-// 성공 응답 인터페이스 - 의뢰 게시판판
+// 게시글 업로드 인터페이스
+export interface BoardInfoRequest {
+  title: string;
+  fileName: string;
+  insuranceFaultRatio?: string;
+  description?: string;
+  question?: string;
+  isPublic?: boolean;
+}
+
+// 의뢰 게시 성공 응답 인터페이스
+export interface ConsultSuccessResponse {
+  requestId: number;
+}
+
+// 성공 응답 인터페이스 - 의뢰 게시판
 export interface SuccessResponse {
   content: Contents[];
   pageable: PageInfo;
