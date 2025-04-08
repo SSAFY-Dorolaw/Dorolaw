@@ -120,7 +120,7 @@ public class MemberService {
         String oneLineIntro = lawyerProfile.getShortIntroduction();
         String greetingMessage = lawyerProfile.getGreeting();
         String introVideo = lawyerProfile.getIntroductionVideoUrl();
-        Long accountNumber = lawyerProfile.getAccountNumber();
+        String accountNumber = lawyerProfile.getAccountNumber();
         String bankName = lawyerProfile.getBankName();
         Integer phoneConsultationPrice = lawyerProfile.getPhoneConsultationPrice();
         Integer videoConsultationPrice = lawyerProfile.getVideoConsultationPrice();
@@ -151,7 +151,7 @@ public class MemberService {
         }
 
         if (requestDto.getAccountNumber() != null) {
-            accountNumber = Long.parseLong(requestDto.getAccountNumber());
+            accountNumber = requestDto.getAccountNumber();
         }
 
         if (requestDto.getBankName() != null) {
@@ -387,6 +387,7 @@ public class MemberService {
                 .reviewCount(reviewCount)
                 .averageRating(averageRating)
                 .introVideo(lawyerProfile.getIntroductionVideoUrl())
+                .accountNumber(lawyerProfile.getAccountNumber())
                 .education(lawyerProfile.getEducations().stream().map(edu ->
                         new LawyerProfileDto.EducationDto(edu.getSchool(), edu.getDegree(), edu.getGraduationYear())
                 ).collect(Collectors.toList()))

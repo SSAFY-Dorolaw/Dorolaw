@@ -119,7 +119,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .officeDetailedAddress("Default Address")
                 .attorneyLicenseNumber("Default-0000")
                 .isVerified(false)
-                .accountNumber(0L)
+                .accountNumber("Default Number")
                 .bankName("Default Bank")
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

@@ -104,7 +104,7 @@ public class LawyerProfile {
     private LocalDateTime updatedAt;
 
     @Column(name = "account_number", nullable = false)
-    private Long accountNumber;
+    private String accountNumber;
 
     @Column(name = "bank_name", length = 20, nullable = false)
     private String bankName;
@@ -133,7 +133,7 @@ public class LawyerProfile {
             String shortIntroduction,
             String greeting,
             String introductionVideoUrl,
-            Long accountNumber,
+            String accountNumber,
             String bankName,
             Integer phoneConsultationPrice,
             Integer videoConsultationPrice,
