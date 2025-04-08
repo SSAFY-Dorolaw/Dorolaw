@@ -6,7 +6,6 @@ import {
 import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import Pagenation from '@/widgets/Pagenation';
-import { useState } from 'react';
 import { useBoardStore } from '@/features/board/model/store';
 
 const Board = () => {
