@@ -1,6 +1,8 @@
 import MainHeader from '@/features/mainpage/MainHeader';
 import MainFunctions from '@/features/mainpage/MainFunctions';
 import Guideline from '@/features/mainpage/Guideline';
+import AiAnalysis from '@/features/mainpage/AiAnalysis';
+import LawyerConsulting from '@/features/mainpage/LawyerConsulting';
 
 const Main = () => {
   return (
@@ -17,34 +19,38 @@ const Main = () => {
         <Guideline />
 
         {/* AI 사고 분석 */}
-        <section className="flex justify-between">
-          <article>
-            <div className="flex">
-              <img src="/car.png" alt="자동차" className="mr-3" />
-              <h2 className="my-0 text-h1 font-bold">AI 사고 분석</h2>
-            </div>
-            <div>
-              <h3 className="text-h3 font-bold">
-                영상 업로드만으로 과실 비율 분석 리포트를 받아보세요.
-              </h3>
-            </div>
-            <div>
-              <p className="text-bodymedium font-bold">
-                교통사고 블랙박스 또는 CCTV 영상을 업로드하면 <br />
-                AI가 자동으로 분석하여 사고 대상, 과실 비율 등을 포함한 <br />
-                전문 리포트를 제공합니다. <br />
-                단순 분석이 필요할 때는 상담 없이 리포트만 받아보세요.
-              </p>
-            </div>
-          </article>
-          <article>
-            <img src="/analysis_report.png" alt="과실 비율 리포트" />
-          </article>
-        </section>
+        <AiAnalysis />
 
         {/* 변호사 상담 신청 */}
+        <LawyerConsulting />
 
         {/* 변호사이신가요? */}
+        <section className="mx-[120px] flex justify-between">
+          <article className="flex items-center">
+            <div>
+              <div className="flex">
+                <h2 className="my-0 text-h1 font-bold">
+                  변호사로 참여하고 싶으신가요?
+                </h2>
+              </div>
+              <br />
+              <div>
+                <p className="text-bodymedium font-bold">
+                  교통사고 전문 변호사로 등록하고, 의뢰인을 직접 만나보세요.{' '}
+                  <br />
+                  <br />
+                  AI 분석 리포트를 바탕으로 상담을 요청받고 <br />
+                  고객과 연결될 수 있습니다. <br />
+                  <br />
+                  상담 예약, 답변 관리, 일정 관리까지 한 번에!
+                </p>
+              </div>
+            </div>
+          </article>
+          <article>
+            <img src="/business_man.png" alt="비즈니스맨" />
+          </article>
+        </section>
       </main>
     </>
   );

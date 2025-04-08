@@ -12,7 +12,7 @@ const MainHeader = () => {
   };
 
   return (
-    <header className="inset-x-0 w-[1440px] leading-[0]">
+    <header className="inset-x-0 w-screen leading-[0]">
       <img
         className="m-0 block h-[600px] w-full object-cover p-0 align-top"
         src="/main_img.png"
@@ -21,7 +21,7 @@ const MainHeader = () => {
 
       {/* 이미지 위에 오버레이 텍스트 */}
       <div className="absolute inset-0 mt-10 flex flex-col items-center justify-center pt-20 text-white">
-        <section className="mb-10 mt-[-100px]">
+        <section className="mb-10 mt-[-110px]">
           {/* 위쪽으로 이동시키기 위해 negative margin 추가 */}
           <h1 className="mb-5 text-center text-6xl font-bold leading-normal">
             사고 영상, AI가 먼저 분석하고
