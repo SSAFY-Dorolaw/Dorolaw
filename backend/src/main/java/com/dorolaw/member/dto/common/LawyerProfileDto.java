@@ -27,8 +27,9 @@ public class LawyerProfileDto {
     private Long reviewCount;
     private Float averageRating;
     private String introVideo;
-    private List<EducationDto> education;
-    private List<CareerDto> career;
+    private String accountNumber;
+    private List<EducationDto> educations;
+    private List<CareerDto> careers;
     private String lawyerLicenseNumber;
     private String lawyerLicenseExam;
     private List<LawyerTagDto> lawyerTags;
