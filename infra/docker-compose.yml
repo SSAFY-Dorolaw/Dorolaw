@@ -8,8 +8,8 @@ services:
       - "8080"
     volumes:
       - /home/ubuntu/videos:/home/ubuntu/videos
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - rabbitmq
     networks:
@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     expose:
       - "3000"
+    environment:
+      - TZ=Asia/Seoul
     networks:
       - app-network
 
@@ -30,18 +32,13 @@ services:
       - "5000"
     volumes:
       - /home/ubuntu/videos:/home/ubuntu/videos
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - rabbitmq
     networks:
       - app-network
     command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
-    # build:
-    #   context: ../ai
-    #   dockerfile: Dockerfile
-    # expose:
-    #   - "5000"
-    # networks:
-    #   - app-network
 
   nginx:
     build:
@@ -56,6 +53,8 @@ services:
       - ../nginx/nginx.conf:/etc/nginx/nginx.conf
       - ../nginx/conf.d:/etc/nginx/conf.d
       - ../frontend/build:/usr/share/nginx/html
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - backend
       - frontend
@@ -66,24 +65,25 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     expose:
-      - "5672"      # 메시지 브로커 포트
-      - "15672"     # 웹 관리 콘솔 포트
+      - "5672"
+      - "15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+      TZ: Asia/Seoul
     networks:
       - app-network
 
-  # 호스트 모니터링
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
     expose:
       - "9100"
+    environment:
+      - TZ=Asia/Seoul
     networks:
       - app-network
 
-  # 컨테이너 모니터링
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.0
     container_name: cadvisor
@@ -94,6 +94,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    environment:
+      - TZ=Asia/Seoul
     expose:
       - "8080"
     networks:
@@ -104,12 +106,12 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      # 필요 시 데이터 보존하려면 아래처럼 볼륨 추가 가능
-      # - ./prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.external-url=https://j12a501.p.ssafy.io/prometheus'
       - '--web.route-prefix=/prometheus'
+    environment:
+      - TZ=Asia/Seoul
     expose:
       - "9090"
     networks:
@@ -128,6 +130,7 @@ services:
     container_name: grafana
     environment:
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - TZ=Asia/Seoul
     expose:
       - "3000"
     volumes:
