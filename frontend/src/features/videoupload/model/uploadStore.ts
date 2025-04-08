@@ -14,9 +14,16 @@ interface UploadState {
   // 복합 액션
   handleFile: (file: File) => void;
   resetUpload: () => void;
+  resetStore: () => void;
 }
 
 /* 업로드 스토어 */
+const initialState = {
+  selectedFile: null,
+  title: '',
+  isDragging: false,
+};
+
 export const useUploadStore = create<UploadState>((set) => ({
   // 초기 상태
   selectedFile: null,
@@ -40,4 +47,7 @@ export const useUploadStore = create<UploadState>((set) => ({
 
   // 업로드 관련 상태 리셋
   resetUpload: () => set({ selectedFile: null, title: '' }),
+
+  // 모든 상태 초기화
+  resetStore: () => set(initialState),
 }));

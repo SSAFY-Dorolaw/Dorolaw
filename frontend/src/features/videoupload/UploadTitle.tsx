@@ -1,5 +1,5 @@
 import { useUploadStore } from '@/features/videoupload/model/uploadStore';
-import { useRef, forwardRef, useImperativeHandle } from 'react';
+import { useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
 
 // 외부에서 접근할 수 있는 메서드를 정의하는 인터페이스
 export interface UploadTitleRef {
@@ -8,9 +8,25 @@ export interface UploadTitleRef {
 }
 
 const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
-  const { selectedFile, title, setTitle, handleFile, setSelectedFile } =
-    useUploadStore();
+  const {
+    selectedFile,
+    title,
+    setTitle,
+    handleFile,
+    setSelectedFile,
+    resetStore,
+  } = useUploadStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 컴포넌트가 마운트될 때 상태 초기화
+  useEffect(() => {
+    if (typeof resetStore === 'function') {
+      resetStore();
+    } else {
+      setTitle('');
+      setSelectedFile(null);
+    }
+  }, []);
 
   // 외부에서 ref를 통해 selectedFile에 접근할 수 있도록 함
   useImperativeHandle(ref, () => ({

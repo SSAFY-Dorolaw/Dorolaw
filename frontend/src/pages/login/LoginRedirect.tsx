@@ -69,7 +69,12 @@ function LoginRedirect() {
           setClientId(data.clientId);
         }
       }
-      void navigate('/');
+
+      // 저장된 리다이렉트 경로가 있으면 해당 경로로 이동
+      // if not, 메인페이지로
+      const redirectPath = localStorage.getItem('redirectAfterLogin') ?? '/';
+      localStorage.removeItem('redirectAfterLogin'); // 사용 후 제거
+      void navigate(redirectPath);
     }
   }, [isSuccess, navigate, data, setClientId, role]);
 

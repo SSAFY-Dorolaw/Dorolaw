@@ -6,12 +6,18 @@ import {
 import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import Pagenation from '@/widgets/Pagenation';
-import { useState } from 'react';
+import { useBoardStore } from '@/features/board/model/store';
 
 const Board = () => {
-  const [isConsultTab, setIsConsultTab] = useState<boolean>(false);
-  const [consultPage, setConsultPage] = useState<number>(0);
-  const [analysisPage, setAnalysisPage] = useState<number>(0);
+  // Zustand 스토어에서 상태와 액션 가져오기
+  const {
+    isConsultTab,
+    consultPage,
+    analysisPage,
+    setIsConsultTab,
+    setConsultPage,
+    setAnalysisPage,
+  } = useBoardStore();
 
   /* Tanstack Query로 데이터 가져오기 */
   // 의뢰글
