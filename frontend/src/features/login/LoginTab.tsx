@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface LoginTabProps {
   isLawyerTab: boolean;
   setIsLawyerTab: React.Dispatch<React.SetStateAction<boolean>>;
