@@ -9,7 +9,18 @@ interface NotificationItemProps {
 const NotificationItem: React.FC<NotificationItemProps> = ({
   notification,
 }) => {
-  const { icon, bgColor } = getNotificationStyle(notification.type);
+  // 알림 내용을 분석하여 타입 추측
+  const detectType = (content: string): string => {
+    if (content.includes('상담')) return 'SCHEDULE';
+    if (content.includes('분석')) return 'REQUEST';
+    if (content.includes('답변')) return 'ANSWER';
+    return ''; // 기본 타입
+  };
+
+  // notification.type이 없으면 내용을 기반으로 타입 추측
+  const notificationType =
+    notification.type ?? detectType(notification.content);
+  const { icon, bgColor } = getNotificationStyle(notificationType);
 
   return (
     <div className={`py-3 ${notification.isRead ? 'opacity-70' : ''}`}>
