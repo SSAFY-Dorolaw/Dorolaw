@@ -28,6 +28,9 @@ public class Alarm {
     @JoinColumn(name = "receive_member_id", nullable = false)
     private Member receiveMember;
 
+    @Column(name = "receive_member_id", insertable = false, updatable = false)
+    private Long receiveMemberId;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 

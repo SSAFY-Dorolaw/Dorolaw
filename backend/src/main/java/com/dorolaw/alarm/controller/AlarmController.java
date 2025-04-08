@@ -2,7 +2,7 @@ package com.dorolaw.alarm.controller;
 
 import com.dorolaw.alarm.dto.request.AnalysisAlarmDto;
 import com.dorolaw.alarm.dto.request.RequestAlarmDto;
-import com.dorolaw.alarm.entity.Alarm;
+import com.dorolaw.alarm.dto.response.AlarmDTO;
 import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.alarm.service.FcmService;
@@ -77,7 +77,7 @@ public class AlarmController {
 
     // 알림 리스트 조회
     @GetMapping("/myList/{memberId}")
-    public List<Alarm> getMyAlarmList(@PathVariable Long memberId) {
+    public List<AlarmDTO> getMyAlarmList(@PathVariable Long memberId) {
         return alarmService.getMyList(memberId);
     }
 }
