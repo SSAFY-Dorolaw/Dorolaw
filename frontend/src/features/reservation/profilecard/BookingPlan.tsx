@@ -5,10 +5,18 @@ import SelectTime from './SelectTime';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface BookingPlanProps {
+  videoConsultationPrice: number | null;
+  phoneConsultationPrice: number | null;
+  visitConsultationPrice: number | null;
   onClose: () => void;
 }
 
-const BookingPlan = ({ onClose }: BookingPlanProps) => {
+const BookingPlan = ({
+  videoConsultationPrice,
+  phoneConsultationPrice,
+  visitConsultationPrice,
+  onClose,
+}: BookingPlanProps) => {
   const { lawyerId, requestId } = useParams();
   const [selectConsulting, setSelectConsulting] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -21,11 +29,11 @@ const BookingPlan = ({ onClose }: BookingPlanProps) => {
   const getPrice = () => {
     switch (selectConsulting) {
       case '15분 전화상담':
-        return 50000;
+        return phoneConsultationPrice;
       case '20분 화상상담':
-        return 70000;
+        return videoConsultationPrice;
       case '30분 방문상담':
-        return 100000;
+        return visitConsultationPrice;
       default:
         return 0;
     }
