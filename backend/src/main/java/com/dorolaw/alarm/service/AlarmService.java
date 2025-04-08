@@ -1,5 +1,6 @@
 package com.dorolaw.alarm.service;
 
+import com.dorolaw.alarm.dto.response.AlarmDTO;
 import com.dorolaw.alarm.entity.Alarm;
 import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.repository.AlarmRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +53,10 @@ public class AlarmService {
     }
     
     // memberId로 알람 조회하기
-    public List<Alarm> getMyList(Long memberId) {
-        return alarmRepository.findByReceiveMember_MemberIdOrderByCreatedAtDesc(memberId);
+    public List<AlarmDTO> getMyList(Long memberId) {
+        List<Alarm> alarms = alarmRepository.findAlarmsByMemberIdOrderByCreatedAtDesc(memberId);
+        return alarms.stream()
+                .map(AlarmDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 }
