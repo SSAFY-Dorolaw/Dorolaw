@@ -114,7 +114,7 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        void navigate(`/consultation/${infoResponse.requestId}`);
+        void navigate(`/board`);
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면
