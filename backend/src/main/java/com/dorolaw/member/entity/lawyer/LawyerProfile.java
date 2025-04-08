@@ -137,7 +137,9 @@ public class LawyerProfile {
             String bankName,
             Integer phoneConsultationPrice,
             Integer videoConsultationPrice,
-            Integer visitConsultationPrice
+            Integer visitConsultationPrice,
+            String attorneyLicenseNumber,
+            String qualificationExam
     ) {
         this.officeName = officeName;
         this.officePhoneNumber = officePhoneNumber;
@@ -153,6 +155,8 @@ public class LawyerProfile {
         this.phoneConsultationPrice = phoneConsultationPrice;
         this.videoConsultationPrice = videoConsultationPrice;
         this.visitConsultationPrice = visitConsultationPrice;
+        this.attorneyLicenseNumber = attorneyLicenseNumber;
+        this.qualificationExam = qualificationExam;
     }
 
     public void parseAndSetAddress(String fullAddress) {

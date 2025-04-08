@@ -122,9 +122,20 @@ public class MemberService {
         String introVideo = lawyerProfile.getIntroductionVideoUrl();
         String accountNumber = lawyerProfile.getAccountNumber();
         String bankName = lawyerProfile.getBankName();
+        String lawyerLicenseNumber = lawyerProfile.getAttorneyLicenseNumber();
+        String lawyerLicenseExam = lawyerProfile.getQualificationExam();
         Integer phoneConsultationPrice = lawyerProfile.getPhoneConsultationPrice();
         Integer videoConsultationPrice = lawyerProfile.getVideoConsultationPrice();
         Integer visitConsultationPrice = lawyerProfile.getVisitConsultationPrice();
+
+        if(requestDto.getLawyerLicenseNumber() != null){
+            lawyerLicenseNumber = requestDto.getLawyerLicenseNumber();
+        }
+
+        if(requestDto.getLawyerLicenseExam() != null){
+            lawyerLicenseExam = requestDto.getLawyerLicenseExam();
+        }
+
 
         if (requestDto.getOfficeName() != null) {
             officeName = requestDto.getOfficeName();
@@ -171,6 +182,8 @@ public class MemberService {
             visitConsultationPrice = requestDto.getVisitConsultationPrice();
         }
 
+
+
         // 모든 필드를 updateProfile 메소드에 전달
         lawyerProfile.updateProfile(
                 officeName,
@@ -186,7 +199,9 @@ public class MemberService {
                 bankName,
                 phoneConsultationPrice,
                 videoConsultationPrice,
-                visitConsultationPrice
+                visitConsultationPrice,
+                lawyerLicenseNumber,
+                lawyerLicenseExam
         );
 
         if (requestDto.getEducations() != null) {
@@ -388,10 +403,10 @@ public class MemberService {
                 .averageRating(averageRating)
                 .introVideo(lawyerProfile.getIntroductionVideoUrl())
                 .accountNumber(lawyerProfile.getAccountNumber())
-                .education(lawyerProfile.getEducations().stream().map(edu ->
+                .educations(lawyerProfile.getEducations().stream().map(edu ->
                         new LawyerProfileDto.EducationDto(edu.getSchool(), edu.getDegree(), edu.getGraduationYear())
                 ).collect(Collectors.toList()))
-                .career(lawyerProfile.getCareers().stream().map(career ->
+                .careers(lawyerProfile.getCareers().stream().map(career ->
                         new LawyerProfileDto.CareerDto(career.getCompany(), career.getPosition(), career.getYears())
                 ).collect(Collectors.toList()))
                 .lawyerLicenseNumber(lawyerProfile.getAttorneyLicenseNumber())
