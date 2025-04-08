@@ -1,7 +1,7 @@
-import { LawyerTags } from '@/entities/lawyers/model/types';
+import { LawyerTag } from '@/entities/lawyers/model/types';
 
 interface ExpertProps {
-  lawyerTags: LawyerTags[];
+  lawyerTags: LawyerTag[];
   greetingMessage: string;
 }
 
@@ -12,10 +12,10 @@ const MyExpert = ({ lawyerTags, greetingMessage }: ExpertProps) => {
         <div className="flex items-center gap-2">
           <h3 className="m-0 text-body font-bold">관심 분야</h3>
         </div>
-        <div className="flex">
+        <div className="flex gap-2">
           {lawyerTags?.map((elem, index) => (
-            <p key={index} className="mt-[10px] text-bodysmall">
-              {elem.lawyer_specialties}
+            <p key={index} className="mt-[10px] text-bodysmall text-p4">
+              #{elem.lawyer_specialties}
             </p>
           ))}
         </div>
