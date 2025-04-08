@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUpdateLawyerProfile } from '@/entities/lawyers/model/mutations';
-import { Career, Education, LawyerProfileUpdate, LawyerSpeciality } from '@/entities/lawyers/model/types';
+import {
+  Career,
+  Education,
+  LawyerProfileUpdate,
+  LawyerSpeciality,
+} from '@/entities/lawyers/model/types';
+import { useLawyerMyProfile } from '@/entities/lawyers/model/queries';
+import { useNavigate } from 'react-router-dom';
 
 const LawyerAuthenticationForm: React.FC = () => {
+  const navigate = useNavigate();
   const updateProfileMutation = useUpdateLawyerProfile();
+  const { data: lawyerProfile, isLoading } = useLawyerMyProfile();
+
+  // 기본 빈 폼 데이터로 초기화
   const [formData, setFormData] = useState<LawyerProfileUpdate>({
     phoneNumber: '',
     profileImage: '',
@@ -16,15 +27,64 @@ const LawyerAuthenticationForm: React.FC = () => {
     introVideo: '',
     educations: [{ school: '', degree: '', graduationYear: 2024 }],
     careers: [{ company: '', position: '', years: '' }],
-    // lawyerLicenseNumber: '',
-    // lawyerLicenseExam: null,
     specialties: [],
     phoneConsultationPrice: 0,
     videoConsultationPrice: 0,
     visitConsultationPrice: 0,
     bankName: '',
     accountNumber: '',
+    lawyerLicenseNumber: '',
+    lawyerLicenseExam: '',
   });
+
+  // 프로필 데이터가 로드되면 폼 데이터 업데이트
+  useEffect(() => {
+    console.log(lawyerProfile);
+    if (lawyerProfile) {
+      const specialties: LawyerSpeciality[] = [];
+
+      if (lawyerProfile.lawyerTags && lawyerProfile.lawyerTags.length > 0) {
+        // lawyerTags 배열에서 lawyer_specialties 필드를 추출하고
+        // LawyerSpeciality enum으로 변환
+        lawyerProfile.lawyerTags.forEach((tag) => {
+          // 열거형 값으로 안전하게 변환
+          const specialty = tag.lawyer_specialties as LawyerSpeciality;
+          if (Object.values(LawyerSpeciality).includes(specialty)) {
+            specialties.push(specialty);
+          }
+        });
+      }
+
+      // 필요한 모든 필드에 대해 기존 데이터로 초기화
+      setFormData({
+        phoneNumber: lawyerProfile.phoneNumber || '',
+        profileImage: lawyerProfile.profileImage || '',
+        officeName: lawyerProfile.officeName || '',
+        officePhoneNumber: lawyerProfile.officePhoneNumber || '',
+        officeAddress: lawyerProfile.officeAddress || '',
+        gender: lawyerProfile.gender || '',
+        oneLineIntro: lawyerProfile.oneLineIntro || '',
+        greetingMessage: lawyerProfile.greetingMessage || '',
+        introVideo: lawyerProfile.introVideo || '',
+        // 기존 교육 데이터가 있으면 사용, 없으면 기본값
+        educations: lawyerProfile.educations?.length
+          ? lawyerProfile.educations
+          : [{ school: '', degree: '', graduationYear: 2024 }],
+        // 기존 경력 데이터가 있으면 사용, 없으면 기본값
+        careers: lawyerProfile.careers?.length
+          ? lawyerProfile.careers
+          : [{ company: '', position: '', years: '' }],
+        specialties: specialties, // ?
+        phoneConsultationPrice: lawyerProfile.phoneConsultationPrice || 0,
+        videoConsultationPrice: lawyerProfile.videoConsultationPrice || 0,
+        visitConsultationPrice: lawyerProfile.visitConsultationPrice || 0,
+        bankName: lawyerProfile.bankName || '',
+        accountNumber: lawyerProfile.accountNumber || '',
+        lawyerLicenseNumber: lawyerProfile.lawyerLicenseNumber || '',
+        lawyerLicenseExam: lawyerProfile.lawyerLicenseExam || '', // null 허용됨
+      });
+    }
+  }, [lawyerProfile]);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -144,44 +204,49 @@ const LawyerAuthenticationForm: React.FC = () => {
     }
   };
 
-  // Submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      // First upload the image if there is one
-      const finalImageUrl = formData.profileImage;
+    // First upload the image if there is one
+    const finalImageUrl = formData.profileImage;
 
-      // if (imageFile) {
-      //   // Create a FormData object to send the image file
-      //   const imageFormData = new FormData();
-      //   imageFormData.append('image', imageFile);
+    // if (imageFile) {
+    //   // Create a FormData object to send the image file
+    //   const imageFormData = new FormData();
+    //   imageFormData.append('image', imageFile);
 
-      //   이미지 url 변환
-      //   finalImageUrl = imageUploadResponse.data.imageUrl;
-      // }
+    //   이미지 url 변환
+    //   finalImageUrl = imageUploadResponse.data.imageUrl;
+    // }
 
-      // Prepare the final data for submission
-      const finalData = {
-        ...formData,
-        profileImage: finalImageUrl,
-      };
+    // Prepare the final data for submission
+    const finalData = {
+      ...formData,
+      profileImage: finalImageUrl,
+    };
 
-      console.log(formData);
+    console.log(finalData);
 
-      // Send the PATCH request
-      const response = await updateProfileMutation.mutateAsync({
-        ...finalData,
-      });
-
-      if (response.status === 200) {
+    // Send the PATCH request
+    updateProfileMutation.mutate(finalData, {
+      onSuccess: () => {
         alert('변호사 인증 요청이 성공적으로 제출되었습니다.');
-      }
-    } catch (error) {
-      console.error('변호사 인증 요청 중 오류가 발생했습니다:', error);
-      alert('변호사 인증 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
-    }
+        void navigate('/lawyer');
+      },
+      onError: (error) => {
+        console.error('변호사 인증 요청 중 오류가 발생했습니다:', error);
+        alert('변호사 인증 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+      },
+    });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center p-8">
+        데이터를 불러오는 중입니다...
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-4xl p-4">
@@ -232,12 +297,10 @@ const LawyerAuthenticationForm: React.FC = () => {
                 value={formData.gender}
                 onChange={handleInputChange}
                 className="w-full rounded border p-2"
-                required
               >
                 <option value="">선택하세요</option>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
-                <option value="기타">기타</option>
+                <option value="MALE">남성</option>
+                <option value="FEMALE">여성</option>
               </select>
             </div>
 
@@ -275,7 +338,7 @@ const LawyerAuthenticationForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="mb-1 block">변호사사무실전화번호</label>
+              <label className="mb-1 block">사무실 전화번호</label>
               <input
                 type="text"
                 name="officePhoneNumber"
@@ -288,7 +351,7 @@ const LawyerAuthenticationForm: React.FC = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="mb-1 block">변호사사무실주소</label>
+              <label className="mb-1 block">사무실 주소</label>
               <input
                 type="text"
                 name="officeAddress"
@@ -304,7 +367,7 @@ const LawyerAuthenticationForm: React.FC = () => {
 
         {/* 전문 분야 및 소개 */}
         <div className="rounded-lg bg-gray-50 p-4">
-          <h2 className="mb-4 text-xl font-semibold">전문 분야 및 소개</h2>
+          <h2 className="mb-4 text-xl font-semibold">전문분야 및 소개</h2>
 
           <div className="mb-4">
             <label className="mb-2 block">전문분야 (복수 선택 가능)</label>
@@ -532,7 +595,7 @@ const LawyerAuthenticationForm: React.FC = () => {
           </button>
         </div>
 
-        {/* 자격 정보
+        {/* 자격 정보 */}
         <div className="rounded-lg bg-gray-50 p-4">
           <h2 className="mb-4 text-xl font-semibold">자격 정보</h2>
 
@@ -562,7 +625,7 @@ const LawyerAuthenticationForm: React.FC = () => {
               />
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* 상담 가격 설정 */}
         <div className="rounded-lg bg-gray-50 p-4">
@@ -576,8 +639,10 @@ const LawyerAuthenticationForm: React.FC = () => {
                 name="phoneConsultationPrice"
                 value={formData.phoneConsultationPrice}
                 onChange={handlePriceChange}
+                onFocus={(e) => e.target.select()}
                 className="w-full rounded border p-2"
                 min="0"
+                step="1000"
                 required
               />
             </div>
@@ -589,8 +654,10 @@ const LawyerAuthenticationForm: React.FC = () => {
                 name="videoConsultationPrice"
                 value={formData.videoConsultationPrice}
                 onChange={handlePriceChange}
+                onFocus={(e) => e.target.select()}
                 className="w-full rounded border p-2"
                 min="0"
+                step="1000"
                 required
               />
             </div>
@@ -602,8 +669,10 @@ const LawyerAuthenticationForm: React.FC = () => {
                 name="visitConsultationPrice"
                 value={formData.visitConsultationPrice}
                 onChange={handlePriceChange}
+                onFocus={(e) => e.target.select()}
                 className="w-full rounded border p-2"
                 min="0"
+                step="1000"
                 required
               />
             </div>

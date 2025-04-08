@@ -1,7 +1,6 @@
-// import { Edit } from 'lucide-react';
 import { TodayConsultations } from '@/entities/lawyers/model/types';
 import Fee from '@/features/consultation/Fee';
-import LawyerImg from '@/shared/assets/images/sskim.png';
+import { FaUserEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 interface ProfileCardProps {
@@ -26,18 +25,21 @@ const ProfileCard = ({
   const navigate = useNavigate();
 
   const goToEdit = () => {
-    void navigate('/lawyer/edit');
+    void navigate('/lawyer/authentication');
   };
 
   return (
     <div>
       {/* 프로필 헤더 */}
-      <div className="rounded-t-[10px] bg-p5 p-4 text-p1">
-        <h2 className="my-1 ml-3 text-h2 font-bold text-p1">{name} 변호사</h2>
+      <header className="rounded-t-[10px] bg-p5 p-4 text-p1">
+        <div className="flex items-center justify-between">
+          <h2 className="my-1 ml-3 text-h2 font-bold text-p1">{name} 변호사</h2>
+          <FaUserEdit size={28} className="cursor-pointer" onClick={goToEdit} />
+        </div>
         <div className="flex justify-between">
           <p className="ml-3 text-bodysmall text-p1">{officeName}</p>
         </div>
-      </div>
+      </header>
 
       {/* 프로필 카드 */}
       <div>

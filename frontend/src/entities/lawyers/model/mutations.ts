@@ -4,13 +4,14 @@ import {
   LawyerProfile,
   LawyerProfileUpdate,
 } from '@/entities/lawyers/model/types';
+import { AxiosResponse } from 'axios';
 
 // 마이페이지 - 정보 수정
 export function useUpdateLawyerProfile() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (updatedData: LawyerProfileUpdate) => {
+  return useMutation<AxiosResponse<LawyerProfile>, Error, LawyerProfileUpdate>({
+    mutationFn: async (updatedData) => {
       const response = await apiClient.patch<LawyerProfile>(
         '/members/profile',
         updatedData,

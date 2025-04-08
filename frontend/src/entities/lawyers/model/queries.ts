@@ -3,7 +3,7 @@ import { lawyerApi } from '../api/lawyerApi';
 
 // 쿼리 키 상수
 export const LAWYER_QUERY_KEYS = {
-  profile: ['laywer', 'profile'],
+  profile: ['lawyer', 'profile'],
   detail: (memberId: number) => ['lawyer', 'detail', memberId],
 };
 

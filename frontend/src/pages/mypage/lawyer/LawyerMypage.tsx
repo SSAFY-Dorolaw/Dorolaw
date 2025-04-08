@@ -58,8 +58,8 @@ const LawyerMypage = () => {
           lawyerTags={data?.lawyerTags}
           lawyerLicenseNumber={data?.lawyerLicenseNumber}
           lawyerLicenseExam={data?.lawyerLicenseExam}
-          education={data?.education}
-          career={data?.career}
+          educations={data?.educations}
+          careers={data?.careers}
           completedConsultationCount={data.completedConsultationCount}
         />
       </section>

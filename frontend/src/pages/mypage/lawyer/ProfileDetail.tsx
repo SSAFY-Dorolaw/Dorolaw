@@ -1,4 +1,4 @@
-import { Career, Education, LawyerTags } from '@/entities/lawyers/model/types';
+import { Career, Education, LawyerTag } from '@/entities/lawyers/model/types';
 import MyCareer from '@/features/mypage/lawyer/profiledetail/MyCareer';
 import MyConsult from '@/features/mypage/lawyer/profiledetail/MyConsult';
 import MyExpert from '@/features/mypage/lawyer/profiledetail/MyExpert';
@@ -13,11 +13,11 @@ interface ProfileDetailProps {
   greetingMessage: string;
   averageRating: number | null;
   officeAddress: string;
-  lawyerTags: LawyerTags[];
+  lawyerTags: LawyerTag[];
   lawyerLicenseNumber: string | null;
   lawyerLicenseExam: string | null;
-  education: Education[];
-  career: Career[];
+  educations: Education[];
+  careers: Career[];
   completedConsultationCount: number;
 }
 
@@ -31,8 +31,8 @@ const ProfileDetail = ({
   lawyerTags,
   lawyerLicenseNumber,
   lawyerLicenseExam,
-  education,
-  career,
+  educations,
+  careers,
   completedConsultationCount,
 }: ProfileDetailProps) => {
   return (
@@ -48,8 +48,8 @@ const ProfileDetail = ({
           averageRating={averageRating}
           officeAddress={officeAddress}
           lawyerTags={lawyerTags}
-          education={education}
-          career={career}
+          educations={educations}
+          careers={careers}
           lawyerLicenseNumber={lawyerLicenseNumber}
           lawyerLicenseExam={lawyerLicenseExam}
         />
