@@ -42,8 +42,9 @@ public class AlarmController {
         
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        tokens.addAll(alarmService.findLawyersByTags(requestAlarmDto.getAccidentObject())); // 태그들로 변호사들 조회
-        return sendAlarms(tokens,requestAlarmDto.getContent());
+        sendAlarms(tokens,requestAlarmDto.getContent());
+        List<FcmToken> tokens2 = alarmService.findLawyersByTags(requestAlarmDto.getAccidentObject()); // 태그들로 변호사들 조회
+        return sendAlarms(tokens2,requestAlarmDto.getAccidentObject() + " 태그와 관련된 요청이 등록되었습니다.");
     }
 
     // 과실 비율 분석기 관련 알림
@@ -67,20 +68,6 @@ public class AlarmController {
         return sendAlarms(tokens,body);
     }
 
-    // 읽음 처리
-    @PutMapping("/read/{alarmId}")
-    public ResponseEntity<Void> read(@PathVariable Long alarmId) {
-        alarmService.markAsRead(alarmId);
-        return ResponseEntity.ok().build();
-    }
-
-    // 모두 읽음 처리
-    @PutMapping("/read-all/{memberId}")
-    public ResponseEntity<Void> readAll(@RequestHeader("Authorization") String authorizationHeader) {
-        alarmService.markAllAsRead(authorizationHeader);
-        return ResponseEntity.ok().build();
-    }
-
     // 알람 보내기
     private String sendAlarms(List<FcmToken> tokens, String body) {
         for (FcmToken token : tokens) {
@@ -94,6 +81,20 @@ public class AlarmController {
     @GetMapping("/myList/{memberId}")
     public List<AlarmDTO> getMyAlarmList(@PathVariable Long memberId) {
         return alarmService.getMyList(memberId);
+    }
+
+    // 읽음 처리
+    @PutMapping("/read/{alarmId}")
+    public ResponseEntity<Void> read(@PathVariable Long alarmId) {
+        alarmService.markAsRead(alarmId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 모두 읽음 처리
+    @PutMapping("/read-all")
+    public ResponseEntity<Void> readAll(@RequestHeader("Authorization") String authorizationHeader) {
+        alarmService.markAllAsRead(authorizationHeader);
+        return ResponseEntity.ok().build();
     }
 }
 
