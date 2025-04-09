@@ -112,6 +112,7 @@ const AnalysisInfo = () => {
             src={`${API_URL}/videos/${data.fileName}`}
             controls
             className="size-full object-contain"
+            controlsList="nodownload"
           >
             브라우저가 비디오 태그를 지원하지 않습니다.
           </video>
@@ -125,12 +126,18 @@ const AnalysisInfo = () => {
       {/* 받은 과실비율 */}
       <div>
         <div className="rate flex flex-col gap-4">
-          <div>
-            <h3>받은 과실비율</h3>
+          <div className="rounded-lg bg-gray-100 p-4 shadow-md">
+            <h3 className="text-lg font-semibold text-gray-800">
+              받은 과실비율
+            </h3>
             {!editMode ? (
               <div className="mt-2 flex gap-4">
-                <p>A차량: {data?.aiReport?.faultRatioA}%</p>
-                <p>B차량: {data?.aiReport?.faultRatioB}%</p>
+                <p className="text-gray-700">
+                  A차량: {data?.aiReport?.faultRatioA}%
+                </p>
+                <p className="text-gray-700">
+                  B차량: {data?.aiReport?.faultRatioB}%
+                </p>
               </div>
             ) : (
               <ModifyFaultRatio />
