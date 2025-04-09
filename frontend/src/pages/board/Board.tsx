@@ -58,7 +58,7 @@ const Board = () => {
                 onClick={() => setIsConsultTab(false)}
               >
                 <h3
-                  className={`${isConsultTab ? 'text-p3' : 'underline decoration-2 underline-offset-[calc(0.75em+2px)]'}`}
+                  className={`${isConsultTab ? 'text-p3 transition hover:text-p5' : 'underline decoration-2 underline-offset-[calc(0.75em+2px)]'}`}
                 >
                   AI 분석 게시판
                 </h3>

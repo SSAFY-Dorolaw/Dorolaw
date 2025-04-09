@@ -21,6 +21,7 @@ const fetchRequestDetail = async (
   const response = await axios.get<SuccessResponse>(
     `${API_URL}/requests/${requestId}`,
   );
+  console.log('게시글 상세 정보:', response.data);
   return response.data;
 };
 

@@ -150,7 +150,7 @@ function NavBar() {
   };
 
   return (
-    <nav className="sticky top-0 z-20 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1">
+    <nav className="sticky top-0 z-20 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1 shadow-[0_3px_10px_rgba(0,0,0,0.5)]">
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-20 font-semibold xl:w-[1200px]">
         <div className="flex justify-between gap-20">
           <NavLink to="/report">AI 과실비율 측정</NavLink>

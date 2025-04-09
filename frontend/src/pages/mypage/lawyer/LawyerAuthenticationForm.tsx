@@ -8,11 +8,14 @@ import {
 } from '@/entities/lawyers/model/types';
 import { useLawyerMyProfile } from '@/entities/lawyers/model/queries';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/entities/auth/model/store';
+import apiClient from '@/shared/api/api-client';
 
 const LawyerAuthenticationForm: React.FC = () => {
   const navigate = useNavigate();
   const updateProfileMutation = useUpdateLawyerProfile();
   const { data: lawyerProfile, isLoading } = useLawyerMyProfile();
+  const { clientId, role } = useAuthStore.getState();
 
   // 기본 빈 폼 데이터로 초기화
   const [formData, setFormData] = useState<LawyerProfileUpdate>({
@@ -230,12 +233,34 @@ const LawyerAuthenticationForm: React.FC = () => {
     // Send the PATCH request
     updateProfileMutation.mutate(finalData, {
       onSuccess: () => {
-        alert('변호사 인증 요청이 성공적으로 제출되었습니다.');
-        void navigate('/lawyer');
+        console.log(role);
+        if (role === 'LAWYER') {
+          apiClient
+            .post('/members/lawyer-verification', {
+              memberId: clientId,
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                useAuthStore.setState({ role: 'CERTIFIED_LAWYER' });
+                alert('변호사 인증이 성공적으로 완료되었습니다.');
+                void navigate('/lawyer');
+              }
+            })
+            .catch((error) => {
+              console.error('변호사 인증 요청 중 오류가 발생했습니다:', error);
+              alert(
+                '변호사 인증 요청 중 오류가 발생했습니다. 다시 시도해주세요.',
+              );
+            });
+        } else {
+          void navigate('/lawyer');
+        }
       },
       onError: (error) => {
-        console.error('변호사 인증 요청 중 오류가 발생했습니다:', error);
-        alert('변호사 인증 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+        console.error('변호사 프로필 업데이트 중 오류가 발생했습니다:', error);
+        alert(
+          '변호사 프로필 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.',
+        );
       },
     });
   };
@@ -250,7 +275,9 @@ const LawyerAuthenticationForm: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-4xl p-4">
-      <h1 className="mb-6 text-2xl font-bold">변호사 인증 요청</h1>
+      <h1 className="mb-6 text-2xl font-bold">
+        {role === 'LAWYER' ? '변호사 인증 요청' : '변호사 프로필 수정'}
+      </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 기본 정보 */}
@@ -685,7 +712,7 @@ const LawyerAuthenticationForm: React.FC = () => {
             type="submit"
             className="rounded-lg bg-p5 px-6 py-3 font-semibold text-p1 transition hover:text-y5"
           >
-            변호사 인증 요청하기
+            {role === 'LAWYER' ? '변호사 인증하기' : '수정하기'}
           </button>
         </div>
       </form>

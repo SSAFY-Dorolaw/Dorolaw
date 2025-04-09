@@ -65,7 +65,7 @@ const LawyerProfileCard = ({
           />
 
           {/* 예약 버튼 */}
-          <div className="rounded-[10px] bg-p5 p-4">
+          <div className="mb-40 rounded-[10px] bg-p5 p-4">
             <button
               onClick={openBooking}
               className="w-full bg-p5 text-body text-white"

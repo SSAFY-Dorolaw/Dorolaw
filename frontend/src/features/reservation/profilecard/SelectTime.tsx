@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import apiClient from '@/shared/api/api-client';
 
 interface AvailableTimesResponse {
@@ -46,7 +45,7 @@ const SelectTime = ({
   // 날짜 변경 시 해당 날짜의 상담 가능한 시간 불러오는 함수
   useEffect(() => {
     if (selectedDate) {
-      void fetchAvailableTimeSlots(selectedDate); // 임시 데이터 사용
+      void fetchAvailableTimeSlots(selectedDate);
     }
   }, [selectedDate]);
 
@@ -57,7 +56,13 @@ const SelectTime = ({
 
     try {
       // 날짜를 YYYY-MM-DD 형식으로 변환
-      const consultationDate = date.toISOString().split('T')[0];
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 해줍니다.
+      const day = String(date.getDate()).padStart(2, '0');
+
+      const consultationDate = `${year}-${month}-${day}`;
+      // toISOString().split('T')[0];
       console.log(consultationDate);
 
       const url = `${import.meta.env.VITE_API_URL}/counseling/${lawyerId}/available-times/${consultationDate}`;

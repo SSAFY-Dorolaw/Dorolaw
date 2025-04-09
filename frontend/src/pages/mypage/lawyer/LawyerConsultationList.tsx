@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '@/shared/assets/images/logo.svg';
 import LawyerConsultationItem from '@/features/mypage/lawyer/LawyerConsultationItem';
-import { useLawyerConsultations } from '@/features/mypage/lawyer/model/queries';
+import { useLawyerMyConsultations } from '@/features/mypage/lawyer/model/queries';
 
 function LawyerConsultationList() {
   const navigate = useNavigate();
 
-  const { data, isPending, isError, error } = useLawyerConsultations();
+  const { data, isPending, isError, error } = useLawyerMyConsultations();
   console.log(data);
   if (isPending) return <h2>로딩 중...</h2>;
   if (isError)
