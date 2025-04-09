@@ -1,6 +1,7 @@
 //src/features/reservation/AdditionalQuestion.tsx
 
 import { useAuthStore } from '@/entities/auth/model/store';
+import apiClient from '@/shared/api/api-client';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -26,35 +27,50 @@ const AdditionalQuestion = () => {
     price,
   } = location.state as AdditionalQuestionState;
 
+  const getConsultationType = () => {
+    switch (consultationType) {
+      case '15분 전화상담':
+        return 'PHONE';
+      case '20분 화상상담':
+        return 'WEBMEET';
+      case '30분 방문상담':
+        return 'VISIT';
+      default:
+        return 0;
+    }
+  };
+
   const [additionalQuestion, setAdditionalQuestion] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   // Format date for display
-  const formattedDate = scheduledDate
-    ? new Intl.DateTimeFormat('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(scheduledDate)
-    : '';
+  const formattedDate = scheduledDate.toISOString().split('T')[0];
+
+  console.log(
+    lawyerId,
+    formattedDate,
+    scheduledTime,
+    getConsultationType(),
+    price,
+    additionalQuestion,
+    requestId,
+  );
 
   const handlePayment = () => {
     // 결제에 필요한 데이터
-    // const paymentData = {
-    //   cid: 'TC0ONETIME', // Kakao Pay merchant ID
-    //   partner_order_id: `order_${Date.now()}`, // Generate unique order ID
-    //   partner_user_id: localStorage.getItem('token') ?? '',
-    //   item_name: `${consultationType} - ${formattedDate}`,
-    //   quantity: 1,
-    //   total_amount: price,
-    //   vat_amount: Math.round(price * 0.1), // 10% VAT
-    //   tax_free_amount: 0,
-    //   approval_url: `${window.location.origin}/payment/success`,
-    //   fail_url: `${window.location.origin}/payment/fail`,
-    //   cancel_url: `${window.location.origin}/payment/cancel`,
-    // };
+    const paymentData = {
+      cid: 'TC0ONETIME', // Kakao Pay merchant ID
+      partner_order_id: `order_${Date.now()}`, // Generate unique order ID
+      partner_user_id: localStorage.getItem('token') ?? '',
+      item_name: `${consultationType} - ${formattedDate}`,
+      quantity: 1,
+      total_amount: price,
+      vat_amount: Math.round(price * 0.1), // 10% VAT
+      tax_free_amount: 0,
+      approval_url: `${window.location.origin}/payment/success`,
+      fail_url: `${window.location.origin}/payment/fail`,
+      cancel_url: `${window.location.origin}/payment/cancel`,
+    };
 
     // 세션스토리지에 api 호출을 위한 데이터 저장
     sessionStorage.setItem(
@@ -71,8 +87,33 @@ const AdditionalQuestion = () => {
       }),
     );
 
-    // // 결제 페이지 이동
-    // void navigate('/initiate-kakao-payment', { state: paymentData });
+    // 결제 페이지 이동
+    void navigate('/initiate-kakao-payment', { state: paymentData });
+  };
+
+  const handleSubmit = async () => {
+    // handlePayment();
+    postConsultation();
+  };
+
+  const postConsultation = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/counseling/book`;
+
+      const params = {
+        lawyerId,
+        scheduledDate: formattedDate,
+        scheduledTime,
+        consultationType: getConsultationType(),
+        price,
+        additionalQuestion,
+        requestId,
+      };
+      const response = await apiClient.post(url, params);
+      void navigate(`/client/consultations`);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -123,7 +164,7 @@ const AdditionalQuestion = () => {
         </div>
       </div>
       <button
-        onClick={handlePayment}
+        onClick={handleSubmit}
         disabled={!agreedToTerms}
         className={`w-full rounded-lg py-3 ${agreedToTerms ? 'bg-p5 text-y5' : 'bg-gray-300 font-bold'}`}
       >

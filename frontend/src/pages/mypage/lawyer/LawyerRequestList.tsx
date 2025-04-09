@@ -7,7 +7,6 @@ function LawyerRequestList() {
   const navigate = useNavigate();
 
   const { data, isPending, isError, error } = useLawyerRequests();
-  console.log(data);
   if (isPending) return <h2>로딩 중...</h2>;
   if (isError)
     return <h2>에러가 발생했습니다: {error?.message || '알 수 없는 에러'}</h2>;
