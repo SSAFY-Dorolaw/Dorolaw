@@ -1,4 +1,19 @@
+import { useAuthStore } from '@/entities/auth/model/store';
+import { useNavigate } from 'react-router-dom';
+
 const LawyerRegist = () => {
+  const navigate = useNavigate();
+
+  const isLawyer = useAuthStore((state) => state.role);
+
+  const lawyerRegist = () => {
+    if (isLawyer === 'GENERAL') {
+      alert('변호사 계정으로 로그인해주세요.');
+      return;
+    }
+    void navigate('/lawyer/authentication');
+  };
+
   return (
     <>
       <section className="mx-[120px] flex justify-between">
@@ -28,7 +43,10 @@ const LawyerRegist = () => {
         </article>
       </section>
       <section className="my-10 flex items-center justify-center">
-        <button className="w-[200px] rounded-[10px] bg-y5 p-3 text-body font-bold text-black transition duration-300 hover:bg-y3">
+        <button
+          onClick={lawyerRegist}
+          className="w-[200px] rounded-[10px] bg-y5 p-3 text-body font-bold text-black transition duration-300 hover:bg-y3"
+        >
           변호사 등록하기
         </button>
       </section>
