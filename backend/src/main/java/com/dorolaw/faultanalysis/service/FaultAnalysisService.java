@@ -56,6 +56,7 @@ public class FaultAnalysisService {
         res.setFaultAnalysisId(savedAnalysis.getFaultAnalysisId());
         res.setFileName(savedAnalysis.getFileName());
         res.setMemberId(savedAnalysis.getMember().getMemberId());
+        res.setTitle(savedAnalysis.getTitle());
         return res;
     }
 
