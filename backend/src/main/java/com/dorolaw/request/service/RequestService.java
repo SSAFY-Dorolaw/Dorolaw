@@ -56,6 +56,7 @@ public class RequestService {
         res.setRequestId(saved.getRequestId());
         res.setFileName(saved.getFileName());
         res.setMemberId(saved.getMember().getMemberId());
+        res.setTitle(saved.getTitle());
         return res;
     }
 
