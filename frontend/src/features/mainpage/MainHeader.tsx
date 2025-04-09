@@ -9,9 +9,9 @@ const MainHeader = () => {
     void navigate('/consultation');
   };
   return (
-    <nav className="inset-x-0 w-screen leading-[0]">
+    <nav className="inset-x-0 h-[calc(100dvh-128px)] w-screen leading-[0]">
       <img
-        className="m-0 block h-[570px] w-full object-cover p-0 align-top"
+        className="size-full object-cover"
         src="/main_img.png"
         alt="메인이미지"
       />

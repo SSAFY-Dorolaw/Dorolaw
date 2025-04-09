@@ -12,6 +12,7 @@ import ModifyFaultRatio from './modify/ModifyFaultRatio';
 import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
 import ModifyQuestion from './modify/ModifyQuestion';
 import { useQueryClient } from '@tanstack/react-query';
+import { statusConverter } from '@/shared/lib/utils/statusConverter';
 
 const ConsultInfo = () => {
   const [editMode, setEditMode] = useState(false);
@@ -87,7 +88,7 @@ const ConsultInfo = () => {
           <>
             <h2>{data?.title}</h2>
             <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
-              상담완료
+              {statusConverter(data?.status)}
             </div>
           </>
         ) : (

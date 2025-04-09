@@ -1,3 +1,5 @@
+import { statusConverter } from '@/shared/lib/utils/statusConverter';
+
 interface ConsultItemProps {
   requestId: number;
   title: string;
@@ -27,7 +29,7 @@ function ConsultItem({
         <p className="truncate">{title}</p>
       </div>
       <div className="w-20 shrink-0 text-center">
-        <p>{status}</p>
+        <p>{statusConverter(status)}</p>
       </div>
       <div className="w-24 shrink-0 text-center">
         <p>의뢰인{memberId}</p>

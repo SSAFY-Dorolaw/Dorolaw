@@ -8,6 +8,7 @@ import MySlogan from '@/features/mypage/lawyer/profiledetail/MySlogan';
 
 interface ProfileDetailProps {
   name: string;
+  lawyerId: number;
   officeName: string;
   oneLineIntro: string;
   greetingMessage: string;
@@ -23,6 +24,7 @@ interface ProfileDetailProps {
 
 const ProfileDetail = ({
   name,
+  lawyerId,
   officeName,
   oneLineIntro,
   greetingMessage,
@@ -60,7 +62,10 @@ const ProfileDetail = ({
         <hr />
 
         {/* 최근 상담 */}
-        <MyConsult completedConsultationCount={completedConsultationCount} />
+        <MyConsult
+          completedConsultationCount={completedConsultationCount}
+          lawyerId={lawyerId}
+        />
         <hr />
 
         {/* 상담 후기 */}
