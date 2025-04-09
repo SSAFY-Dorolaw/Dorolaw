@@ -11,6 +11,7 @@ import com.dorolaw.request.service.AiReportService;
 import com.dorolaw.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,6 +65,20 @@ public class AlarmController {
     public String checkConsultation(@RequestBody String body, @RequestBody Long consultationId) {
         List<FcmToken> tokens = alarmService.findConsultationByconsultationId(consultationId); // 상담 id로 일반인, 변호사 조회
         return sendAlarms(tokens,body);
+    }
+
+    // 읽음 처리
+    @PutMapping("/read/{alarmId}")
+    public ResponseEntity<Void> read(@PathVariable Long alarmId) {
+        alarmService.markAsRead(alarmId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 모두 읽음 처리
+    @PutMapping("/read-all/{memberId}")
+    public ResponseEntity<Void> readAll(@RequestHeader("Authorization") String authorizationHeader) {
+        alarmService.markAllAsRead(authorizationHeader);
+        return ResponseEntity.ok().build();
     }
 
     // 알람 보내기

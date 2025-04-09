@@ -8,11 +8,14 @@ import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.repository.ConsultationRepository;
 import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
+import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,7 @@ public class AlarmService {
     private final FcmTokenRepository fcmTokenRepository;
     private final AlarmRepository alarmRepository;
     private final ConsultationRepository consultationRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     
     // memberId로 fcm 토큰 찾기
     public List<FcmToken> findTokenListByMemberId(Long memberId) {
@@ -58,5 +62,27 @@ public class AlarmService {
         return alarms.stream()
                 .map(AlarmDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void markAsRead(Long alarmId) {
+        // 조회
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new NoSuchElementException("Alarm not found with id: " + alarmId));
+        // 이미 읽은 상태가 아니면 변경
+        if (!alarm.getIsRead()) {
+            alarm.markAsRead();
+        }
+        
+        // 저장
+        alarmRepository.save(alarm);
+    }
+
+    @Transactional
+    public void markAllAsRead(String authorizationHeader) {
+        String token = jwtTokenProvider.extractToken(authorizationHeader);
+        Long memberId = Long.valueOf(jwtTokenProvider.getMemberIdFromJWT(token));
+
+        alarmRepository.markAllAsReadByMemberId(memberId);
     }
 }
