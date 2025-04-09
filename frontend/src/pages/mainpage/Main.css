@@ -1,13 +1,13 @@
 .scroll-container {
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+  height: 100vh; /* 뷰포트 높이로 설정 */
+  overflow-y: scroll; /* 세로 스크롤 가능하도록 */
+  scroll-snap-type: y mandatory; /* 세로 방향 강제 스냅 설정 */
+  scroll-behavior: smooth; /* 부드러운 스크롤 효과 적용 */
 }
 
 .scroll-section {
-  height: 100vh;
-  scroll-snap-align: start;
+  height: 100vh; /* 각 섹션도 뷰포트 높이로 설정 */
+  scroll-snap-align: start; /* 섹션 시작 부분에 스냅 */
   display: flex;
   flex-direction: column;
   justify-content: center;
