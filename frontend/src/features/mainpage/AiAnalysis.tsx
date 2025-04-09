@@ -1,6 +1,6 @@
 const AiAnalysis = () => {
   return (
-    <section className="mx-20 flex justify-between">
+    <section className="mx-20 flex justify-between pt-5">
       <article className="flex items-center">
         <div>
           <div className="flex">

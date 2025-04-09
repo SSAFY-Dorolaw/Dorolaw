@@ -1,6 +1,6 @@
 const Guideline = () => {
   return (
-    <section className="my-20">
+    <section className="my-20 pt-5">
       <div className="text-center">
         <h1 className="mt-10 text-4xl">
           영상만 올리면 끝! 간편한 4단계 분석 절차
