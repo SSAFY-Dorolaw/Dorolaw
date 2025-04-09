@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // 인증 토큰 가져오기
 const getAuthToken = (): string | null => {
-  return localStorage.getItem('accessToken'); // 프로젝트의 토큰 저장 방식에 맞게 수정
+  return localStorage.getItem('token');
 };
 
 /**
