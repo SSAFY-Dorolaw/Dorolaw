@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
-import { X, RotateCw } from 'lucide-react';
+import { X, RotateCw, Check } from 'lucide-react';
 import NotificationItem from './alarm/NotificationItem';
 import { useNotificationStore } from './alarm/notificationStore';
 import { useAuthStore } from '@/entities/auth/model/store';
+import { FCM_NOTIFICATION_RECEIVED } from '@/firebase/useFCM';
 
 const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [lastAutoOpen, setLastAutoOpen] = useState<number>(0);
   const { clientId } = useAuthStore();
 
-  const { notifications, unreadCount, isLoading, error, fetchNotifications } =
-    useNotificationStore();
+  const {
+    notifications,
+    unreadCount,
+    isLoading,
+    error,
+    fetchNotifications,
+    markAllAsRead,
+  } = useNotificationStore();
 
   // 컴포넌트 마운트 시 알림 조회
   useEffect(() => {
@@ -17,6 +25,35 @@ const NotificationBell = () => {
       void fetchNotifications(Number(clientId));
     }
   }, [clientId, fetchNotifications]);
+
+  // FCM 알림 수신 이벤트 리스너 추가
+  useEffect(() => {
+    const handleFcmNotification = (event: Event) => {
+      const customEvent = event as CustomEvent;
+
+      if (clientId) {
+        void fetchNotifications(Number(clientId));
+
+        const now = Date.now();
+        // 마지막 자동 열림 이후 10초가 지났을 때만 자동으로 열림
+        if (now - lastAutoOpen > 10000) {
+          setIsOpen(true);
+          setLastAutoOpen(now);
+        }
+      }
+    };
+
+    // FCM 알림 수신 이벤트 리스너 등록
+    document.addEventListener(FCM_NOTIFICATION_RECEIVED, handleFcmNotification);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener(
+        FCM_NOTIFICATION_RECEIVED,
+        handleFcmNotification,
+      );
+    };
+  }, [clientId, fetchNotifications, lastAutoOpen]);
 
   // 알림창이 열릴 때마다 알림 목록 갱신
   useEffect(() => {
@@ -29,6 +66,13 @@ const NotificationBell = () => {
   const handleRefresh = async () => {
     if (clientId) {
       await fetchNotifications(Number(clientId));
+    }
+  };
+
+  // 모든 알림 읽음 처리
+  const handleMarkAllAsRead = async () => {
+    if (clientId && unreadCount > 0) {
+      await markAllAsRead(Number(clientId));
     }
   };
 
@@ -72,6 +116,15 @@ const NotificationBell = () => {
                 >
                   <RotateCw className="size-4" />
                 </button>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={handleMarkAllAsRead}
+                    className="text-violet-500 hover:text-violet-700"
+                    title="모두 읽음 처리"
+                  >
+                    <Check className="size-4" />
+                  </button>
+                )}
               </div>
               <div className="flex items-center space-x-2">
                 <button
