@@ -1,6 +1,8 @@
 import React from 'react';
 import { Notification } from './types';
 import { formatTimeAgo, getNotificationStyle } from './notificationData';
+import { useNotificationStore } from './notificationStore';
+import { useAuthStore } from '@/entities/auth/model/store';
 
 interface NotificationItemProps {
   notification: Notification;
@@ -9,6 +11,9 @@ interface NotificationItemProps {
 const NotificationItem: React.FC<NotificationItemProps> = ({
   notification,
 }) => {
+  const { clientId } = useAuthStore();
+  const { markAsRead } = useNotificationStore();
+
   // 알림 내용을 분석하여 타입 추측
   const detectType = (content: string): string => {
     if (content.includes('상담')) return 'SCHEDULE';
@@ -22,8 +27,18 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     notification.type ?? detectType(notification.content);
   const { icon, bgColor } = getNotificationStyle(notificationType);
 
+  // 알림 클릭 시 읽음 처리
+  const handleClick = () => {
+    if (!notification.isRead && clientId) {
+      void markAsRead(notification.alarmId, Number(clientId));
+    }
+  };
+
   return (
-    <div className={`py-3 ${notification.isRead ? 'opacity-70' : ''}`}>
+    <div
+      className={`py-3 ${notification.isRead ? 'opacity-70' : ''} cursor-pointer hover:bg-gray-50`}
+      onClick={handleClick}
+    >
       <div className="flex items-start space-x-3">
         {/* 알림 타입 아이콘 */}
         <div

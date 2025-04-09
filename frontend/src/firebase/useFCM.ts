@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { getToken, onMessage } from 'firebase/messaging';
 import { messagingPromise } from './config';
 import { registerServiceWorker } from './serviceWorker';
-import apiClient from '@/shared/api/api-client'; // apiClient 임포트
+import apiClient from '@/shared/api/api-client';
+
+// 커스텀 이벤트 생성
+export const FCM_NOTIFICATION_RECEIVED = 'fcm-notification-received';
 
 const useFCM = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -30,16 +33,8 @@ const useFCM = () => {
 
   // FCM 토큰을 API 서버에 등록하는 함수
   const registerTokenToServer = async (fcmToken: string): Promise<void> => {
-    console.log('🔍 registerTokenToServer 함수 호출됨', fcmToken);
     try {
-      console.log('🔍 API 요청 시작:', fcmToken.substring(0, 10) + '...');
-
-      // 이 줄에서 직접 axios를 사용해봅니다
       const response = await apiClient.post('fcm-tokens', { token: fcmToken });
-
-      console.log('✅ FCM 토큰이 서버에 등록되었습니다:', response.status);
-
-      // 토큰을 로컬 스토리지에 저장
       localStorage.setItem('fcmToken', fcmToken);
     } catch (error) {
       console.warn('❌ FCM 토큰 서버 등록 실패:', error);
@@ -77,39 +72,32 @@ const useFCM = () => {
         }
 
         setToken(fcmToken);
-        // console.log('FCM 토큰:', fcmToken);
 
         // 5. 백엔드에 토큰 전송
         const storedToken = localStorage.getItem('fcmToken');
-        // console.log(
-        //   '🔍 현재 저장된 토큰:',
-        //   storedToken?.substring(0, 10) + '...',
-        // );
-        // console.log('🔍 새 토큰:', fcmToken.substring(0, 10) + '...');
-        // console.log('🔍 토큰 비교:', storedToken !== fcmToken);
 
-        // 조건 체크를 더 명확하게 합니다
         if (!storedToken) {
-          console.log('🔍 저장된 토큰이 없어 새로 등록합니다');
           await registerTokenToServer(fcmToken);
         } else if (storedToken !== fcmToken) {
-          console.log('🔍 토큰이 변경되어 새로 등록합니다');
           await registerTokenToServer(fcmToken);
-        } else {
-          console.log('🔍 토큰이 동일하여 등록을 생략합니다');
         }
 
         // 6. 포그라운드 메시지 핸들러 설정
         if (!unsubscribeRef.current) {
           unsubscribeRef.current = onMessage(messaging, (payload) => {
-            console.log('📩 포그라운드 메시지 수신:', payload);
-
-            const { title, body } = payload.notification || {};
+            const { title, body } = payload.notification ?? {};
             if (title && body) {
               new Notification(title, {
                 body,
-                icon: payload.notification?.icon || '/notification-icon.png',
+                icon: payload.notification?.icon ?? '/notification-icon.png',
               });
+
+              // FCM 알림 수신 이벤트 발행
+              document.dispatchEvent(
+                new CustomEvent(FCM_NOTIFICATION_RECEIVED, {
+                  detail: payload,
+                }),
+              );
             }
           });
         }
@@ -117,8 +105,11 @@ const useFCM = () => {
         // 7. 서비스 워커로부터 메시지 수신 설정
         navigator.serviceWorker.addEventListener('message', (event) => {
           if (event.data && event.data.type === 'PUSH_NOTIFICATION_RECEIVED') {
-            console.log('서비스 워커로부터 알림 수신:', event.data.payload);
-            // 여기서 알림 처리 또는 상태 업데이트 가능
+            document.dispatchEvent(
+              new CustomEvent(FCM_NOTIFICATION_RECEIVED, {
+                detail: event.data.payload,
+              }),
+            );
           }
         });
       } catch (err) {
