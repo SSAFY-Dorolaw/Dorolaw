@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
-const ModifyQuestion = () => {
-  const [question, setQuestion] = useState('');
+interface ModifyQuestionProps {
+  content: string | undefined;
+}
+
+const ModifyQuestion = ({ content }: ModifyQuestionProps) => {
+  const [question, setQuestion] = useState(content);
 
   return (
     <div>
