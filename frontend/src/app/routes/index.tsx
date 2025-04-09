@@ -19,6 +19,7 @@ import LoginRedirect from '@/pages/login/LoginRedirect';
 import { requireAuth } from '@/entities/auth/authUtils';
 import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 import LawyerAuthenticationForm from '@/pages/mypage/lawyer/LawyerAuthenticationForm';
+import LawyerRequests from '@/pages/reservation/LawyerRequests';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
             path: 'profile/:lawyerId/:requestId',
             element: <Reservation />,
             loader: requireAuth,
+          },
+          {
+            path: ':lawyerId/requests',
+            element: <LawyerRequests />,
           },
           {
             path: 'requests',

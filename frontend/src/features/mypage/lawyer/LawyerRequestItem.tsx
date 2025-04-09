@@ -1,6 +1,7 @@
 import { Requests } from '@/features/mypage/lawyer/model/types';
 import { FaGavel, FaUser, FaCheck, FaClock } from 'react-icons/fa';
 import { BsChatLeftText } from 'react-icons/bs';
+import { getRelativeTime } from '@/shared/lib/utils/getRelativeTime';
 
 interface RequestItemProps extends Requests {
   onClick: () => void;
@@ -54,19 +55,23 @@ function LawyerRequestItem({
       <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
         <h3 className="text-lg font-bold text-gray-800">{title}</h3>
         <span className="text-sm text-gray-500">
-          {new Date(answeredAt).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}{' '}
-          답변
+          {getRelativeTime(answeredAt)}
         </span>
       </div>
 
       {/* 의뢰인 정보 */}
-      <div className="mb-3 flex items-center gap-2 text-sm text-gray-600">
-        <FaUser size={14} />
-        <span>의뢰인 {memberId}</span>
+      <div className="mb-3 flex items-center gap-4 text-sm text-gray-600">
+        <div className="flex items-center gap-2">
+          <FaUser size={14} />
+          <span>의뢰인 {memberId}</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <FaGavel className="text-blue-600" />
+          <span className="text-sm font-medium text-gray-700">
+            의뢰번호 #{requestId}
+          </span>
+        </div>
 
         {/* 매칭 여부 표시 */}
         {isSelected && (
@@ -89,12 +94,6 @@ function LawyerRequestItem({
 
       {/* 하단 정보 영역 */}
       <div className="mt-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <FaGavel className="text-blue-600" />
-          <span className="text-sm font-medium text-gray-700">
-            의뢰번호 #{requestId}
-          </span>
-        </div>
         {getStatusBadge()}
       </div>
     </div>

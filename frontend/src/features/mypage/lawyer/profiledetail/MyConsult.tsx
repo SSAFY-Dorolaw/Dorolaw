@@ -1,4 +1,5 @@
 import { useLawyerRequests } from '@/features/reservation/model/queries';
+import { getRelativeTime } from '@/shared/lib/utils/getRelativeTime';
 import { useNavigate } from 'react-router-dom';
 
 interface ConsultProps {
@@ -26,7 +27,7 @@ const MyConsult = ({ completedConsultationCount, lawyerId }: ConsultProps) => {
               {data?.length ? (
                 <p
                   className="ml-1 text-caption text-g3"
-                  onClick={() => void navigate('/lawyer/requests')}
+                  onClick={() => void navigate(`/lawyer/${lawyerId}/requests`)}
                 >
                   더보기
                 </p>
@@ -40,14 +41,14 @@ const MyConsult = ({ completedConsultationCount, lawyerId }: ConsultProps) => {
             <div className="mt-4 grid grid-cols-3 gap-4 bg-p1">
               {data.slice(0, 3).map((request, index) => (
                 <div key={index} className="flex flex-col">
-                  <p className="max-w-[20ch] cursor-pointer truncate text-bodysmall">
+                  <p className="max-w-[20ch] cursor-pointer truncate text-caption">
                     {request.title}
                   </p>
                   <p className="max-w-[20ch] cursor-pointer truncate text-caption text-p4">
                     {request.requestAnsweredContent}
                   </p>
                   <span className="mt-2 text-caption text-p4">
-                    {request.answeredAt}
+                    {getRelativeTime(request.answeredAt)}
                   </span>
                 </div>
               ))}
