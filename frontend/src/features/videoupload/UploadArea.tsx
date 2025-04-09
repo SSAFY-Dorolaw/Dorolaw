@@ -76,7 +76,7 @@ const UploadArea = () => {
       >
         {selectedFile ? (
           <div className="flex flex-col items-center">
-            <p>영상 썸네일</p>
+            <p>업로드 완료</p>
           </div>
         ) : (
           <>

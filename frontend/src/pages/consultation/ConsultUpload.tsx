@@ -5,7 +5,7 @@ import UploadTitle, {
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
 import BulletList from '@/components/ui/BulletList';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { submitBoardInfo } from '@/features/board/model/queries';
@@ -16,12 +16,30 @@ interface AdditionalData {
   question?: string;
 }
 
+const setCookie = (name: string, value: string, days: number) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+};
+
+const getCookie = (name: string) => {
+  const cookies = document.cookie.split('; ');
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split('=');
+    if (key === name) return value;
+  }
+  return null;
+};
+
 const ConsultUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [isAgree, setIsAgree] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
   const navigate = useNavigate();
 
   // 추가 정보 객체로 분리
@@ -33,6 +51,26 @@ const ConsultUpload = () => {
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
+
+  // 팝업 처리
+  useEffect(() => {
+    // 쿠키에서 팝업 표시 여부 확인
+    const popupDismissed = getCookie('consultPopupDismissed');
+    if (!popupDismissed) {
+      setShowPopup(true);
+    }
+  }, []);
+
+  const handleDismissPopup = () => {
+    if (dontShowAgain) {
+      setCookie('consultPopupDismissed', 'true', 30); // 30일 동안 유지
+    }
+    setShowPopup(false);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
 
   // BulletList 항목
   const bulletAnalysisItems = [
@@ -138,75 +176,108 @@ const ConsultUpload = () => {
 
   return (
     <>
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg">
+            <article>
+              <h3 className="mb-8 text-h1 font-bold text-gray-800">
+                교통사고 과실비율 자동 분석 서비스
+              </h3>
+            </article>
+            <article>
+              <p className="text-bodysmall text-gray-600">
+                본 서비스는 교통사고 발생 시 제출된 블랙박스 영상 또는 CCTV
+                영상을 기반으로, AI 기술을 활용하여 사고 상황을 분석하고 예상
+                과실비율을 산정해 드리는 기능입니다.
+              </p>
+              <br />
+            </article>
+            <article>
+              <BulletList items={bulletAnalysisItems} />
+              <br />
+            </article>
+            <p className="text-bodysmall text-gray-600">
+              ※ 본 서비스는 법률 상담 예약을 지원하며, 실제 상담은 변호사 개별
+              사무소 또는 온라인을 통해 이루어집니다.
+            </p>
+            <div className="mt-6 flex items-center justify-between">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={dontShowAgain}
+                  onChange={(e) => setDontShowAgain(e.target.checked)}
+                  className="mr-2"
+                />
+                다시 보지 않음
+              </label>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleDismissPopup}
+                  className="rounded bg-p5 px-4 py-2 text-white"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 설명 */}
-      <header className="mb-10 w-[800px]">
-        <article className="flex justify-center">
-          <h2 className="text-h1 font-bold">
-            교통사고 과실비율 자동 분석 서비스
-          </h2>
-        </article>
-        <article className="flex justify-center">
-          <p className="mb-10 text-body">
-            본 서비스는 교통사고 발생 시 제출된 블랙박스 영상 또는 CCTV 영상을
-            기반으로, <br />
-            AI 기술을 활용하여 사고 상황을 분석하고 예상 과실비율을 산정해
-            드리는 기능입니다.
-          </p>
-          <br />
-        </article>
-        <article className="flex justify-center">
-          <BulletList items={bulletAnalysisItems} />
-          <br />
-        </article>
-        <article className="mt-10 flex justify-center">
-          <p>
-            ※ 본 서비스는 법률 상담 예약을 지원하며, 실제 상담은 변호사 개별
-            사무소 또는 온라인을 통해 이루어집니다.
-          </p>
-        </article>
+      <header className="mt-6 w-[800px] bg-p1 py-8">
+        <h1 className="text-start text-3xl font-bold text-gray-800">
+          변호사 상담하기
+        </h1>
       </header>
-      <main>
-        <UploadTitle ref={uploadTitleRef} />
 
-        {/* 영상 업로드 드래그 */}
-        <UploadArea />
+      <main className="mx-auto max-w-4xl space-y-6">
+        {/* 카드 형태로 구성 */}
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <UploadTitle ref={uploadTitleRef} />
+          <UploadArea />
+        </div>
 
-        {/* 추가 정보 작성 */}
-        <AdditionalInfo onChange={additionalDataChange} />
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <AdditionalInfo onChange={additionalDataChange} />
+        </div>
 
-        {/* 옵션 */}
-        <OptionCheckbox
-          isPublic={isPublic}
-          onChangePublic={(value: boolean) => setIsPublic(value)}
-          isAgree={isAgree}
-          onChangeAgree={(value: boolean) => setIsAgree(value)}
-        />
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">옵션</h2>
+          <OptionCheckbox
+            isPublic={isPublic}
+            onChangePublic={(value: boolean) => setIsPublic(value)}
+            isAgree={isAgree}
+            onChangeAgree={(value: boolean) => setIsAgree(value)}
+          />
+        </div>
 
         {/* 성공 메시지 표시 */}
         {success && (
-          <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
+          <div className="rounded-lg bg-green-100 p-4 text-center text-green-700">
             게시글이 업로드되었습니다.
-          </p>
+          </div>
         )}
 
         {/* 에러 메시지 표시 */}
         {error && (
-          <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
+          <div className="rounded-lg bg-red-100 p-4 text-center text-red-700">
             {error}
-          </p>
+          </div>
         )}
 
         {/* 버튼 */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            void requestAnalysis();
-          }}
-          disabled={loading}
-          className="mx-auto my-9 block rounded-[10px] bg-p5 px-6 py-2 text-g1 disabled:opacity-50"
-        >
-          {loading ? '처리 중...' : '의뢰 신청하기'}
-        </button>
+        <div className="flex justify-center">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              void requestAnalysis();
+            }}
+            disabled={loading}
+            className="my-10 mb-20 rounded-[10px] bg-p5 px-6 py-3 text-p1 transition hover:text-y5 disabled:opacity-50"
+          >
+            {loading ? '처리 중...' : '의뢰 신청하기'}
+          </button>
+        </div>
       </main>
     </>
   );
