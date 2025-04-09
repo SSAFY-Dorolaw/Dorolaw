@@ -3,14 +3,13 @@ package com.dorolaw.consultation.controller;
 import com.dorolaw.consultation.dto.request.ConsultationBookRequestDto;
 import com.dorolaw.consultation.dto.request.AvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
-import com.dorolaw.consultation.dto.response.AvailableTimesResponseDto;
-import com.dorolaw.consultation.dto.response.ConsultationBookResponseDto;
-import com.dorolaw.consultation.dto.response.ReviewResponseDto;
-import com.dorolaw.consultation.dto.response.ReviewWriteResponseDto;
+import com.dorolaw.consultation.dto.response.*;
 import com.dorolaw.consultation.service.ConsultationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/counseling")
@@ -59,4 +58,14 @@ public class ConsultationController {
         Object responseDto = consultationService.getMemberInfo(memberId);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 변호사 최근 의뢰내역 최근순서
+    @GetMapping("/recent-requests/{memberId}")
+    public ResponseEntity<List<LawyerRecentRequestResponseDto>> getRecentRequests(
+            @PathVariable Long memberId) {
+        List<LawyerRecentRequestResponseDto> recentRequests = consultationService.getRecentRequestsByMemberId(memberId);
+        return ResponseEntity.ok(recentRequests);
+    }
+
+
 }

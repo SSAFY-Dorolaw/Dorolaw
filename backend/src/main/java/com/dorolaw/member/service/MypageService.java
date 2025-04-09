@@ -157,11 +157,11 @@ public class MypageService {
         Map<String, Object> memberInfo = jwtTokenProvider.extractMemberInfo(authorizationHeader);
         Long memberId = (Long) memberInfo.get("memberId");
 
-        LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+//        LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(memberId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         // 변호사 ID로 답변 목록과 연관된 의뢰 정보를 함께 조회
-        List<Answer> answers = answerRepository.findByLawyerIdWithRequest(lawyerProfile.getLawyerProfileId());
+        List<Answer> answers = answerRepository.findByLawyerIdWithRequest(memberId);
 
         return answers.stream()
                 .map(answer -> LawyerAnsweredInquiryListResponseDto.builder()
