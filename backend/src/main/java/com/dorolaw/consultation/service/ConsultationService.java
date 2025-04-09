@@ -3,10 +3,7 @@ package com.dorolaw.consultation.service;
 import com.dorolaw.consultation.dto.request.ConsultationBookRequestDto;
 import com.dorolaw.consultation.dto.request.AvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
-import com.dorolaw.consultation.dto.response.ConsultationBookResponseDto;
-import com.dorolaw.consultation.dto.response.AvailableTimesResponseDto;
-import com.dorolaw.consultation.dto.response.ReviewResponseDto;
-import com.dorolaw.consultation.dto.response.ReviewWriteResponseDto;
+import com.dorolaw.consultation.dto.response.*;
 import com.dorolaw.consultation.entity.Consultation;
 import com.dorolaw.consultation.entity.ConsultationStatus;
 import com.dorolaw.consultation.entity.ConsultationType;
@@ -21,8 +18,10 @@ import com.dorolaw.member.entity.lawyer.LawyerSchedule;
 import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.MemberRepository;
 import com.dorolaw.member.service.MemberService;
+import com.dorolaw.request.entity.Answer;
 import com.dorolaw.request.entity.Request;
 import com.dorolaw.request.entity.RequestStatus;
+import com.dorolaw.request.repository.AnswerRepository;
 import com.dorolaw.request.repository.RequestRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +50,7 @@ public class ConsultationService {
     private final ReviewRepository reviewRepository;
     private final MemberService memberService;
     private final RequestRepository requestRepository;
+    private final AnswerRepository answerRepository;
 
     public AvailableTimesResponseDto getAvailableTimes(
             Long lawyerId,
@@ -261,5 +262,25 @@ public class ConsultationService {
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+    }
+
+    public List<LawyerRecentRequestResponseDto> getRecentRequestsByMemberId(Long memberId) {
+        // 회원 ID로 회원 존재 여부 확인 (선택적)
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "변호사를 찾을 수 없습니다."));
+
+        List<Answer> answers = answerRepository.findByLawyerIdOrderByCreatedAtDesc(memberId);
+
+        return answers.stream()
+                .map(answer -> LawyerRecentRequestResponseDto.builder()
+                        .requestId(answer.getRequest().getRequestId())
+                        .title(answer.getRequest().getTitle())
+                        .memberId(answer.getRequest().getMember().getMemberId())
+                        .requestAnsweredContent(answer.getContent())
+                        .answeredAt(answer.getCreatedAt())
+                        .isSelected(answer.getIsSelected())
+                        .requestStatus(answer.getRequest().getStatus().toString())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
