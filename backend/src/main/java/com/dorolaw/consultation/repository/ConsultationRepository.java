@@ -15,11 +15,11 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     @Query("SELECT c.scheduledTime FROM Consultation c " +
             "WHERE c.lawyer.lawyerProfileId = :lawyerId " +
             "AND c.consultationDate = :consultationDate " +
-            "AND c.status = :status")
-    List<LocalTime> findBookedTimesByLawyerAndDate(
+            "AND c.status IN (:statuses)")
+    List<LocalTime> findBookedTimesByLawyerAndDateAndStatuses(
             @Param("lawyerId") Long lawyerId,
             @Param("consultationDate") LocalDate consultationDate,
-            @Param("status") ConsultationStatus status
+            @Param("statuses") List<ConsultationStatus> statuses
     );
 
     List<Consultation> findByClientOrLawyer(Member client, LawyerProfile lawyer);

@@ -17,5 +17,8 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query("SELECT a FROM Answer a JOIN FETCH a.request WHERE a.lawyer.memberId = :lawyerId ORDER BY a.createdAt DESC")
     List<Answer> findByLawyerIdWithRequest(@Param("lawyerId") Long lawyerId);
 
+    // 변호사가 작성한 답변 목록을 최신순으로 조회
+    @Query("SELECT a FROM Answer a JOIN FETCH a.request r JOIN FETCH r.member WHERE a.lawyer.memberId = :lawyerId ORDER BY a.createdAt DESC")
+    List<Answer> findByLawyerIdOrderByCreatedAtDesc(@Param("lawyerId") Long lawyerId);
 }
 
