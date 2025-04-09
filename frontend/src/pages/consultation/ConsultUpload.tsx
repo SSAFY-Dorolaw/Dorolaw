@@ -4,6 +4,7 @@ import UploadTitle, {
 } from '@/features/videoupload/UploadTitle';
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
+import BulletList from '@/components/ui/BulletList';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
@@ -32,6 +33,13 @@ const ConsultUpload = () => {
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
+
+  // BulletList 항목
+  const bulletAnalysisItems = [
+    'AI 분석 결과 또는 영상 자료 기반 상담 가능',
+    '분야: 과실 다툼, 보험 처리, 손해배상, 민혀앗 소송 등',
+    '상담 신청 시 일정 선택 및 상담 방식(전화/화상/대면 등) 지정 가능',
+  ];
 
   // 추가 정보 변경 핸들러
   const additionalDataChange = (data: AdditionalData) => {
@@ -129,49 +137,78 @@ const ConsultUpload = () => {
   };
 
   return (
-    <main className="mt-[50px]">
-      <UploadTitle ref={uploadTitleRef} />
+    <>
+      {/* 설명 */}
+      <header className="mb-10 w-[800px]">
+        <article className="flex justify-center">
+          <h2 className="text-h1 font-bold">
+            교통사고 과실비율 자동 분석 서비스
+          </h2>
+        </article>
+        <article className="flex justify-center">
+          <p className="mb-10 text-body">
+            본 서비스는 교통사고 발생 시 제출된 블랙박스 영상 또는 CCTV 영상을
+            기반으로, <br />
+            AI 기술을 활용하여 사고 상황을 분석하고 예상 과실비율을 산정해
+            드리는 기능입니다.
+          </p>
+          <br />
+        </article>
+        <article className="flex justify-center">
+          <BulletList items={bulletAnalysisItems} />
+          <br />
+        </article>
+        <article className="mt-10 flex justify-center">
+          <p>
+            ※ 본 서비스는 법률 상담 예약을 지원하며, 실제 상담은 변호사 개별
+            사무소 또는 온라인을 통해 이루어집니다.
+          </p>
+        </article>
+      </header>
+      <main>
+        <UploadTitle ref={uploadTitleRef} />
 
-      {/* 영상 업로드 드래그 */}
-      <UploadArea />
+        {/* 영상 업로드 드래그 */}
+        <UploadArea />
 
-      {/* 추가 정보 작성 */}
-      <AdditionalInfo onChange={additionalDataChange} />
+        {/* 추가 정보 작성 */}
+        <AdditionalInfo onChange={additionalDataChange} />
 
-      {/* 옵션 */}
-      <OptionCheckbox
-        isPublic={isPublic}
-        onChangePublic={(value: boolean) => setIsPublic(value)}
-        isAgree={isAgree}
-        onChangeAgree={(value: boolean) => setIsAgree(value)}
-      />
+        {/* 옵션 */}
+        <OptionCheckbox
+          isPublic={isPublic}
+          onChangePublic={(value: boolean) => setIsPublic(value)}
+          isAgree={isAgree}
+          onChangeAgree={(value: boolean) => setIsAgree(value)}
+        />
 
-      {/* 성공 메시지 표시 */}
-      {success && (
-        <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
-          게시글이 업로드되었습니다.
-        </p>
-      )}
+        {/* 성공 메시지 표시 */}
+        {success && (
+          <p className="mx-auto mt-2 w-[800px] text-center text-green-500">
+            게시글이 업로드되었습니다.
+          </p>
+        )}
 
-      {/* 에러 메시지 표시 */}
-      {error && (
-        <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
-          {error}
-        </p>
-      )}
+        {/* 에러 메시지 표시 */}
+        {error && (
+          <p className="mx-auto mt-2 w-[800px] text-center text-red-500">
+            {error}
+          </p>
+        )}
 
-      {/* 버튼 */}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          void requestAnalysis();
-        }}
-        disabled={loading}
-        className="mx-auto my-9 block rounded-[10px] bg-p5 px-6 py-2 text-g1 disabled:opacity-50"
-      >
-        {loading ? '처리 중...' : '의뢰 신청하기'}
-      </button>
-    </main>
+        {/* 버튼 */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            void requestAnalysis();
+          }}
+          disabled={loading}
+          className="mx-auto my-9 block rounded-[10px] bg-p5 px-6 py-2 text-g1 disabled:opacity-50"
+        >
+          {loading ? '처리 중...' : '의뢰 신청하기'}
+        </button>
+      </main>
+    </>
   );
 };
 
