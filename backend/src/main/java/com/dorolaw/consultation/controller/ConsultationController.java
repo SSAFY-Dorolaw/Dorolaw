@@ -1,7 +1,7 @@
 package com.dorolaw.consultation.controller;
 
+import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.consultation.dto.request.ConsultationBookRequestDto;
-import com.dorolaw.consultation.dto.request.AvailableTimesRequestDto;
 import com.dorolaw.consultation.dto.request.ReviewWriteRequestDto;
 import com.dorolaw.consultation.dto.response.*;
 import com.dorolaw.consultation.service.ConsultationService;
@@ -17,6 +17,7 @@ import java.util.List;
 public class ConsultationController {
 
     private final ConsultationService consultationService;
+    private final AlarmService alarmService;
 
     // 예약 가능한 특정일 시간 조회 API
     @GetMapping("/{lawyerId}/available-times/{consultationDate}")
@@ -33,6 +34,7 @@ public class ConsultationController {
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ConsultationBookRequestDto requestDto) {
         ConsultationBookResponseDto response = consultationService.bookConsultation(authorizationHeader, requestDto);
+        alarmService.checkConsultation(response.getLawyer().getLawyerId(),response.getConsultationId(),response.getScheduledDate());
         return ResponseEntity.ok(response);
     }
 
@@ -66,6 +68,4 @@ public class ConsultationController {
         List<LawyerRecentRequestResponseDto> recentRequests = consultationService.getRecentRequestsByMemberId(memberId);
         return ResponseEntity.ok(recentRequests);
     }
-
-
 }

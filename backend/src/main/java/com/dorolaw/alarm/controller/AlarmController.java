@@ -5,7 +5,6 @@ import com.dorolaw.alarm.dto.request.RequestAlarmDto;
 import com.dorolaw.alarm.dto.response.AlarmDTO;
 import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.service.AlarmService;
-import com.dorolaw.alarm.service.FcmService;
 import com.dorolaw.faultanalysis.service.FaultAnalysisAiReportService;
 import com.dorolaw.request.service.AiReportService;
 import com.dorolaw.request.service.RequestService;
@@ -22,7 +21,6 @@ import java.util.List;
 @Slf4j
 public class AlarmController {
 
-    private final FcmService fcmService;
     private final AlarmService alarmService;
     private final AiReportService requestAiReportService;
     private final FaultAnalysisAiReportService faultAnalysisAiReportService;
@@ -42,9 +40,9 @@ public class AlarmController {
         
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        sendAlarms(tokens,requestAlarmDto.getContent());
+        alarmService.sendAlarms(tokens,requestAlarmDto.getContent());
         List<FcmToken> tokens2 = alarmService.findLawyersByTags(requestAlarmDto.getAccidentObject()); // 태그들로 변호사들 조회
-        return sendAlarms(tokens2,requestAlarmDto.getAccidentObject() + " 태그와 관련된 요청이 등록되었습니다.");
+        return alarmService.sendAlarms(tokens2,requestAlarmDto.getAccidentObject() + " 태그와 관련된 요청이 등록되었습니다.");
     }
 
     // 과실 비율 분석기 관련 알림
@@ -57,24 +55,7 @@ public class AlarmController {
 
         // 알림 보내기
         List<FcmToken> tokens = alarmService.findTokenListByMemberId(analysisAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        return sendAlarms(tokens,analysisAlarmDto.getContent());
-    }
-
-    // 상담 예약 확인 알림 - 일반인, 변호사 - 백엔드
-    // FIXME
-    @PostMapping("/consultations")
-    public String checkConsultation(@RequestBody String body, @RequestBody Long consultationId) {
-        List<FcmToken> tokens = alarmService.findConsultationByconsultationId(consultationId); // 상담 id로 일반인, 변호사 조회
-        return sendAlarms(tokens,body);
-    }
-
-    // 알람 보내기
-    private String sendAlarms(List<FcmToken> tokens, String body) {
-        for (FcmToken token : tokens) {
-            fcmService.sendNotification(token.getToken(), body);
-            alarmService.save(token,body);
-        }
-        return "알림 전송 요청 완료";
+        return alarmService.sendAlarms(tokens,analysisAlarmDto.getContent());
     }
 
     // 알림 리스트 조회
