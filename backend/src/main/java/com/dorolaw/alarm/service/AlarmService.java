@@ -5,7 +5,9 @@ import com.dorolaw.alarm.entity.Alarm;
 import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.repository.AlarmRepository;
 import com.dorolaw.alarm.repository.FcmTokenRepository;
+import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
+import com.dorolaw.member.repository.LawyerTagRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,24 +25,41 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final FcmService fcmService;
-    
-    // memberId로 fcm 토큰 찾기
-    public List<FcmToken> findTokenListByMemberId(Long memberId) {
-        return fcmTokenRepository.findByMember_MemberId(memberId);
+    private final LawyerTagRepository lawyerTagRepository;
+
+    // 의뢰 요청자에게 알림 보내기
+    public void sendReportFinishedAlarm(Long memberId, String content) {
+        FcmToken token = fcmService.getLatestFcmTokenByMemberId(memberId); // memberId로 fcm 토큰들 조회
+        sendAlarm(token,content);
     }
-    
-    // tag로 fcm 토큰 찾기
-    public List<FcmToken> findLawyersByTags(String tag) {
-        if(tag.equals("차대 이륜차")) tag = "차대이륜차";
-        return fcmTokenRepository.findLawyersByTags(LawyerSpeciality.valueOf(tag));
+
+    // 사고유형과 관련된 변호사에게 알림 보내기
+    public void sendLawyersAlarm(String accidentObject) {
+        if(accidentObject.equals("차대 이륜차")) accidentObject = "차대이륜차";
+
+        // 알림보낼 member의 memberId 찾기
+        List<Long> lawyerIds = lawyerTagRepository.findDistinctLawyersBySpeciality(LawyerSpeciality.valueOf(accidentObject)).stream()
+                .map(Member::getMemberId)
+                .collect(Collectors.toList());
+
+        // fcm token 찾기
+        List<FcmToken> tokens = lawyerTagRepository.findLatestTokensByMemberIds(lawyerIds); // 태그들로 변호사들 조회
+
+        // 알림들 보내기
+        sendAlarms(tokens,accidentObject + " 태그와 관련된 요청이 등록되었습니다.");
     }
-    
-    // 상담id로 fcm 토큰 찾기
-    public List<FcmToken> findConsultationByconsultationId(Long lawyerId, Long clientId) {
-        List<FcmToken> tokens = new ArrayList<>();
-        tokens.addAll(fcmTokenRepository.findByMember_MemberId(lawyerId));
-        tokens.addAll(fcmTokenRepository.findByMember_MemberId(clientId));
-        return tokens;
+
+    // 상담 예약 확인 알림
+    public void sendConsultationConfirmAlarms(Long lawyerId, Long clientId, String date) {
+        List<Long> memberIds = new ArrayList<>();
+        memberIds.add(clientId);
+        memberIds.add(lawyerId);
+
+        // 일반인, 변호사의 fcm token 조회
+        List<FcmToken> tokens = fcmTokenRepository.findLatestTokensByMemberIds(memberIds);
+
+        // 알림들 보내기
+        sendAlarms(tokens,date + "에 상담이 확정되었습니다.");
     }
 
     // 알람 내역 저장
@@ -52,20 +71,19 @@ public class AlarmService {
                 .build();
         alarmRepository.save(alarm);
     }
-
-    // 상담 예약 확인 알림 - 일반인, 변호사 - 백엔드
-    public void checkConsultation(Long lawyerId, Long clientId, String date) {
-        List<FcmToken> tokens = findConsultationByconsultationId(lawyerId, clientId); // 상담 id로 일반인, 변호사 조회
-        sendAlarms(tokens,date + "에 상담이 확정되었습니다.");
-    }
     
     // 알람 보내기
-    public String sendAlarms(List<FcmToken> tokens, String body) {
-        for (FcmToken token : tokens) {
+    public void sendAlarm(FcmToken token, String body) {
+        fcmService.sendNotification(token.getToken(), body);
+        saveAlarm(token,body);
+    }
+    
+    // 알람 여러개 보내기
+    public void sendAlarms(List<FcmToken> tokens, String body) {
+        for(FcmToken token : tokens) {
             fcmService.sendNotification(token.getToken(), body);
             saveAlarm(token,body);
         }
-        return "알림 전송 요청 완료";
     }
     
     // memberId로 알람 조회하기
@@ -75,7 +93,8 @@ public class AlarmService {
                 .map(AlarmDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-
+    
+    // 선택한 알림 읽음 처리하기
     @Transactional
     public void markAsRead(Long alarmId) {
         // 조회
@@ -89,7 +108,8 @@ public class AlarmService {
         // 저장
         alarmRepository.save(alarm);
     }
-
+    
+    // 사용자의 모든 알림 읽음 처리하기
     @Transactional
     public void markAllAsRead(String authorizationHeader) {
         String token = jwtTokenProvider.extractToken(authorizationHeader);

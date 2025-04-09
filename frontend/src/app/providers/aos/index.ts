@@ -1,0 +1,1 @@
+export { initAOS } from './lib';

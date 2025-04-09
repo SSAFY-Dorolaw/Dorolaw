@@ -34,7 +34,12 @@ export const useAuthStore = create<AuthStore>()(
           if (typeof window !== 'undefined') {
             localStorage.removeItem('token');
           }
-          set({ isLogin: false, accessToken: null, clientId: null });
+          set({
+            isLogin: false,
+            accessToken: null,
+            clientId: null,
+            role: null,
+          });
         },
 
         // clientId 설정 함수
@@ -43,7 +48,7 @@ export const useAuthStore = create<AuthStore>()(
         },
 
         // lawyerId 설정 함수
-        setRole: (role: string | null) => {
+        setRole: (role: 'GENERAL' | 'LAWYER' | 'CERTIFIED_LAWYER' | null) => {
           set({ role: role });
         },
 

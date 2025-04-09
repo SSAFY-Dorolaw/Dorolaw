@@ -23,8 +23,12 @@ const Pagenation = ({ pageInfo, onPageChange }: PaginationProps) => {
 
   // 페이지 번호에 배열 생성
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
+  if (totalPages <= 0) {
+    pageNumbers.push(1);
+  } else {
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
   }
 
   // 페이지 변경 핸들러

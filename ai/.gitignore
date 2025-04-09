@@ -26,6 +26,7 @@ build/
 pip-wheel-metadata/
 __pypackages__/
 nohup.out
+.ipynb_checkpoints
 
 # 도커 이미지 파일
 *.tar

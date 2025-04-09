@@ -2,17 +2,15 @@ import axios, { AxiosResponse } from 'axios';
 import { useAuthStore, getTokenFromStorage } from '@/entities/auth/model/store';
 import {
   SuccessResponse,
-  ConsultSuccessResponse,
   ErrorResponse,
   VideoUploadRequest,
-  ConsultInfoRequest,
 } from '@/features/videoupload/model/types';
 
 // API 기본 URL
 const API_URL = import.meta.env.VITE_API_URL;
 
 // 응답 타입 (성공 또는 에러)
-type ApiResponse = SuccessResponse | ConsultSuccessResponse | ErrorResponse;
+type ApiResponse = SuccessResponse | ErrorResponse;
 
 /**
  * 비디오 파일을 서버에 업로드하는 함수
@@ -80,53 +78,6 @@ export const uploadVideo = async (
       return error.response.data as ErrorResponse;
     }
     // 기타 에러 응답 데이터
-    return {
-      errorCode: 'UNKNOWN_ERROR',
-      message: '알 수 없는 오류가 발생했습니다.',
-    };
-  }
-};
-
-/* 추가 정보 업로드 */
-export const submitInfo = async (
-  data: ConsultInfoRequest,
-  endpoint = '/requests',
-): Promise<ApiResponse> => {
-  try {
-    // 인증 토큰 가져오기 - 스토어와 로컬 스토리지 모두 확인
-    const { accessToken } = useAuthStore.getState();
-    // 스토어에 토큰이 없으면 로컬 스토리지에서 직접 가져옴
-    const token = accessToken ?? getTokenFromStorage();
-
-    // 디버깅
-    console.log('토큰상태: ', token ? '토큰 존재' : '토큰 없음');
-    console.log('전송할 데이터: ', data);
-
-    // axios 요청
-    const response: AxiosResponse<ConsultSuccessResponse> = await axios.post(
-      `${API_URL}${endpoint}`,
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          // 토큰이 있는 경우 인증 헤더 추가
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-      },
-    );
-
-    // 성공 응답 확인
-    console.log('응답 상태: ', response.status);
-    console.log('응답 데이터: ', response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error('추가 정보 전송 중 에러 발생');
-    if (axios.isAxiosError(error) && error.response?.data) {
-      console.log('서버 에러 응답: ', error.response.data);
-      return error.response.data as ErrorResponse;
-    }
-    // 기타 에러
     return {
       errorCode: 'UNKNOWN_ERROR',
       message: '알 수 없는 오류가 발생했습니다.',

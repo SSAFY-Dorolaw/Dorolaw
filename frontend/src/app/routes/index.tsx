@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@/widgets/Layout';
 import Login from '@/pages/login/Login';
 import Main from '@/pages/mainpage/Main';
-import VideoUpload from '@/pages/analysis/VideoUpload';
+import VideoUpload from '@/pages/analysis/AnalysisUpload';
 import ConsultUpload from '@/pages/consultation/ConsultUpload';
 import ConsultDetail from '@/pages/consultation/ConsultDetail';
 import AnalysisDetail from '@/pages/analysis/AnalysisDetail';
@@ -18,6 +18,7 @@ import EditLawyerPage from '@/pages/mypage/lawyer/EditLawyerPage';
 import LoginRedirect from '@/pages/login/LoginRedirect';
 import { requireAuth } from '@/entities/auth/authUtils';
 import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
+import LawyerAuthenticationForm from '@/pages/mypage/lawyer/LawyerAuthenticationForm';
 
 const router = createBrowserRouter([
   {
@@ -99,10 +100,21 @@ const router = createBrowserRouter([
           {
             path: 'requests',
             element: <MyRequests />,
+            loader: requireAuth,
+          },
+          {
+            path: 'consultations',
+            element: <MyConsultations />,
+            loader: requireAuth,
           },
           {
             path: 'edit',
             element: <EditLawyerPage />,
+            loader: requireAuth,
+          },
+          {
+            path: 'authentication',
+            element: <LawyerAuthenticationForm />,
             loader: requireAuth,
           },
         ],
