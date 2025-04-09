@@ -9,4 +9,5 @@ public class AiFaultDto {
     private Long faultAnalysisId;
     private Long memberId;
     private String fileName;
+    private String title;
 }

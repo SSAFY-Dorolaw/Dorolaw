@@ -40,4 +40,8 @@ public class Alarm {
     @CreatedDate
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(0)")
     private LocalDateTime createdAt;
+
+    public void markAsRead() {
+        this.isRead = true;
+    }
 }
