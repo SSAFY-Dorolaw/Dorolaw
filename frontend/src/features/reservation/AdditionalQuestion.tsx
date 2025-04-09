@@ -166,7 +166,7 @@ const AdditionalQuestion = () => {
       <button
         onClick={handleSubmit}
         disabled={!agreedToTerms}
-        className={`w-full rounded-lg py-3 transition-all duration-200 hover:text-y5 hover:shadow-lg hover:brightness-110 active:brightness-95 ${agreedToTerms ? 'bg-p5 text-p1' : 'bg-gray-300 font-bold'}`}
+        className={`w-full rounded-lg py-3 transition-all duration-200 ${agreedToTerms ? 'bg-p5 text-p1 hover:text-y5 hover:shadow-lg hover:brightness-110 active:brightness-95' : 'bg-gray-300 font-bold'}`}
       >
         {price.toLocaleString()}원 결제하기
       </button>
