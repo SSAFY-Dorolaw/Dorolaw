@@ -36,7 +36,7 @@ function NavBar() {
           enabled: !!token && isLogin,
         })
       : useQuery<LawyerProfile>({
-          queryKey: ['lawyer', 'profile]'],
+          queryKey: ['lawyer', 'profile'],
           queryFn: lawyerApi.getMyProfile,
           enabled: !!token && isLogin,
         });
@@ -60,7 +60,7 @@ function NavBar() {
   const AuthComponent = () => {
     return isLogin && profile ? (
       <div className="flex items-center gap-6">
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger>
             <div className="flex items-center gap-2">
               {clientProfile ? (
@@ -150,7 +150,7 @@ function NavBar() {
   };
 
   return (
-    <nav className="sticky top-0 z-10 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1">
+    <nav className="sticky top-0 z-20 flex h-[48px] w-screen items-center justify-between bg-p5 text-xl text-p1">
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-20 font-semibold xl:w-[1200px]">
         <div className="flex justify-between gap-20">
           <NavLink to="/report">AI 과실비율 측정</NavLink>
