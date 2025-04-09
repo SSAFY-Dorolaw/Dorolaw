@@ -72,10 +72,11 @@ public class ConsultationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        List<LocalTime> bookedTimes = consultationRepository.findBookedTimesByLawyerAndDate(
+        List<LocalTime> bookedTimes = consultationRepository.findBookedTimesByLawyerAndDateAndStatuses(
                 lawyer.getLawyerProfileId(),
                 date,
-                ConsultationStatus.SCHEDULED
+                Arrays.asList(ConsultationStatus.PENDING, ConsultationStatus.SCHEDULED,
+                        ConsultationStatus.COMPLETED, ConsultationStatus.REVIEWD)
         );
 
         List<String> availableTimes = generateAvailableTimes(startTime, endTime, bookedTimes);
