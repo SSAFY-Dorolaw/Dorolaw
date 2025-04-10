@@ -61,7 +61,10 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       default:
         if (notification.content.includes('과실비율 분석')) {
           return `/board/analysis/${id}`;
-        } else if (notification.content.includes('의뢰')) {
+        } else if (
+          notification.content.includes('의뢰') ||
+          notification.content.includes('상담')
+        ) {
           return `/board/consultation/${id}`;
         }
         return null;
