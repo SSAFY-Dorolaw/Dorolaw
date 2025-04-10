@@ -154,12 +154,27 @@ const AnalysisUpload = () => {
         // 성공하면
         setSuccess(true);
         showAlert(
-          '분석 요청이 성공적으로 완료되었습니다. AI 분석을 시작합니다.',
+          '🔎 AI 분석이 시작되었습니다! 분석이 완료되면 알림을 드려요!\n5.0초 후에 분석 게시판으로 이동합니다.',
           'success',
+          true, // 큰 글씨체 옵션 전달
         );
-        setTimeout(() => {
-          void navigate(`/board/analysis`);
-        }, 1500);
+
+        // 카운트다운 알림 처리
+        let countDown = 5.0;
+        const timer = setInterval(() => {
+          countDown = Math.round((countDown - 0.1) * 10) / 10;
+          if (countDown <= 0) {
+            clearInterval(timer);
+            void navigate(`/board/analysis`);
+          } else {
+            showAlert(
+              `🔎 AI 분석 시작! 분석이 완료되면 알림을 드려요!\n${countDown.toFixed(1)}초 후에 분석 게시판으로 이동합니다.`,
+              'success',
+              true, // 큰 글씨체 옵션 전달
+            );
+          }
+        }, 100);
+
         console.log('업로드 성공: ', boardResponse);
       } else if ('message' in boardResponse) {
         // 실패하면

@@ -178,10 +178,35 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        showAlert('의뢰글이 성공적으로 업로드되었습니다.', 'success');
-        setTimeout(() => {
-          void navigate(`/board/consultation`);
-        }, 1500);
+
+        // 초기 알림 메시지에 애니메이션 효과를 위해 AOS 설정 새로고침
+        AOS.refresh();
+
+        showAlert(
+          '✅ 의뢰글이 성공적으로 등록되었습니다! 분석이 완료되면 알림을 드려요!\n5.0초 후에 게시판으로 이동합니다.',
+          'success',
+          true, // 큰 글씨체 옵션 전달
+        );
+
+        // 카운트다운 알림 처리
+        let countDown = 5.0;
+        const timer = setInterval(() => {
+          countDown = Math.round((countDown - 0.1) * 10) / 10;
+          if (countDown <= 0) {
+            clearInterval(timer);
+            void navigate(`/board/consultation`);
+          } else {
+            // 애니메이션 효과 새로고침
+            AOS.refresh();
+
+            showAlert(
+              `✅ 의뢰글 등록 완료! 분석이 완료되면 알림을 드려요!\n${countDown.toFixed(1)}초 후에 게시판으로 이동합니다.`,
+              'success',
+              true, // 큰 글씨체 옵션 전달
+            );
+          }
+        }, 100);
+
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면
@@ -249,7 +274,7 @@ const ConsultUpload = () => {
               <div className="flex gap-2">
                 <button
                   onClick={handleDismissPopup}
-                  className="rounded bg-p5 px-4 py-2 text-white hover:bg-p4 transition-colors"
+                  className="rounded bg-p5 px-4 py-2 text-white transition-colors hover:bg-p4"
                 >
                   닫기
                 </button>
