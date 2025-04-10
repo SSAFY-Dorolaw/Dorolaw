@@ -34,6 +34,7 @@ export enum LawyerSpeciality {
 export interface LawyerProfile extends LawyerProfileUpdate {
   lawyerId: number;
   name: string;
+  profileImage: string;
   email: string;
   reviewCount: number;
   averageRating: number | null;
@@ -44,7 +45,7 @@ export interface LawyerProfile extends LawyerProfileUpdate {
 
 export interface LawyerProfileUpdate {
   phoneNumber: string;
-  profileImage: string;
+  // profileImage: string;
   officeName: string;
   officePhoneNumber: string;
   officeAddress: string;

@@ -48,7 +48,7 @@ function ClientInfo({
   };
 
   return (
-    <div className="border-gray mx-auto mb-8 max-w-[996px] items-center rounded-[10px] border p-10 text-xl">
+    <div className="mx-auto mb-8 max-w-[996px] items-center rounded-[10px] border bg-white p-10 text-xl drop-shadow-[0_0_2px_rgba(0,0,0,0.25)]">
       <div className="flex items-center">
         <img
           src={profileImage}

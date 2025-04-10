@@ -22,18 +22,20 @@ const MyPage = () => {
 
   return (
     <div className="w-full">
-      <header>
-        <h2>마이페이지</h2>
-      </header>
-      <main>
-        <ClientInfo
-          clientId={clientProfile.clientId}
-          name={clientProfile.name}
-          phoneNumber={clientProfile.phoneNumber}
-          email={clientProfile.email}
-          profileImage={clientProfile.profileImage}
-        />
-      </main>
+      <div className="mx-auto max-w-[996px]">
+        <header className="mb-8">
+          <h2 className="text-3xl font-bold text-p5">마이페이지</h2>
+        </header>
+        <main>
+          <ClientInfo
+            clientId={clientProfile.clientId}
+            name={clientProfile.name}
+            phoneNumber={clientProfile.phoneNumber}
+            email={clientProfile.email}
+            profileImage={clientProfile.profileImage}
+          />
+        </main>
+      </div>
     </div>
   );
 };
