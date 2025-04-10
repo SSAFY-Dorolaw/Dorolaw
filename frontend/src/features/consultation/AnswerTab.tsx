@@ -1,7 +1,6 @@
 import Answer from '@/features/consultation/Answer';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRequestDetail } from '@/features/consultation/model/queries';
-import { Answers } from './model/types';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePostAnswer } from '@/features/consultation/model/mutations';
@@ -26,6 +25,7 @@ import { useAuthStore } from '@/entities/auth/model/store';
 // ];
 
 function AnswerTab() {
+  const navigate = useNavigate();
   const { requestId } = useParams();
   const [answer, setAnswer] = useState('');
   const { data, isPending, isError } = useRequestDetail(Number(requestId));
@@ -46,8 +46,19 @@ function AnswerTab() {
   };
 
   const handleSubmit = () => {
+    if (!data?.title || !data?.memberId) return;
+    if (!answer) {
+      alert('답변을 입력해주세요.');
+      return;
+    }
+
     postAnswer.mutate(
-      { requestId: Number(requestId), content: answer },
+      {
+        requestId: Number(requestId),
+        content: answer,
+        title: data.title,
+        memberId: data.memberId,
+      },
       {
         onSuccess: () => {
           closePopup();
@@ -132,13 +143,22 @@ function AnswerTab() {
           document.body,
         )}
 
-      {role === 'CERTIFIED_LAWYER' || role === 'LAWYER' ? (
+      {role === 'CERTIFIED_LAWYER' ? (
         <nav className="my-2 mt-5 flex justify-center">
           <button
-            className="button-small mx-4 rounded-[10px] bg-p5 p-2 px-6 text-p1"
+            className="button-small mx-4 rounded-[10px] bg-p5 p-2 px-6 text-p1 transition hover:text-y5"
             onClick={postPopup}
           >
             답변하기
+          </button>
+        </nav>
+      ) : role === 'LAWYER' ? (
+        <nav className="my-2 mt-5 flex justify-center">
+          <button
+            className="button-small mx-4 rounded-[10px] bg-p5 p-2 px-6 text-p1 transition hover:text-y5"
+            onClick={() => void navigate('/lawyer/authentication')}
+          >
+            변호사 인증하기
           </button>
         </nav>
       ) : (

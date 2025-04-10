@@ -39,6 +39,7 @@ const Reservation = () => {
       <section className="w-[700px] text-h3 font-bold">
         <ProfileDetail
           name={profileData.name}
+          lawyerId={Number(lawyerId)}
           officeName={profileData?.officeName}
           oneLineIntro={profileData?.oneLineIntro}
           greetingMessage={profileData?.greetingMessage}

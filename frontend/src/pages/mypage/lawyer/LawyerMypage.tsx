@@ -50,6 +50,7 @@ const LawyerMypage = () => {
       <section className="w-[700px] text-h3 font-bold">
         <ProfileDetail
           name={data.name}
+          lawyerId={data.lawyerId}
           officeName={data?.officeName}
           oneLineIntro={data?.oneLineIntro}
           greetingMessage={data?.greetingMessage}

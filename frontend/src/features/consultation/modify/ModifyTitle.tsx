@@ -1,15 +1,19 @@
 import { useState } from 'react';
 
-const ModifyTitle = () => {
-  const [title, setTitle] = useState<string>('');
+interface ModifyTitleProps {
+  title: string | undefined;
+}
+
+const ModifyTitle = ({ title }: ModifyTitleProps) => {
+  const [edittedTitle, setEdittedTitle] = useState<string | undefined>(title);
 
   return (
-    <div className="mb-3 w-[690px]">
+    <div className="my-3 w-full">
       <input
         type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="mt-3 h-[35px] w-[300px] rounded-[5px] pl-[10px]"
+        value={edittedTitle}
+        onChange={(e) => setEdittedTitle(e.target.value)}
+        className="mt-3 h-[35px] w-full rounded-[5px] border border-p2 pl-[10px]"
       />
     </div>
   );

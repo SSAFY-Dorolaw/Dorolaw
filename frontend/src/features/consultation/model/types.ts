@@ -36,6 +36,7 @@ export interface SuccessResponse {
   isPublic: boolean;
   aiReport: AiReport;
   answers: Answers[];
+  status: string;
 }
 
 // 응답 에러 인터페이스

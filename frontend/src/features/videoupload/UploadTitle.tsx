@@ -67,7 +67,7 @@ const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
-          className="mt-3 h-[35px] w-full rounded-[5px] pl-[10px]"
+          className="mt-3 h-[35px] w-full rounded-[5px] border border-p2 pl-[10px]"
         />
       </section>
 

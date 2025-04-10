@@ -65,10 +65,10 @@ const LawyerProfileCard = ({
           />
 
           {/* 예약 버튼 */}
-          <div className="rounded-[10px] bg-p5 p-4">
+          <div className="mb-40">
             <button
               onClick={openBooking}
-              className="w-full bg-p5 text-body text-white"
+              className="w-full rounded-[10px] bg-p5 py-3 text-body font-medium text-p1 transition-all duration-200 hover:text-y5 hover:shadow-lg hover:brightness-110 active:brightness-95"
             >
               상담 예약하기
             </button>

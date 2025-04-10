@@ -148,10 +148,10 @@ const BookingPlan = ({
       >
         <button
           disabled={!selectedDate || !selectedTime}
-          className="w-full text-body text-white"
+          className="w-full text-body text-white transition hover:text-y5"
           onClick={handleMoveToAdditionalInfo}
         >
-          상담 예약하기
+          다음
         </button>
       </div>
     </div>

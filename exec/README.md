@@ -208,7 +208,7 @@ VITE_FIREBASE_VAPID_KEY={{구글클라우드 앱 VAPID_KEY}}
   6. 컨테이너 실행: `docker-compose up -d`
 
 ### 🐳 Docker 구성
-- `docker-compose.yml`로 관리되는 4개의 컨테이너:
+- `docker-compose.yml`로 관리되는 9개의 컨테이너:
   1. `frontend`: React + Nginx (포트: 3000)
   2. `backend`: Spring Boot (포트: 8080)
   3. `ai`: 임베디드 시스템 서버 (포트: 5000)

@@ -1,12 +1,12 @@
 import LawyerRequestItem from '@/features/mypage/lawyer/LawyerRequestItem';
 import logo from '@/shared/assets/images/logo.svg';
-import { useLawyerRequests } from '@/features/mypage/lawyer/model/queries';
+import { useLawyerMyRequests } from '@/features/mypage/lawyer/model/queries';
 import { useNavigate } from 'react-router-dom';
 
 function LawyerRequestList() {
   const navigate = useNavigate();
 
-  const { data, isPending, isError, error } = useLawyerRequests();
+  const { data, isPending, isError, error } = useLawyerMyRequests();
   if (isPending) return <h2>로딩 중...</h2>;
   if (isError)
     return <h2>에러가 발생했습니다: {error?.message || '알 수 없는 에러'}</h2>;
@@ -58,7 +58,7 @@ function LawyerRequestList() {
               isSelected={request.isSelected}
               requestStatus={request.requestStatus}
               onClick={() =>
-                void navigate(`/consultation/${request.requestId}`)
+                void navigate(`/board/consultation/${request.requestId}`)
               }
             />
           ))}
@@ -73,7 +73,7 @@ function LawyerRequestList() {
             지금 의뢰 게시글에 답변을 달고 의뢰인의 상담을 받아보세요
           </p>
           <button
-            onClick={() => void navigate('/board')}
+            onClick={() => void navigate('/board/consultation')}
             className="hover:opacity980 rounded-lg bg-p5 px-6 py-3 font-medium text-p1 transition hover:text-y5"
           >
             사건 의뢰 신청 보러가기
