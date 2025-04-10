@@ -57,14 +57,10 @@ public class FcmService {
             }
             // 다른 사용자인 경우
             else {
-                // 기존거 삭제
-                fcmTokenRepository.delete(existingToken.get());
-                
-                // 새로 등록
-                FcmToken fcmToken = new FcmToken();
-                fcmToken.setMember(member);
-                fcmToken.setToken(token);
-                fcmTokenRepository.save(fcmToken);
+                FcmToken tokenEntity = existingToken.get();
+                tokenEntity.setMember(member);   // 토큰 소유자만 변경
+                tokenEntity.setUpdatedAt(LocalDateTime.now());
+                fcmTokenRepository.save(tokenEntity);
             }
         }
 
