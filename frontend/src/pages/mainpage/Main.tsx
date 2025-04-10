@@ -57,9 +57,9 @@ const Main = () => {
 
         {/* 이용 방법 */}
         <section
-          className="align-center h-[calc(100dvh-128px)]"
+          className="py-10"
           data-aos="fade-up"
-          data-aos-duration="1000"
+          data-aos-duration="800"
           data-aos-delay="200"
         >
           <Guideline />
@@ -67,30 +67,30 @@ const Main = () => {
 
         {/* 1) AI 사고 분석 */}
         <section
-          className="align-center h-[calc(100dvh-128px)]"
+          className="py-10"
           data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="300"
+          data-aos-duration="800"
+          data-aos-delay="225"
         >
           <AiAnalysis />
         </section>
 
         {/* 2) 변호사 상담 신청 */}
         <section
-          className="align-center h-[calc(100dvh-128px)]"
+          className="py-10"
           data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="400"
+          data-aos-duration="800"
+          data-aos-delay="250"
         >
           <LawyerConsulting />
         </section>
 
         {/* 3) 변호사 인증 */}
         <section
-          className="align-center h-[calc(100dvh-128px)]"
+          className="mb-20 py-10"
           data-aos="zoom-in"
-          data-aos-duration="1200"
-          data-aos-delay="500"
+          data-aos-duration="800"
+          data-aos-delay="275"
         >
           <LawyerRegist />
         </section>
