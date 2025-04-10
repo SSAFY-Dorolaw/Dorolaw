@@ -90,9 +90,12 @@ const UploadTitle = forwardRef<UploadTitleRef>((props, ref) => {
               </span>
             </p>
           ) : (
-            <p className="text-g3">
-              영상을 업로드하면 AI가 과실 비율을 분석합니다.
-            </p>
+            <div className="text-g3">
+              <p>영상을 업로드하면 AI가 과실 비율을 분석합니다.</p>
+              <p className="mt-1 text-sm text-p4">
+                ※ 최대 용량 100MB, MP4 형식만 지원
+              </p>
+            </div>
           )}
         </div>
 
