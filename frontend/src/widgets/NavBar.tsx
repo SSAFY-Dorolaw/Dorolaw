@@ -22,8 +22,10 @@ import { useEffect, useState } from 'react';
 const navStyles = `
   .nav-link {
     position: relative;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.5rem;  /* 좌우 패딩 증가 */
     transition: color 0.3s ease;
+    text-align: center;  /* 텍스트 중앙 정렬 */
+    display: inline-block;  /* 너비 적용을 위해 변경 */
   }
 
   .nav-link::after {
