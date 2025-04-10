@@ -56,6 +56,7 @@ const LawyerMypage = () => {
           greetingMessage={data?.greetingMessage}
           averageRating={data?.averageRating}
           officeAddress={data?.officeAddress}
+          officePhoneNumber={data?.officePhoneNumber}
           lawyerTags={data?.lawyerTags}
           lawyerLicenseNumber={data?.lawyerLicenseNumber}
           lawyerLicenseExam={data?.lawyerLicenseExam}

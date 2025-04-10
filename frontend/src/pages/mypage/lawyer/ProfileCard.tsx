@@ -142,7 +142,7 @@ const ProfileCard = ({
       {/* 프로필 카드 */}
       <div>
         {/* 프로필 이미지 */}
-        <div className="flex h-[300px] justify-center rounded-b-[10px] bg-white">
+        <div className="flex h-[300px] justify-center bg-white">
           <img
             src={profileImage}
             alt="변호사 프로필 이미지"
@@ -174,7 +174,7 @@ const ProfileCard = ({
         </div> */}
 
         {/* 정보 수정 버튼 */}
-        <div className="mb-40 rounded-[10px] bg-p5">
+        <div className="mb-40 rounded-b-[10px] bg-p5">
           <button
             onClick={openModal}
             className="w-full rounded-md py-3 text-body font-medium text-white transition hover:bg-p3"

@@ -1,6 +1,7 @@
 import { Career, Education, LawyerTag } from '@/entities/lawyers/model/types';
 import star from '@/shared/assets/images/star.png';
 import { useState } from 'react';
+import { FaPhoneAlt } from 'react-icons/fa';
 
 interface CareerProps {
   name: string | null;
@@ -8,7 +9,7 @@ interface CareerProps {
   averageRating: number | null;
   officeAddress: string | null;
   lawyerTags: LawyerTag[];
-  // officePhoneNumber: string;
+  officePhoneNumber: string;
   // oneLineIntro: string;
   educations: Education[];
   careers: Career[];
@@ -24,6 +25,7 @@ const MyCareer = ({
   lawyerTags,
   educations,
   careers,
+  officePhoneNumber,
   lawyerLicenseNumber,
   lawyerLicenseExam,
 }: CareerProps) => {
@@ -41,17 +43,27 @@ const MyCareer = ({
 
   return (
     // 변호사 이력
-    <div className="mx-[50px] mb-8 flex justify-between">
+    <div className="mx-4 mb-8 flex justify-between">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <h3 className="m-0 text-h3 font-bold">{name} 변호사</h3>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <img src={star} alt="별점" className="ml-6 size-4" />
             <span className="ml-2 text-caption text-g4">{averageRating}</span>
-          </div>
+          </div> */}
         </div>
         <p className="mt-2 text-bodysmall text-gray-500">{officeName}</p>
+
+        <div className="flex items-center gap-1">
+          {/* <PiBuildingOf ficeFill /> */}
+          <p className="text-caption text-gray-500">{officePhoneNumber}</p>
+        </div>
+
         <p className="text-caption text-gray-500">{officeAddress}</p>
+        <div className="flex items-center gap-1">
+          <FaPhoneAlt size={12} />
+          <p className="text-caption text-gray-500">{officePhoneNumber}</p>
+        </div>
       </div>
 
       <div onClick={careerPopup} className="mt-2 flex cursor-pointer flex-col">

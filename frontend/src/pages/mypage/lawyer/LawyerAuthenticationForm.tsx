@@ -20,7 +20,6 @@ const LawyerAuthenticationForm: React.FC = () => {
   // 기본 빈 폼 데이터로 초기화
   const [formData, setFormData] = useState<LawyerProfileUpdate>({
     phoneNumber: '',
-    profileImage: '',
     officeName: '',
     officePhoneNumber: '',
     officeAddress: '',
@@ -61,7 +60,6 @@ const LawyerAuthenticationForm: React.FC = () => {
       // 필요한 모든 필드에 대해 기존 데이터로 초기화
       setFormData({
         phoneNumber: lawyerProfile.phoneNumber || '',
-        profileImage: lawyerProfile.profileImage || '',
         officeName: lawyerProfile.officeName || '',
         officePhoneNumber: lawyerProfile.officePhoneNumber || '',
         officeAddress: lawyerProfile.officeAddress || '',
@@ -196,42 +194,13 @@ const LawyerAuthenticationForm: React.FC = () => {
     }
   };
 
-  // Handle image upload
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
-
-      // For preview purposes, create a temporary URL
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setFormData({ ...formData, profileImage: imageUrl });
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // First upload the image if there is one
-    const finalImageUrl = formData.profileImage;
-
-    // if (imageFile) {
-    //   // Create a FormData object to send the image file
-    //   const imageFormData = new FormData();
-    //   imageFormData.append('image', imageFile);
-
-    //   이미지 url 변환
-    //   finalImageUrl = imageUploadResponse.data.imageUrl;
-    // }
-
-    // Prepare the final data for submission
-    const finalData = {
-      ...formData,
-      profileImage: finalImageUrl,
-    };
-
-    console.log(finalData);
+    console.log(formData);
 
     // Send the PATCH request
-    updateProfileMutation.mutate(finalData, {
+    updateProfileMutation.mutate(formData, {
       onSuccess: () => {
         console.log(role);
         if (role === 'LAWYER') {
@@ -284,7 +253,7 @@ const LawyerAuthenticationForm: React.FC = () => {
         <div className="rounded-lg bg-gray-50 p-4">
           <h2 className="mb-4 text-xl font-semibold">기본 정보</h2>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="mb-2 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="mb-1 block">전화번호</label>
               <input
@@ -296,25 +265,6 @@ const LawyerAuthenticationForm: React.FC = () => {
                 placeholder="예: 010-1234-5678"
                 required
               />
-            </div>
-
-            <div>
-              <label className="mb-1 block">프로필 이미지</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="w-full rounded border p-2"
-              />
-              {formData.profileImage && (
-                <div className="mt-2">
-                  <img
-                    src={formData.profileImage}
-                    alt="프로필 미리보기"
-                    className="size-20 rounded-full object-cover"
-                  />
-                </div>
-              )}
             </div>
 
             <div>
@@ -330,19 +280,18 @@ const LawyerAuthenticationForm: React.FC = () => {
                 <option value="FEMALE">여성</option>
               </select>
             </div>
-
-            <div>
-              <label className="mb-1 block">한줄소개</label>
-              <input
-                type="text"
-                name="oneLineIntro"
-                value={formData.oneLineIntro}
-                onChange={handleInputChange}
-                className="w-full rounded border p-2"
-                placeholder="예: 진심을 다해 상담합니다."
-                required
-              />
-            </div>
+          </div>
+          <div>
+            <label className="mb-1 block">한줄소개</label>
+            <input
+              type="text"
+              name="oneLineIntro"
+              value={formData.oneLineIntro}
+              onChange={handleInputChange}
+              className="w-full rounded border p-2"
+              placeholder="예: 진심을 다해 상담합니다."
+              required
+            />
           </div>
         </div>
 
