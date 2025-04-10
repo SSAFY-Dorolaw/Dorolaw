@@ -102,7 +102,7 @@ public class MemberService {
     }
 
     @Transactional
-    private void updateLawyerProfile(Member member, MyPageUpdateRequestDto requestDto) {
+    public void updateLawyerProfile(Member member, MyPageUpdateRequestDto requestDto) {
         LawyerProfile lawyerProfile = lawyerProfileRepository.findByMember_MemberId(member.getMemberId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
@@ -354,34 +354,16 @@ public class MemberService {
         if (lawyerTags != null && !lawyerTags.isEmpty()) {
             lawyerTagDtos = lawyerTags.stream()
                     .map(tag -> {
-                        String tagDescription = "";
+                        String tagDescription = switch (tag.getLawyerSpeciality()) {
+                            case ALL -> "모든 사건";
+                            case NONE -> "없음";
+                            case 차대차 -> "차량 간 충돌 사고";
+                            case 차대보행자 -> "차량과 보행자 사고";
+                            case 차대자전거 -> "차량과 자전거 사고";
+                            case 차대이륜차 -> "차량과 이륜차 사고";
+                            case 고속도로 -> "고속도로 관련 사고";
+                        };
                         // 태그 유형에 따른 설명 추가
-                        switch(tag.getLawyerSpeciality()) {
-                            case ALL:
-                                tagDescription = "모든 사건";
-                                break;
-                            case NONE:
-                                tagDescription = "없음";
-                                break;
-                            case 차대차:
-                                tagDescription = "차량 간 충돌 사고";
-                                break;
-                            case 차대보행자:
-                                tagDescription = "차량과 보행자 사고";
-                                break;
-                            case 차대자전거:
-                                tagDescription = "차량과 자전거 사고";
-                                break;
-                            case 차대이륜차:
-                                tagDescription = "차량과 이륜차 사고";
-                                break;
-                            case 고속도로:
-                                tagDescription = "고속도로 관련 사고";
-                                break;
-                            default:
-                                tagDescription = "";
-                                break;
-                        }
 
                         return LawyerProfileDto.LawyerTagDto.builder()
                                 .lawyer_specialties(tag.getLawyerSpeciality().name())

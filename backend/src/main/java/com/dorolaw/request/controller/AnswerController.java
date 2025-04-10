@@ -1,5 +1,6 @@
 package com.dorolaw.request.controller;
 
+import com.dorolaw.alarm.service.AlarmService;
 import com.dorolaw.request.dto.request.AnswerCreateDto;
 import com.dorolaw.request.dto.request.AnswerUpdateDto;
 import com.dorolaw.request.service.AnswerService;
@@ -13,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final AlarmService alarmService;
 
     @PostMapping
     public ResponseEntity<Long> createAnswer(@RequestHeader("Authorization") String authorizationHeader,
                                        @RequestBody AnswerCreateDto dto) {
         answerService.createAnswer(authorizationHeader, dto);
+        alarmService.sendAnswerAlarm(dto.getTitle(),dto.getMemberId(),dto.getRequestId());
         return ResponseEntity.ok(dto.getRequestId());
     }
 

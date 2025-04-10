@@ -8,5 +8,7 @@ import lombok.Setter;
 public class AnswerCreateDto {
     private String content;
     private Long requestId;
+    private String title;
+    private Long memberId;
 }
 
