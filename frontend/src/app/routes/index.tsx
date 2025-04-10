@@ -21,10 +21,14 @@ import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 import LawyerAuthenticationForm from '@/pages/mypage/lawyer/LawyerAuthenticationForm';
 import LawyerRequests from '@/pages/reservation/LawyerRequests';
 import ConsultationBoard from '@/pages/board/ConsultationBoard';
+import NotFound from '@/pages/errors/NotFound';
+import ErrorPage from '@/pages/errors/ErrorPage';
+import ErrorHandler from '@/pages/errors/ErrorHandler';
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
+    errorElement: <ErrorHandler />,
     children: [
       { path: '/', element: <Main /> },
       {
@@ -36,6 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/upload',
+        errorElement: <ErrorHandler />,
         children: [
           {
             path: 'report',
@@ -75,6 +80,7 @@ const router = createBrowserRouter([
               {
                 path: ':faultAnalysisId',
                 element: <AnalysisDetail />,
+                errorElement: <ErrorPage />,
               },
             ],
           },
@@ -152,6 +158,10 @@ const router = createBrowserRouter([
       {
         path: '/reservation/additional-question',
         element: <AdditionalQuestion />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
