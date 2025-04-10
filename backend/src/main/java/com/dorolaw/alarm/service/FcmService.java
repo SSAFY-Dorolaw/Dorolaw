@@ -68,11 +68,13 @@ public class FcmService {
             }
         }
 
-        // 토큰 중복 안된경우 - 토큰 등록
-        FcmToken fcmToken = new FcmToken();
-        fcmToken.setMember(member);
-        fcmToken.setToken(token);
-        fcmTokenRepository.save(fcmToken);
+        else {
+            // 토큰 중복 안된경우 - 토큰 등록
+            FcmToken fcmToken = new FcmToken();
+            fcmToken.setMember(member);
+            fcmToken.setToken(token);
+            fcmTokenRepository.save(fcmToken);
+        }
     }
 
     public FcmToken getLatestFcmTokenByMemberId(Long memberId) {
