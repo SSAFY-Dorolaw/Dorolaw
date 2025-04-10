@@ -38,10 +38,10 @@ public class AlarmController {
         log.info("Request tag 추가");
         
         // 의뢰 요청자에게 알림 보내기
-        alarmService.sendReportFinishedAlarm(requestAlarmDto.getMemberId(),requestAlarmDto.getContent());
+        alarmService.sendReportFinishedAlarm(requestAlarmDto.getMemberId(),requestAlarmDto.getContent(),requestAlarmDto.getRequestId());
         
         // 사고유형과 관련된 변호사에게 알림 보내기
-        alarmService.sendLawyersAlarm(requestAlarmDto.getAccidentObject());
+        alarmService.sendLawyersAlarm(requestAlarmDto.getAccidentObject(),requestAlarmDto.getRequestId());
 
         return "의뢰 요청과 관련된 알림을 보냈습니다.";
     }
@@ -55,7 +55,7 @@ public class AlarmController {
         log.info("Ai repor 저장 완료됨");
 
         // 의뢰 요청자에게 알림 보내기
-        alarmService.sendReportFinishedAlarm(analysisAlarmDto.getMemberId(),analysisAlarmDto.getContent());
+        alarmService.sendReportFinishedAlarm(analysisAlarmDto.getMemberId(),analysisAlarmDto.getContent(),analysisAlarmDto.getFaultAnalysisId());
 
         return "과실 비율 분석 관련 알림을 보냈습니다.";
     }
