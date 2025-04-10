@@ -63,7 +63,7 @@ const AnalysisInfo = () => {
           void queryClient.invalidateQueries({ queryKey: ['analysisDetail'] });
 
           // 게시글 목록 페이지로 이동
-          void navigate('/board'); // 삭제한 페이지로 뒤로가기 못하도록 막음
+          void navigate('/board/analysis'); // 삭제한 페이지로 뒤로가기 못하도록 막음
           // 이동 후 새로고침 하면 삭제 여부 반영됨
         },
         onError: (error) => {

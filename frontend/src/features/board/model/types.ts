@@ -71,6 +71,7 @@ export interface AnalysisSuccess {
   totalPages: number;
   totalElements: number;
   size: number;
+  number: number;
   sort: SortInfo;
   first: boolean;
   numberOfElements: number;

@@ -37,7 +37,9 @@ const LawyerRequests = () => {
             answeredAt={request.answeredAt}
             isSelected={request.isSelected}
             requestStatus={request.requestStatus}
-            onClick={() => void navigate(`/consultation/${request.requestId}`)}
+            onClick={() =>
+              void navigate(`/board/consultation/${request.requestId}`)
+            }
           />
         ))}
       </ul>

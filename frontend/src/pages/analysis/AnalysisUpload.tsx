@@ -146,7 +146,7 @@ const AnalysisUpload = () => {
           'success',
         );
         setTimeout(() => {
-          void navigate(`/board`);
+          void navigate(`/board/analysis`);
         }, 1500);
         console.log('업로드 성공: ', boardResponse);
       } else if ('message' in boardResponse) {

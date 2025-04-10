@@ -85,7 +85,7 @@ const AnalysisList = () => {
               간편하게 사고 영상을 업로드하고 과실비율 분석을 시작해보세요.
             </p>
             <button
-              onClick={() => void navigate('/report')}
+              onClick={() => void navigate('/upload/report')}
               className="hover:opacity980 rounded-lg bg-p5 px-6 py-3 font-medium text-p1 transition hover:text-y5"
             >
               AI 과실비율 분석 시작하기

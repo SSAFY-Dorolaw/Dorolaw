@@ -10,7 +10,7 @@ function CreateArticleButton({ isConsultTab }: CreateArticleButtonProps) {
     <button
       className="typo-button self-end rounded-[10px] bg-p5 px-10 py-2 text-p1"
       onClick={() =>
-        void navigate(`/${isConsultTab ? 'consultation' : 'report'}`)
+        void navigate(`/upload/${isConsultTab ? 'consultation' : 'report'}`)
       }
     >
       {isConsultTab ? '사건 의뢰하기' : '과실 분석하기'}
