@@ -20,7 +20,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer></Footer>
-      <NotificationBell />
+      <NotificationBell /> {/* Router 내부에서 렌더링 */}
     </div>
   );
 };
