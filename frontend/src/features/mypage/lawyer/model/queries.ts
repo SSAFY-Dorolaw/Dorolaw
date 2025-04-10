@@ -7,14 +7,14 @@ export const lawyerMypageKeys = {
   myConsultations: ['lawyer', 'myConsultations'] as const,
 };
 
-export const useLawyerRequests = () => {
+export const useLawyerMyRequests = () => {
   return useQuery<Requests[]>({
     queryKey: lawyerMypageKeys.myRequests,
     queryFn: lawyerMypageApi.getMyRequests,
   });
 };
 
-export const useLawyerConsultations = () => {
+export const useLawyerMyConsultations = () => {
   return useQuery<Consultations[]>({
     queryKey: lawyerMypageKeys.myConsultations,
     queryFn: lawyerMypageApi.getMyConsultations,

@@ -157,7 +157,7 @@ const ProfileCard = ({
           visitConsultationPrice={visitConsultationPrice}
         />
 
-        {/* 상담 가능시간 */}
+        {/* 상담 가능시간
         <div className="mb-4 mt-6 rounded-[10px] bg-white p-5 shadow-md">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center">
@@ -171,12 +171,10 @@ const ProfileCard = ({
               시간 수정
             </button>
           </div>
-
-          {/* <div className="mt-3">{formatConsultationTimes()}</div> */}
-        </div>
+        </div> */}
 
         {/* 정보 수정 버튼 */}
-        <div className="rounded-[10px] bg-p5">
+        <div className="mb-40 rounded-[10px] bg-p5">
           <button
             onClick={openModal}
             className="w-full rounded-md py-3 text-body font-medium text-white transition hover:bg-p3"

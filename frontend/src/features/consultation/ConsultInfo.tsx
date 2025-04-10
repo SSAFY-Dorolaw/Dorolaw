@@ -12,6 +12,7 @@ import ModifyFaultRatio from './modify/ModifyFaultRatio';
 import ModifyAdditionalInfo from './modify/ModifyAdditionalInfo';
 import ModifyQuestion from './modify/ModifyQuestion';
 import { useQueryClient } from '@tanstack/react-query';
+import { statusConverter } from '@/shared/lib/utils/statusConverter';
 
 const ConsultInfo = () => {
   const [editMode, setEditMode] = useState(false);
@@ -81,79 +82,100 @@ const ConsultInfo = () => {
   };
 
   return (
-    <div className="col-span-7 mb-10">
-      <div className="flex w-full justify-start gap-2">
-        {!editMode ? (
-          <>
-            <h2>{data?.title}</h2>
-            <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
-              상담완료
-            </div>
-          </>
-        ) : (
-          <ModifyTitle />
-        )}
-      </div>
-      {isWriter && (
-        <div className="icongroup flex justify-end gap-2">
-          <Edit
-            strokeWidth={3}
-            size={24}
-            className="cursor-pointer hover:text-green-500"
-            onClick={editPost}
-          />
-          <RiDeleteBin6Line
-            strokeWidth={1}
-            size={24}
-            className="cursor-pointer hover:text-red-500"
-            onClick={deletePost}
-          />
+    <div className="col-span-7 mb-20">
+      {/* 전체를 하나의 카드로 통합 */}
+      <div className="space-y-2 rounded-lg bg-white p-6 shadow-md">
+        {/* 제목 및 상태 */}
+        <div className="flex w-full items-center gap-4">
+          {!editMode ? (
+            <>
+              <h2 className="text-2xl font-bold text-gray-800">
+                {data?.title}
+              </h2>
+              <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2 text-gray-700">
+                {statusConverter(data?.status)}
+              </div>
+            </>
+          ) : (
+            <ModifyTitle title={data?.title} />
+          )}
         </div>
-      )}
-
-      {/* 영상 재생 부분 */}
-      <div className="video my-4 aspect-video w-full bg-white">
-        {data?.fileName ? (
-          <video
-            src={`https://j12a501.p.ssafy.io/api/videos/${data.fileName}`}
-            controls
-            className="size-full object-contain"
-          >
-            브라우저가 비디오 태그를 지원하지 않습니다.
-          </video>
-        ) : (
-          <div className="flex size-full items-center justify-center text-gray-500">
-            업로드된 영상이 없습니다.
+        {isWriter && (
+          <div className="icongroup flex justify-end gap-2">
+            <Edit
+              strokeWidth={3}
+              size={24}
+              className="cursor-pointer hover:text-green-500"
+              onClick={editPost}
+            />
+            <RiDeleteBin6Line
+              strokeWidth={1}
+              size={24}
+              className="cursor-pointer hover:text-red-500"
+              onClick={deletePost}
+            />
           </div>
         )}
-      </div>
 
-      {/* 추가 정보 3가지 */}
-      <div>
-        <div className="rate flex flex-col gap-4">
-          <div>
-            <h3>받은 과실비율</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.insuranceFaultRatio}</p>
+        {/* 영상 재생 부분 */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800">업로드된 영상</h3>
+          <div className="video mb-4 aspect-video w-full bg-gray-100">
+            {data?.fileName ? (
+              <video
+                src={`https://j12a501.p.ssafy.io/api/videos/${data.fileName}`}
+                controls
+                className="size-full rounded-xl object-contain"
+              >
+                브라우저가 비디오 태그를 지원하지 않습니다.
+              </video>
             ) : (
-              <ModifyFaultRatio />
+              <div className="flex size-full items-center justify-center text-gray-500">
+                업로드된 영상이 없습니다.
+              </div>
             )}
           </div>
-          <div>
-            <h3>영상 외 추가정보</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.description}</p>
-            ) : (
-              <ModifyAdditionalInfo />
-            )}
-          </div>
-          <div>
-            <h3>궁금한 점</h3>
-            {!editMode ? (
-              <p className="mt-2">{data?.question}</p>
-            ) : (
-              <ModifyQuestion />
-            )}
+        </div>
+
+        {/* 추가 정보 */}
+        <div>
+          {/* <h2>추가 정보</h2> */}
+          <div className="rate mb-4 mt-10 flex flex-col gap-6">
+            {/* 받은 과실비율 */}
+            <div>
+              <h3 className="text-p5">받은 과실비율</h3>
+              {!editMode ? (
+                <p className="mt-2 text-lg text-gray-600">
+                  {data?.insuranceFaultRatio}
+                </p>
+              ) : (
+                <ModifyFaultRatio />
+              )}
+            </div>
+            {/* <hr className="border-gray-300" /> */}
+
+            {/* 영상 외 추가정보 */}
+            <div className="mt-4">
+              <h3 className="mt-0 text-p5">영상 외 추가정보</h3>
+              {!editMode ? (
+                <p className="mt-2 text-lg text-gray-600">
+                  {data?.description}
+                </p>
+              ) : (
+                <ModifyAdditionalInfo content={data?.description} />
+              )}
+            </div>
+            {/* <hr className="border-gray-300" /> */}
+
+            {/* 궁금한 점 */}
+            <div className="mt-4">
+              <h3 className="mt-0 text-p5">궁금한 점</h3>
+              {!editMode ? (
+                <p className="mt-2 text-lg text-gray-600">{data?.question}</p>
+              ) : (
+                <ModifyQuestion content={data?.question} />
+              )}
+            </div>
           </div>
         </div>
       </div>

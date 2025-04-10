@@ -6,7 +6,6 @@ importScripts(
 );
 
 self.addEventListener('install', (event) => {
-  console.log('FCM 서비스 워커 설치 중...');
   self.skipWaiting();
 });
 
@@ -24,8 +23,6 @@ self.addEventListener('message', (event) => {
 
     // 백그라운드 메시지 처리
     self.messaging.onBackgroundMessage((payload) => {
-      console.log('📩 백그라운드 메시지 수신:', payload);
-
       const notificationTitle = payload.notification?.title || '새로운 알림';
       const notificationOptions = {
         body: payload.notification?.body || '내용 없음',
@@ -49,8 +46,6 @@ self.addEventListener('message', (event) => {
           });
         });
     });
-
-    // console.log('Firebase 메시징이 백그라운드 모드로 초기화되었습니다.');
   }
 });
 
@@ -68,10 +63,24 @@ self.addEventListener('push', function (event) {
     };
 
     event.waitUntil(
-      self.registration.showNotification(
-        notificationTitle,
-        notificationOptions,
-      ),
+      self.registration
+        .showNotification(notificationTitle, notificationOptions)
+        .then(() => {
+          // 알림 표시 후 모든 클라이언트에 이벤트 전달
+          return self.clients
+            .matchAll({
+              type: 'window',
+              includeUncontrolled: true,
+            })
+            .then((clients) => {
+              clients.forEach((client) => {
+                client.postMessage({
+                  type: 'PUSH_NOTIFICATION_RECEIVED',
+                  payload: data,
+                });
+              });
+            });
+        }),
     );
   } catch (e) {
     console.error('푸시 알림 처리 중 오류:', e);

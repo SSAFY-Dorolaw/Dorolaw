@@ -1,0 +1,36 @@
+.bulletList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.bulletList li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.bulletList li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #3182ce;
+  font-size: 18px;
+}
+
+.squareBullet li::before {
+  content: '■';
+  font-size: 10px;
+}
+
+.circleBullet li::before {
+  content: '○';
+}
+
+.arrowBullet li::before {
+  content: '→';
+}
+
+.checkBullet li::before {
+  content: '✓';
+}
