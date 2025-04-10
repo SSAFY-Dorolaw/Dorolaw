@@ -5,6 +5,8 @@ import UploadTitle, {
 import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import AdditionalInfo from '@/features/videoupload/AdditionalInfo';
 import BulletList from '@/components/ui/BulletList';
+import CustomAlert from '@/components/ui/CustomAlert';
+import useAlert from '@/hooks/useAlert';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
@@ -41,6 +43,9 @@ const ConsultUpload = () => {
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
   const navigate = useNavigate();
+
+  // 커스텀 알림 훅 사용
+  const { alertProps, showAlert, closeAlert } = useAlert();
 
   // 추가 정보 객체로 분리
   const [additionalData, setAdditionalData] = useState<AdditionalData>({
@@ -96,19 +101,19 @@ const ConsultUpload = () => {
     const title = uploadTitleRef.current?.getTitle();
 
     if (!title) {
-      alert('제목을 입력해주세요');
+      showAlert('제목을 입력해주세요', 'warning');
       setLoading(false);
       return;
     }
 
     if (!selectedFile) {
-      alert('업로드할 파일을 선택해주세요');
+      showAlert('업로드할 파일을 선택해주세요', 'warning');
       setLoading(false);
       return;
     }
 
     if (!isAgree) {
-      alert('개인정보 제공 동의가 필요합니다.');
+      showAlert('개인정보 제공 동의가 필요합니다.', 'warning');
       setLoading(false);
       return;
     }
@@ -129,6 +134,7 @@ const ConsultUpload = () => {
             ? uploadResponse.message
             : '파일 업로드 실패';
         setError(errorMessage);
+        showAlert(errorMessage, 'error');
         setLoading(false);
         return;
       }
@@ -160,14 +166,20 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        void navigate(`/board`);
+        showAlert('의뢰글이 성공적으로 업로드되었습니다.', 'success');
+        setTimeout(() => {
+          void navigate(`/board`);
+        }, 1500);
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면
         setError(infoResponse.message);
+        showAlert(infoResponse.message, 'error');
       }
     } catch (error) {
-      setError('의뢰글 업로드 중 오류 발생');
+      const errorMsg = '의뢰글 업로드 중 오류 발생';
+      setError(errorMsg);
+      showAlert(errorMsg, 'error');
       console.error('요청 오류: ', error);
     } finally {
       setLoading(false);
@@ -176,6 +188,14 @@ const ConsultUpload = () => {
 
   return (
     <>
+      {/* 커스텀 알림 컴포넌트 */}
+      <CustomAlert
+        isOpen={alertProps.isOpen}
+        onClose={closeAlert}
+        message={alertProps.message}
+        type={alertProps.type}
+      />
+
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg">

@@ -36,6 +36,7 @@ const useFCM = () => {
     try {
       const response = await apiClient.post('fcm-tokens', { token: fcmToken });
       localStorage.setItem('fcmToken', fcmToken);
+      console.log('✅ FCM 토큰 서버 등록 성공:', response.data);
     } catch (error) {
       console.warn('❌ FCM 토큰 서버 등록 실패:', error);
       throw error;

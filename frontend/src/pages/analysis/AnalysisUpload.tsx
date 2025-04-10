@@ -3,11 +3,13 @@ import OptionCheckbox from '@/features/videoupload/OptionCheckbox';
 import UploadTitle, {
   UploadTitleRef,
 } from '@/features/videoupload/UploadTitle';
+import BulletList from '@/components/ui/BulletList';
+import CustomAlert from '@/components/ui/CustomAlert';
+import useAlert from '@/hooks/useAlert';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { uploadInfo } from '@/features/analysis/api';
-import BulletList from '@/components/ui/BulletList';
 
 // 쿠키 설정 및 읽기 함수
 const setCookie = (name: string, value: string, days: number) => {
@@ -35,6 +37,9 @@ const AnalysisUpload = () => {
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
   const navigate = useNavigate();
+
+  // 커스텀 알림 훅 사용
+  const { alertProps, showAlert, closeAlert } = useAlert();
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
@@ -77,19 +82,19 @@ const AnalysisUpload = () => {
     const title = uploadTitleRef.current?.getTitle();
 
     if (!title) {
-      alert('제목을 입력해주세요.');
+      showAlert('제목을 입력해주세요.', 'warning');
       setLoading(false);
       return;
     }
 
     if (!selectedFile) {
-      alert('업로드할 파일을 선택해주세요.');
+      showAlert('업로드할 파일을 선택해주세요.', 'warning');
       setLoading(false);
       return;
     }
 
     if (!isAgree) {
-      alert('개인정보 제공 동의가 필요합니다.');
+      showAlert('개인정보 제공 동의가 필요합니다.', 'warning');
       setLoading(false);
       return;
     }
@@ -110,6 +115,7 @@ const AnalysisUpload = () => {
             ? uploadResponse.message
             : '파일 업로드 실패';
         setError(errorMessage);
+        showAlert(errorMessage, 'error');
         setLoading(false);
         return;
       }
@@ -135,14 +141,23 @@ const AnalysisUpload = () => {
       if ('fileName' in boardResponse) {
         // 성공하면
         setSuccess(true);
-        void navigate(`/board`);
+        showAlert(
+          '분석 요청이 성공적으로 완료되었습니다. AI 분석을 시작합니다.',
+          'success',
+        );
+        setTimeout(() => {
+          void navigate(`/board`);
+        }, 1500);
         console.log('업로드 성공: ', boardResponse);
       } else if ('message' in boardResponse) {
         // 실패하면
         setError(boardResponse.message);
+        showAlert(boardResponse.message, 'error');
       }
     } catch (error) {
-      setError('파일 업로드 중 오류 발생');
+      const errorMsg = '파일 업로드 중 오류 발생';
+      setError(errorMsg);
+      showAlert(errorMsg, 'error');
       console.error('업로드 오류: ', error);
     } finally {
       setLoading(false);
@@ -151,6 +166,13 @@ const AnalysisUpload = () => {
 
   return (
     <>
+      {/* 커스텀 알림 컴포넌트 */}
+      <CustomAlert
+        isOpen={alertProps.isOpen}
+        onClose={closeAlert}
+        message={alertProps.message}
+        type={alertProps.type}
+      />
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg">
