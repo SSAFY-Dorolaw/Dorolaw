@@ -6,14 +6,18 @@ import { AxiosError } from 'axios';
 interface PostAnswerParams {
   requestId: number;
   content: string;
+  title: string;
+  memberId: number;
 }
 
 const postAnswer = async ({
   requestId,
   content,
+  title,
+  memberId,
 }: PostAnswerParams): Promise<void> => {
   try {
-    await apiClient.post(`/answers`, { requestId, content });
+    await apiClient.post(`/answers`, { requestId, content, title, memberId });
   } catch (error) {
     console.error('답변 등록 실패: ', error);
     throw error; // 에러를 다시 throw하여 onError 핸들러가 처리할 수 있게 함
