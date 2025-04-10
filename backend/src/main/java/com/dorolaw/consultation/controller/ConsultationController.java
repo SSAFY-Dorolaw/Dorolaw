@@ -34,7 +34,7 @@ public class ConsultationController {
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ConsultationBookRequestDto requestDto) {
         ConsultationBookResponseDto response = consultationService.bookConsultation(authorizationHeader, requestDto);
-        alarmService.sendConsultationConfirmAlarms(response.getLawyer().getLawyerId(),response.getConsultationId(),response.getScheduledDate());
+        alarmService.sendConsultationConfirmAlarms(response.getLawyer().getLawyerId(),response.getConsultationId(),response.getScheduledDate(), response.getRequestId());
         return ResponseEntity.ok(response);
     }
 
