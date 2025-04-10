@@ -77,25 +77,27 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed top-4 left-1/2 z-50 transform -translate-x-1/2"
-      data-aos="fade-down"
-      data-aos-duration="500"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className={`${currentStyle.bgColor} ${currentStyle.borderColor} border-l-4 rounded-lg shadow-lg p-6 max-w-md w-full`}
+        className="absolute inset-0 bg-black bg-opacity-20"
+        onClick={onClose}
+      ></div>
+      <div
+        className={`${currentStyle.bgColor} ${currentStyle.borderColor} z-10 mx-4 max-w-md rounded-lg border-l-4 p-6 shadow-2xl`}
+        data-aos="zoom-in"
+        data-aos-duration="500"
       >
         <div className="flex items-center justify-between">
           <p
-            className={`${isLarge ? 'text-lg font-medium' : 'text-base'} whitespace-pre-line ${currentStyle.textColor}`}
+            className={`${isLarge ? 'text-lg font-bold' : 'text-base'} whitespace-pre-line ${currentStyle.textColor}`}
           >
             {message}
           </p>
           <button
             onClick={onClose}
-            className={`${currentStyle.textColor} ml-4 hover:opacity-70 transition-opacity`}
+            className={`${currentStyle.textColor} ml-4 transition-opacity hover:opacity-70`}
           >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="size-5" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
