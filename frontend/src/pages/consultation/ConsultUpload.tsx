@@ -11,6 +11,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { submitBoardInfo } from '@/features/board/model/queries';
+// AOS 라이브러리 임포트
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 interface AdditionalData {
   faultRatio?: string;
@@ -56,6 +59,15 @@ const ConsultUpload = () => {
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
+
+  // AOS 초기화
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out',
+      once: true,
+    });
+  }, []);
 
   // 팝업 처리
   useEffect(() => {
@@ -166,10 +178,35 @@ const ConsultUpload = () => {
       if ('requestId' in infoResponse) {
         // 성공하면
         setSuccess(true);
-        showAlert('의뢰글이 성공적으로 업로드되었습니다.', 'success');
-        setTimeout(() => {
-          void navigate(`/board/consultation`);
-        }, 1500);
+
+        // 초기 알림 메시지에 애니메이션 효과를 위해 AOS 설정 새로고침
+        AOS.refresh();
+
+        showAlert(
+          '✅ 의뢰글이 성공적으로 등록되었습니다! 분석이 완료되면 알림을 드려요!\n5.0초 후에 게시판으로 이동합니다.',
+          'success',
+          true, // 큰 글씨체 옵션 전달
+        );
+
+        // 카운트다운 알림 처리
+        let countDown = 5.0;
+        const timer = setInterval(() => {
+          countDown = Math.round((countDown - 0.1) * 10) / 10;
+          if (countDown <= 0) {
+            clearInterval(timer);
+            void navigate(`/board/consultation`);
+          } else {
+            // 애니메이션 효과 새로고침
+            AOS.refresh();
+
+            showAlert(
+              `✅ 의뢰글 등록 완료! 분석이 완료되면 알림을 드려요!\n${countDown.toFixed(1)}초 후에 게시판으로 이동합니다.`,
+              'success',
+              true, // 큰 글씨체 옵션 전달
+            );
+          }
+        }, 100);
+
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {
         // 실패하면
@@ -198,7 +235,11 @@ const ConsultUpload = () => {
 
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg">
+          <div
+            data-aos="zoom-in"
+            data-aos-duration="300"
+            className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg"
+          >
             <article>
               <h3 className="mb-8 text-h1 font-bold text-gray-800">
                 교통사고 과실비율 자동 분석 서비스
@@ -228,12 +269,12 @@ const ConsultUpload = () => {
                   onChange={(e) => setDontShowAgain(e.target.checked)}
                   className="mr-2"
                 />
-                다시 보지 않음
+                7일간 다시 보지 않음
               </label>
               <div className="flex gap-2">
                 <button
                   onClick={handleDismissPopup}
-                  className="rounded bg-p5 px-4 py-2 text-white"
+                  className="rounded bg-p5 px-4 py-2 text-white transition-colors hover:bg-p4"
                 >
                   닫기
                 </button>
@@ -245,23 +286,43 @@ const ConsultUpload = () => {
 
       {/* 설명 */}
       <header className="mt-6 w-[800px] bg-p1 py-8">
-        <h1 className="text-start text-3xl font-bold text-gray-800">
+        <h1
+          className="text-start text-3xl font-bold text-gray-800"
+          data-aos="fade-up"
+          data-aos-delay="25"
+          data-aos-duration="500"
+        >
           변호사 상담하기
         </h1>
       </header>
 
       <main className="mx-auto max-w-4xl space-y-6">
         {/* 카드 형태로 구성 */}
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div
+          className="rounded-lg bg-white p-6 shadow-md"
+          data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="500"
+        >
           <UploadTitle ref={uploadTitleRef} />
           <UploadArea />
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div
+          className="rounded-lg bg-white p-6 shadow-md"
+          data-aos="fade-up"
+          data-aos-delay="125"
+          data-aos-duration="500"
+        >
           <AdditionalInfo onChange={additionalDataChange} />
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div
+          className="rounded-lg bg-white p-6 shadow-md"
+          data-aos="fade-up"
+          data-aos-delay="150"
+          data-aos-duration="500"
+        >
           <h2 className="mb-4 text-xl font-semibold text-gray-800">옵션</h2>
           <OptionCheckbox
             isPublic={isPublic}
@@ -273,20 +334,33 @@ const ConsultUpload = () => {
 
         {/* 성공 메시지 표시 */}
         {success && (
-          <div className="rounded-lg bg-green-100 p-4 text-center text-green-700">
+          <div
+            className="rounded-lg bg-green-100 p-4 text-center text-green-700"
+            data-aos="fade-in"
+            data-aos-duration="500"
+          >
             게시글이 업로드되었습니다.
           </div>
         )}
 
         {/* 에러 메시지 표시 */}
         {error && (
-          <div className="rounded-lg bg-red-100 p-4 text-center text-red-700">
+          <div
+            className="rounded-lg bg-red-100 p-4 text-center text-red-700"
+            data-aos="fade-in"
+            data-aos-duration="500"
+          >
             {error}
           </div>
         )}
 
         {/* 버튼 */}
-        <div className="flex justify-center">
+        <div
+          className="flex justify-center"
+          data-aos="fade-up"
+          data-aos-delay="175"
+          data-aos-duration="500"
+        >
           <button
             onClick={(e) => {
               e.preventDefault();
