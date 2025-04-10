@@ -2,7 +2,6 @@ import { RouterProvider } from 'react-router-dom';
 import router from '@/app/routes';
 import { useEffect } from 'react';
 import useFCM from '@/firebase/useFCM';
-import NotificationBell from '@/widgets/NotificationBell';
 
 function App() {
   // FCM 초기화
@@ -19,12 +18,7 @@ function App() {
     }
   }, [token, error]);
 
-  return (
-    <>
-      <RouterProvider router={router} />
-      <NotificationBell />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

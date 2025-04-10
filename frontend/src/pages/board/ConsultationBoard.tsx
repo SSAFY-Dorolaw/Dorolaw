@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import AnalysisList from '@/features/board/AnalysisList';
-import { useAnalysisListQuery } from '@/features/board/api';
+import { useConsultListQuery } from '@/features/board/api';
+import ConsultList from '@/features/board/ConsultList';
 import CreateArticleButton from '@/features/board/CreateArticleButton';
 import Pagenation from '@/widgets/Pagenation';
 
-const Board = () => {
+const ConsultationBoard = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  // 분석글 데이터 fetch
-  const { data: analysisData, isLoading } = useAnalysisListQuery(currentPage);
+  // 의뢰글 데이터 fetch
+  const { data, isLoading } = useConsultListQuery(currentPage, true);
 
   // 페이지 변경 핸들러
   const handlePageChange = (newPage: number) => {
@@ -20,9 +20,9 @@ const Board = () => {
       <header>
         <div className="flex flex-col p-4 text-center">
           <h1 className="decoration-3 text-2xl font-bold underline underline-offset-[0.5em]">
-            AI 과실분석 게시판
+            법률 상담 게시판
           </h1>
-          <CreateArticleButton isConsultTab={false} />
+          <CreateArticleButton isConsultTab={true} />
         </div>
       </header>
 
@@ -31,23 +31,23 @@ const Board = () => {
           {isLoading ? (
             <div className="flex justify-center py-10">로딩 중...</div>
           ) : (
-            <AnalysisList data={analysisData} />
+            <ConsultList data={data} />
           )}
         </div>
       </main>
 
       <nav>
-        {analysisData &&
-          'number' in analysisData &&
-          'totalPages' in analysisData &&
-          'first' in analysisData &&
-          'last' in analysisData && (
+        {data &&
+          'number' in data &&
+          'totalPages' in data &&
+          'first' in data &&
+          'last' in data && (
             <Pagenation
               pageInfo={{
-                number: analysisData.number,
-                totalPages: analysisData.totalPages,
-                first: analysisData.first,
-                last: analysisData.last,
+                number: data.number,
+                totalPages: data.totalPages,
+                first: data.first,
+                last: data.last,
               }}
               onPageChange={handlePageChange}
             />
@@ -57,4 +57,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default ConsultationBoard;

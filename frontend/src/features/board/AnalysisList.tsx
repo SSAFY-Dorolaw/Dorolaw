@@ -43,7 +43,9 @@ const AnalysisList = ({ data }: AnalysisListProps) => {
             status={analysis.status}
             memberId={analysis.memberId}
             createdAt={analysis.createdAt}
-            onClick={() => void navigate(`/report/${analysis.faultAnalysisId}`)}
+            onClick={() =>
+              void navigate(`/board/analysis/${analysis.faultAnalysisId}`)
+            }
           />
           <hr />
         </React.Fragment>

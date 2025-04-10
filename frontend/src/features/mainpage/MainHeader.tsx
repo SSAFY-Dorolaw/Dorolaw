@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 const MainHeader = () => {
   const navigate = useNavigate();
   const goToReport = () => {
-    void navigate('/report');
+    void navigate('/upload/report');
   };
   const goToConsultation = () => {
-    void navigate('/consultation');
+    void navigate('/upload/consultation');
   };
   return (
     <nav className="inset-x-0 h-[calc(100dvh-128px)] w-screen leading-[0]">

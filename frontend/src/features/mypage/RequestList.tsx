@@ -26,7 +26,7 @@ function RequestList() {
               faultRatioB={request.faultRatioB}
               createdAt={request.createdAt}
               onClick={() =>
-                void navigate(`/consultation/${request.requestId}`)
+                void navigate(`/board/consultation/${request.requestId}`)
               }
             />
           ))}
@@ -42,7 +42,7 @@ function RequestList() {
             받아보세요.
           </p>
           <button
-            onClick={() => void navigate('/consultation')}
+            onClick={() => void navigate('/upload/consultation')}
             className="hover:opacity980 rounded-lg bg-p5 px-6 py-3 font-medium text-p1 transition hover:text-y5"
           >
             AI 분석받고 사건 의뢰하기
