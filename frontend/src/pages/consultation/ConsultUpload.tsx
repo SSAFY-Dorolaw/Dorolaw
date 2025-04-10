@@ -212,7 +212,7 @@ const ConsultUpload = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div
             data-aos="zoom-in"
-            data-aos-duration="500"
+            data-aos-duration="300"
             className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg"
           >
             <article>
@@ -261,7 +261,12 @@ const ConsultUpload = () => {
 
       {/* 설명 */}
       <header className="mt-6 w-[800px] bg-p1 py-8">
-        <h1 className="text-start text-3xl font-bold text-gray-800">
+        <h1
+          className="text-start text-3xl font-bold text-gray-800"
+          data-aos="fade-up"
+          data-aos-delay="25"
+          data-aos-duration="500"
+        >
           변호사 상담하기
         </h1>
       </header>
