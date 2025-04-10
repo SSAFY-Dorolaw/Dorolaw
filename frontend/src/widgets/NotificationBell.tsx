@@ -160,7 +160,10 @@ const NotificationBell = () => {
               ) : notifications.length > 0 ? (
                 notifications.map((notification, index) => (
                   <div key={notification.alarmId}>
-                    <NotificationItem notification={notification} />
+                    <NotificationItem
+                      notification={notification}
+                      onNavigate={() => setIsOpen(false)} // 알림 클릭 시 창 닫기 함수 전달
+                    />
                     {/* 마지막 항목이 아니면 구분선 추가 */}
                     {index < notifications.length - 1 && (
                       <div className="my-1 border-t border-gray-200"></div>
