@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>영상 업로드</title></head>
+<body>
+<h2>영상 업로드 페이지</h2>
+
+<form method="post" action="/api/videos/upload" enctype="multipart/form-data">
+    <input type="file" name="file" accept="video/*" required>
+    <button type="submit">업로드</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>OAuth2 로그인 테스트</title>
+    <script>
+        function loginWithRole(role) {
+            window.location.href = "http://localhost:8080/api/oauth2/authorization/kakao?role=" + encodeURIComponent(role);
+        }
+    </script>
+</head>
+<body>
+<h1>OAuth2 로그인 테스트</h1>
+<p>
+    <a href="#" onclick="loginWithRole('LAWYER')">변호사 로그인 테스트</a>
+</p>
+<p>
+    <a href="#" onclick="loginWithRole('GENERAL')">일반 사용자 로그인 테스트</a>
+</p>
+<p>
+    로그인이 완료되면, JWT가 쿠키에 발급되고, memberId, name, role이 출력됩니다.
+</p>
+</body>
+</html>

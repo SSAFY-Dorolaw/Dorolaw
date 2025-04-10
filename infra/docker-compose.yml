@@ -1,0 +1,148 @@
+name: dorolaw
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - app-network
+
+  ai:
+    image: ai:latest
+    expose:
+      - "5000"
+    volumes:
+      - /home/ubuntu/videos:/home/ubuntu/videos
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: bash -c "cd fastapi && nohup python3 videoRecognizerAPI.py > api.log 2>&1"
+
+  nginx:
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx/ssl:/etc/nginx/ssl
+      - ../nginx/logs:/var/log/nginx
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../frontend/build:/usr/share/nginx/html
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - backend
+      - frontend
+      - ai
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    expose:
+      - "5672"
+      - "15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      TZ: Asia/Seoul
+    networks:
+      - app-network
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    expose:
+      - "9100"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - app-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cadvisor
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    environment:
+      - TZ=Asia/Seoul
+    expose:
+      - "8080"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=https://j12a501.p.ssafy.io/prometheus'
+      - '--web.route-prefix=/prometheus'
+    environment:
+      - TZ=Asia/Seoul
+    expose:
+      - "9090"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+      - frontend
+      - ai
+      - nginx
+      - rabbitmq
+      - node-exporter
+      - cadvisor
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - TZ=Asia/Seoul
+    expose:
+      - "3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app-network
+    depends_on:
+      - prometheus
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  grafana_data:

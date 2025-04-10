@@ -1,0 +1,26 @@
+{
+	"info": {
+		"name": "accident",
+		"description": "",
+		"url": ""
+	},
+	"video": {
+		"video_name": "bb_1_150216_vehicle_239_23088",
+		"video_date": "151112",
+		"filming_way": "bb",
+		"video_point_of_view": 1,
+		"accident_negligence_rate": 20,
+		"traffic_accident_type": 111,
+		"accident_object": 0,
+		"accident_place": 3,
+		"accident_place_feature": 11,
+		"vehicle_a_progress_info": 25,
+		"vehicle_b_progress_info": 57,
+		"damage_location": "",
+		"related_laws": "",
+		"violation_of_law": "",
+		"additional_elements": "",
+		"violation_factor": "",
+		"weather": ""
+	}
+}
