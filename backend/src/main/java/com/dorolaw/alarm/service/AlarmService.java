@@ -61,6 +61,12 @@ public class AlarmService {
         // 알림들 보내기
         sendAlarms(tokens,date + "에 상담이 확정되었습니다.("+requestId+")");
     }
+    
+    // 답변 알람
+    public void sendAnswerAlarm(String title, Long memberId, Long requestId) {
+        FcmToken token = fcmService.getLatestFcmTokenByMemberId(memberId);
+        sendAlarm(token,"의뢰글 [" + title + "] 에 변호사 답변이 작성되었습니다. (" + requestId+")");
+    }
 
     // 알람 내역 저장
     public void saveAlarm(FcmToken token, String body) {
