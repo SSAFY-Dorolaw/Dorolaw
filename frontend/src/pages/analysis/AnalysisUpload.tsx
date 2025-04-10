@@ -10,6 +10,9 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadVideo } from '@/features/videoupload/api';
 import { uploadInfo } from '@/features/analysis/api';
+// AOS 라이브러리 임포트
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // 쿠키 설정 및 읽기 함수
 const setCookie = (name: string, value: string, days: number) => {
@@ -43,6 +46,15 @@ const AnalysisUpload = () => {
 
   // UploadTitle 참조를 위한 ref
   const uploadTitleRef = useRef<UploadTitleRef | null>(null);
+
+  // AOS 초기화
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out',
+      once: true,
+    });
+  }, []);
 
   // BulletList 항목
   const bulletAnalysisItems = [
@@ -173,9 +185,14 @@ const AnalysisUpload = () => {
         message={alertProps.message}
         type={alertProps.type}
       />
+
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg">
+          <div
+            data-aos="zoom-in"
+            data-aos-duration="500"
+            className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg"
+          >
             <article>
               <h3 className="mb-8 text-h1 font-bold text-gray-800">
                 교통사고 과실비율 자동 분석 서비스
@@ -205,12 +222,12 @@ const AnalysisUpload = () => {
                   onChange={(e) => setDontShowAgain(e.target.checked)}
                   className="mr-2"
                 />
-                다시 보지 않음
+                7일간 다시 보지 않음
               </label>
               <div className="flex gap-2">
                 <button
                   onClick={handleDismissPopup}
-                  className="rounded bg-p5 px-4 py-2 text-white"
+                  className="rounded bg-p5 px-4 py-2 text-white hover:bg-p4 transition-colors"
                 >
                   닫기
                 </button>
@@ -222,19 +239,34 @@ const AnalysisUpload = () => {
 
       {/* 설명 */}
       <header className="mt-6 w-[800px] bg-p1 py-8">
-        <h1 className="text-start text-3xl font-bold text-gray-800">
+        <h1
+          className="text-start text-3xl font-bold text-gray-800"
+          data-aos="fade-up"
+          data-aos-delay="25"
+          data-aos-duration="500"
+        >
           AI 과실비율 분석
         </h1>
       </header>
 
       <main className="mx-auto max-w-4xl space-y-6">
         {/* 카드 형태로 구성 */}
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div
+          className="rounded-lg bg-white p-6 shadow-md"
+          data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="500"
+        >
           <UploadTitle ref={uploadTitleRef} />
           <UploadArea />
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div
+          className="rounded-lg bg-white p-6 shadow-md"
+          data-aos="fade-up"
+          data-aos-delay="125"
+          data-aos-duration="500"
+        >
           <h1 className="mb-4 text-xl font-semibold text-p5">옵션 설정</h1>
           <OptionCheckbox
             isPublic={isPublic}
@@ -246,20 +278,33 @@ const AnalysisUpload = () => {
 
         {/* 성공 메시지 표시 */}
         {success && (
-          <div className="rounded-lg bg-green-100 p-4 text-center text-green-700">
+          <div
+            className="rounded-lg bg-green-100 p-4 text-center text-green-700"
+            data-aos="fade-in"
+            data-aos-duration="500"
+          >
             게시글이 업로드되었습니다. AI 분석을 시작합니다.
           </div>
         )}
 
         {/* 에러 메시지 표시 */}
         {error && (
-          <div className="rounded-lg bg-red-100 p-4 text-center text-red-700">
+          <div
+            className="rounded-lg bg-red-100 p-4 text-center text-red-700"
+            data-aos="fade-in"
+            data-aos-duration="500"
+          >
             {error}
           </div>
         )}
 
         {/* 버튼 */}
-        <div className="flex justify-center">
+        <div
+          className="flex justify-center"
+          data-aos="fade-up"
+          data-aos-delay="175"
+          data-aos-duration="500"
+        >
           <button
             onClick={(e) => {
               e.preventDefault();
