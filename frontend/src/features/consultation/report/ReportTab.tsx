@@ -122,7 +122,7 @@ function ReportTab() {
       </article>
       <nav className="my-2 mt-5 flex justify-center">
         <button
-          className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1"
+          className="button-small mx-4 w-[128px] rounded-[10px] bg-p5 p-2 text-p1 transition hover:text-y5"
           onClick={downloadPDF}
         >
           PDF 다운로드

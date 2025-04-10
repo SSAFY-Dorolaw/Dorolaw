@@ -2,6 +2,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { Answers } from './model/types';
 import { formatDate } from '@/shared/lib/utils/dateFormatter';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/entities/auth/model/store';
 
 interface AnswerProps {
   answer: Answers;
@@ -12,9 +13,9 @@ interface AnswerProps {
 
 function Answer({ answer, requestId, isMyRequest, isMyAnswer }: AnswerProps) {
   const navigate = useNavigate();
+
   return (
-    <div className="w-full">
-      <hr />
+    <div className="color mb-4 w-full rounded-lg bg-p1">
       <header className="flex h-[54px] items-center px-4">
         <div className="profile">
           <FaUserCircle size={32} />
