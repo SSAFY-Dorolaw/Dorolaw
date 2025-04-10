@@ -28,13 +28,13 @@ public class AlarmService {
     private final LawyerTagRepository lawyerTagRepository;
 
     // 의뢰 요청자에게 알림 보내기
-    public void sendReportFinishedAlarm(Long memberId, String content) {
+    public void sendReportFinishedAlarm(Long memberId, String content, Long requestId) {
         FcmToken token = fcmService.getLatestFcmTokenByMemberId(memberId); // memberId로 fcm 토큰들 조회
-        sendAlarm(token,content);
+        sendAlarm(token,content+"("+requestId+")");
     }
 
     // 사고유형과 관련된 변호사에게 알림 보내기
-    public void sendLawyersAlarm(String accidentObject) {
+    public void sendLawyersAlarm(String accidentObject, Long requestId) {
         if(accidentObject.equals("차대 이륜차")) accidentObject = "차대이륜차";
 
         // 알림보낼 member의 memberId 찾기
@@ -46,11 +46,11 @@ public class AlarmService {
         List<FcmToken> tokens = lawyerTagRepository.findLatestTokensByMemberIds(lawyerIds); // 태그들로 변호사들 조회
 
         // 알림들 보내기
-        sendAlarms(tokens,accidentObject + " 태그와 관련된 요청이 등록되었습니다.");
+        sendAlarms(tokens,accidentObject + " 태그와 관련된 요청이 등록되었습니다.("+requestId+")");
     }
 
     // 상담 예약 확인 알림
-    public void sendConsultationConfirmAlarms(Long lawyerId, Long clientId, String date) {
+    public void sendConsultationConfirmAlarms(Long lawyerId, Long clientId, String date, Long requestId) {
         List<Long> memberIds = new ArrayList<>();
         memberIds.add(clientId);
         memberIds.add(lawyerId);
@@ -59,7 +59,7 @@ public class AlarmService {
         List<FcmToken> tokens = fcmTokenRepository.findLatestTokensByMemberIds(memberIds);
 
         // 알림들 보내기
-        sendAlarms(tokens,date + "에 상담이 확정되었습니다.");
+        sendAlarms(tokens,date + "에 상담이 확정되었습니다.("+requestId+")");
     }
 
     // 알람 내역 저장
