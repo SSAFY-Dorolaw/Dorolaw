@@ -192,14 +192,17 @@ function NavBar() {
             <NavLink to="/" className="nav-link">
               홈
             </NavLink>
-            <NavLink to="/report" className="nav-link">
+            <NavLink to="/upload/report" className="nav-link">
               AI 과실비율 측정
             </NavLink>
-            <NavLink to="/consultation" className="nav-link">
+            <NavLink to="/upload/consultation" className="nav-link">
               변호사 상담신청
             </NavLink>
-            <NavLink to="/board" className="nav-link">
-              게시판
+            <NavLink to="/board/analysis" className="nav-link">
+              AI 분석 게시판
+            </NavLink>
+            <NavLink to="/board/consultation" className="nav-link">
+              법률상담 게시판
             </NavLink>
           </div>
           <AuthComponent />

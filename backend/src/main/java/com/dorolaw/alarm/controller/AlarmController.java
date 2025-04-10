@@ -3,14 +3,13 @@ package com.dorolaw.alarm.controller;
 import com.dorolaw.alarm.dto.request.AnalysisAlarmDto;
 import com.dorolaw.alarm.dto.request.RequestAlarmDto;
 import com.dorolaw.alarm.dto.response.AlarmDTO;
-import com.dorolaw.alarm.entity.FcmToken;
 import com.dorolaw.alarm.service.AlarmService;
-import com.dorolaw.alarm.service.FcmService;
 import com.dorolaw.faultanalysis.service.FaultAnalysisAiReportService;
 import com.dorolaw.request.service.AiReportService;
 import com.dorolaw.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,6 @@ import java.util.List;
 @Slf4j
 public class AlarmController {
 
-    private final FcmService fcmService;
     private final AlarmService alarmService;
     private final AiReportService requestAiReportService;
     private final FaultAnalysisAiReportService faultAnalysisAiReportService;
@@ -39,10 +37,13 @@ public class AlarmController {
         requestService.updateTag(requestAlarmDto);
         log.info("Request tag 추가");
         
-        // 알림 보내기
-        List<FcmToken> tokens = alarmService.findTokenListByMemberId(requestAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        tokens.addAll(alarmService.findLawyersByTags(requestAlarmDto.getAccidentObject())); // 태그들로 변호사들 조회
-        return sendAlarms(tokens,requestAlarmDto.getContent());
+        // 의뢰 요청자에게 알림 보내기
+        alarmService.sendReportFinishedAlarm(requestAlarmDto.getMemberId(),requestAlarmDto.getContent(),requestAlarmDto.getRequestId());
+        
+        // 사고유형과 관련된 변호사에게 알림 보내기
+        alarmService.sendLawyersAlarm(requestAlarmDto.getAccidentObject(),requestAlarmDto.getRequestId());
+
+        return "의뢰 요청과 관련된 알림을 보냈습니다.";
     }
 
     // 과실 비율 분석기 관련 알림
@@ -53,32 +54,30 @@ public class AlarmController {
         faultAnalysisAiReportService.saveAnalysisReport(analysisAlarmDto);
         log.info("Ai repor 저장 완료됨");
 
-        // 알림 보내기
-        List<FcmToken> tokens = alarmService.findTokenListByMemberId(analysisAlarmDto.getMemberId()); // memberId로 fcm 토큰들 조회
-        return sendAlarms(tokens,analysisAlarmDto.getContent());
-    }
+        // 의뢰 요청자에게 알림 보내기
+        alarmService.sendReportFinishedAlarm(analysisAlarmDto.getMemberId(),analysisAlarmDto.getContent(),analysisAlarmDto.getFaultAnalysisId());
 
-    // 상담 예약 확인 알림 - 일반인, 변호사 - 백엔드
-    // FIXME
-    @PostMapping("/consultations")
-    public String checkConsultation(@RequestBody String body, @RequestBody Long consultationId) {
-        List<FcmToken> tokens = alarmService.findConsultationByconsultationId(consultationId); // 상담 id로 일반인, 변호사 조회
-        return sendAlarms(tokens,body);
-    }
-
-    // 알람 보내기
-    private String sendAlarms(List<FcmToken> tokens, String body) {
-        for (FcmToken token : tokens) {
-            fcmService.sendNotification(token.getToken(), body);
-            alarmService.save(token,body);
-        }
-        return "알림 전송 요청 완료";
+        return "과실 비율 분석 관련 알림을 보냈습니다.";
     }
 
     // 알림 리스트 조회
     @GetMapping("/myList/{memberId}")
     public List<AlarmDTO> getMyAlarmList(@PathVariable Long memberId) {
         return alarmService.getMyList(memberId);
+    }
+
+    // 읽음 처리
+    @PutMapping("/read/{alarmId}")
+    public ResponseEntity<Void> read(@PathVariable Long alarmId) {
+        alarmService.markAsRead(alarmId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 모두 읽음 처리
+    @PutMapping("/read-all")
+    public ResponseEntity<Void> readAll(@RequestHeader("Authorization") String authorizationHeader) {
+        alarmService.markAllAsRead(authorizationHeader);
+        return ResponseEntity.ok().build();
     }
 }
 

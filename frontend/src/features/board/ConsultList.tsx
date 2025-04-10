@@ -41,7 +41,7 @@ const ConsultList = ({ data }: ConsultListProps) => {
             memberId={consulting.memberId}
             createdAt={consulting.createdAt}
             onClick={() =>
-              void navigate(`/consultation/${consulting.requestId}`)
+              void navigate(`/board/consultation/${consulting.requestId}`)
             }
           />
           <hr />

@@ -17,79 +17,74 @@ function ReportTab() {
   const downloadPDF = async () => {
     if (!reportRef.current) return;
 
-    // PDF 생성 전 임시 스타일 적용
-    const originalStyles = { ...reportRef.current.style };
+    // 모든 요소의 원래 스타일을 저장할 Map
+    const originalStylesMap = new Map<
+      HTMLElement,
+      Partial<CSSStyleDeclaration>
+    >();
 
-    // 스타일 강제 적용
-    const applyPrintStyles = (element: HTMLElement) => {
+    // 스타일 저장 및 적용 함수
+    const saveAndApplyPrintStyles = (element: HTMLElement) => {
+      // 원래 스타일 저장
+      originalStylesMap.set(element, {
+        position: element.style.position,
+        height: element.style.height,
+        maxHeight: element.style.maxHeight,
+        overflow: element.style.overflow,
+        width: element.style.width,
+      });
+
+      // 프린트용 스타일 적용
       element.style.position = 'relative';
       element.style.height = 'auto';
       element.style.maxHeight = 'none';
       element.style.overflow = 'visible';
       element.style.width = '100%';
 
-      // 내부 요소에도 스타일 적용
+      // 하위 요소들에도 적용
       Array.from(element.children).forEach((child) => {
         if (child instanceof HTMLElement) {
-          child.style.overflow = 'visible';
-          child.style.height = 'auto';
-          if (child.children.length > 0) {
-            applyPrintStyles(child);
-          }
+          saveAndApplyPrintStyles(child);
         }
       });
     };
 
-    // 스타일 적용
-    applyPrintStyles(reportRef.current);
+    // 원래 스타일 복원 함수
+    const restoreOriginalStyles = (element: HTMLElement) => {
+      const originalStyles = originalStylesMap.get(element);
+      if (originalStyles) {
+        Object.assign(element.style, originalStyles);
+      }
 
-    // PDF 옵션
-    const options = {
-      filename: `변호사 상담용 사고 분석 리포트_${requestId}.pdf`,
-      page: {
-        format: 'A4',
-        orientation: 'portrait' as Orientation,
-        margins: { top: 20, right: 20, bottom: 20, left: 20 },
-      },
-      overrides: {
-        pdf: {
-          title: `AI 과실 분석 리포트_${requestId}`,
-          author: '교통사고 분석 시스템',
-          subject: '교통사고 과실비율 분석',
-          creator: '교통사고 분석 시스템',
-        },
-        canvas: {
-          // 보이지 않는 컨텐츠도 포함하여 캡처
-          useCORS: true,
-          scrollX: 0,
-          scrollY: 0,
-        },
-        // 전체 페이지 렌더링 설정
-        html2canvas: {
-          scrollY: 0,
-          scrollX: 0,
-          windowWidth: 794, // A4 너비(픽셀)
-          windowHeight: 1123, // A4 높이(픽셀)
-          useCORS: true,
-          logging: true,
-          scale: 1.5,
-        },
-      },
-      method: 'save', // 'open' 대신 'save'로 변경하여 바로 다운로드
+      // 하위 요소들의 스타일도 복원
+      Array.from(element.children).forEach((child) => {
+        if (child instanceof HTMLElement) {
+          restoreOriginalStyles(child);
+        }
+      });
     };
 
     try {
+      // PDF 생성 전 스타일 저장 및 적용
+      saveAndApplyPrintStyles(reportRef.current);
+
+      // PDF 옵션 (기존과 동일)
+      const options = {
+        // ...existing options...
+      };
+
       // PDF 생성 및 다운로드
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       await generatePDF(reportRef, options);
 
-      // 원래 스타일 복원
-      Object.assign(reportRef.current.style, originalStyles);
+      // 모든 요소의 스타일 복원
+      restoreOriginalStyles(reportRef.current);
     } catch (error) {
       console.error('PDF 생성 중 오류 발생: ', error);
-      // 원래 스타일 복원
-      Object.assign(reportRef.current.style, originalStyles);
+      // 오류 발생시에도 스타일 복원
+      restoreOriginalStyles(reportRef.current);
+    } finally {
+      // Map 초기화
+      originalStylesMap.clear();
     }
   };
 

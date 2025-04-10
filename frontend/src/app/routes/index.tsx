@@ -20,6 +20,8 @@ import { requireAuth } from '@/entities/auth/authUtils';
 import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 import LawyerAuthenticationForm from '@/pages/mypage/lawyer/LawyerAuthenticationForm';
 import LawyerRequests from '@/pages/reservation/LawyerRequests';
+import ConsultationBoard from '@/pages/board/ConsultationBoard';
+import AnalysisBoard from '@/pages/board/AnalysisBoard';
 
 const router = createBrowserRouter([
   {
@@ -34,26 +36,50 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/report',
-        children: [
-          { path: '', element: <VideoUpload />, loader: requireAuth },
-          { path: ':faultAnalysisId', element: <AnalysisDetail /> },
-        ],
-      },
-      {
-        path: '/consultation',
+        path: '/upload',
         children: [
           {
-            path: '',
+            path: 'report',
+            element: <VideoUpload />,
+            loader: requireAuth,
+          },
+          {
+            path: 'consultation',
             element: <ConsultUpload />,
             loader: requireAuth,
           },
-          { path: ':requestId', element: <ConsultDetail /> },
         ],
       },
       {
         path: '/board',
-        children: [{ path: '', element: <Board /> }],
+        children: [
+          {
+            path: 'consultation',
+            children: [
+              {
+                path: '',
+                element: <ConsultationBoard />,
+              },
+              {
+                path: ':requestId',
+                element: <ConsultDetail />,
+              },
+            ],
+          },
+          {
+            path: 'analysis',
+            children: [
+              {
+                path: '',
+                element: <Board />,
+              },
+              {
+                path: ':faultAnalysisId',
+                element: <AnalysisDetail />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: '/client',
