@@ -190,7 +190,7 @@ const AnalysisUpload = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div
             data-aos="zoom-in"
-            data-aos-duration="500"
+            data-aos-duration="300"
             className="w-[600px] rounded-lg bg-white px-10 pb-10 pt-6 shadow-lg"
           >
             <article>
