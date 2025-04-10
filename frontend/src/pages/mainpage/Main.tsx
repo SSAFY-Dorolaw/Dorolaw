@@ -49,38 +49,53 @@ const Main = () => {
       </header>
 
       {/* 메인 컨텐츠 */}
-      <main className="w-[1200px]">
+      <main className="-mt-[100px] w-[1200px] space-y-16">
         {/* 핵심 기능 3가지 소개 */}
-        <nav data-aos="fade-up" data-aos-duration="1000">
+        <section data-aos="fade-up" data-aos-duration="1000">
           <MainFunctions />
-        </nav>
+        </section>
 
         {/* 이용 방법 */}
-        <nav data-aos="fade-up" data-aos-duration="1000">
+        <section
+          className="align-center h-[calc(100dvh-128px)]"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
           <Guideline />
-        </nav>
+        </section>
 
         {/* 1) AI 사고 분석 */}
-        <nav data-aos="fade-left" data-aos-duration="1000" data-aos-delay="300">
-          <AiAnalysis />
-        </nav>
-
-        {/* 2) 변호사 상담 신청 */}
-        <nav
-          data-aos="fade-right"
+        <section
+          className="align-center h-[calc(100dvh-128px)]"
+          data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="300"
         >
+          <AiAnalysis />
+        </section>
+
+        {/* 2) 변호사 상담 신청 */}
+        <section
+          className="align-center h-[calc(100dvh-128px)]"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+        >
           <LawyerConsulting />
-        </nav>
+        </section>
 
         {/* 3) 변호사 인증 */}
-        <nav data-aos="slide-up" data-aos-duration="1200">
+        <section
+          className="align-center h-[calc(100dvh-128px)]"
+          data-aos="zoom-in"
+          data-aos-duration="1200"
+          data-aos-delay="500"
+        >
           <LawyerRegist />
-        </nav>
+        </section>
       </main>
     </>
   );
 };
-
 export default Main;
