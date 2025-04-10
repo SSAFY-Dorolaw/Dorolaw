@@ -7,9 +7,11 @@ import com.dorolaw.alarm.repository.AlarmRepository;
 import com.dorolaw.alarm.repository.FcmTokenRepository;
 import com.dorolaw.member.entity.Member;
 import com.dorolaw.member.entity.lawyer.LawyerSpeciality;
+import com.dorolaw.member.repository.LawyerProfileRepository;
 import com.dorolaw.member.repository.LawyerTagRepository;
 import com.dorolaw.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AlarmService {
     private final FcmTokenRepository fcmTokenRepository;
     private final AlarmRepository alarmRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final FcmService fcmService;
     private final LawyerTagRepository lawyerTagRepository;
+    private final LawyerProfileRepository lawyerProfileRepository;
 
     // 의뢰 요청자에게 알림 보내기
     public void sendReportFinishedAlarm(Long memberId, String content, Long requestId) {
@@ -50,7 +54,11 @@ public class AlarmService {
     }
 
     // 상담 예약 확인 알림
-    public void sendConsultationConfirmAlarms(Long lawyerId, Long clientId, String date, Long requestId) {
+    public void sendConsultationConfirmAlarms(Long lawyerProfileId, Long clientId, String date, Long requestId) {
+        // 변호사 memberId 찾기
+        Long lawyerId = lawyerProfileRepository.findById(lawyerProfileId).get().getMember().getMemberId();
+        
+        // list에 담기
         List<Long> memberIds = new ArrayList<>();
         memberIds.add(clientId);
         memberIds.add(lawyerId);
