@@ -69,7 +69,9 @@ const AnalysisList = () => {
                 faultRatioB={analysis.faultRatioB}
                 reportCreatedAt={analysis.reportCreatedAt}
                 isPublic={analysis.isPublic}
-                onClick={() => void navigate(`/report/${analysis.reportId}`)}
+                onClick={() =>
+                  void navigate(`/board/analysis/${analysis.reportId}`)
+                }
               />
             ))}
           </div>

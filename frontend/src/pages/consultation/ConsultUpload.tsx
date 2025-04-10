@@ -208,7 +208,7 @@ const ConsultUpload = () => {
               <p className="text-bodysmall text-gray-600">
                 본 서비스는 교통사고 발생 시 제출된 블랙박스 영상 또는 CCTV
                 영상을 기반으로, AI 기술을 활용하여 사고 상황을 분석하고 예상
-                과실비율을 산정해 드리는 기능입니다.
+                과실비율을 산정하는 기능입니다.
               </p>
               <br />
             </article>
