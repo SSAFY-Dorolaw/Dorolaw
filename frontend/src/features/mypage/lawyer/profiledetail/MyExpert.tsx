@@ -7,7 +7,7 @@ interface ExpertProps {
 
 const MyExpert = ({ lawyerTags, greetingMessage }: ExpertProps) => {
   return (
-    <div className="mx-[50px] my-8 flex justify-between">
+    <div className="mx-4 my-8 flex justify-between">
       <div className="flex w-[300px] flex-col">
         <div className="flex items-center gap-2">
           <h3 className="m-0 text-body font-bold">관심 분야</h3>
@@ -22,7 +22,8 @@ const MyExpert = ({ lawyerTags, greetingMessage }: ExpertProps) => {
       </div>
 
       <div className="flex max-w-[400px] flex-col">
-        <div className="mb-2 flex">
+        <h3 className="m-0 text-body font-bold">인삿말</h3>
+        <div className="mt-2 flex">
           <span className="max-w-[300px] text-caption font-medium">
             {greetingMessage}
           </span>

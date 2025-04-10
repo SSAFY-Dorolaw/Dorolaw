@@ -41,6 +41,7 @@ const Reservation = () => {
           name={profileData.name}
           lawyerId={Number(lawyerId)}
           officeName={profileData?.officeName}
+          officePhoneNumber={profileData?.officePhoneNumber}
           oneLineIntro={profileData?.oneLineIntro}
           greetingMessage={profileData?.greetingMessage}
           averageRating={profileData?.averageRating}

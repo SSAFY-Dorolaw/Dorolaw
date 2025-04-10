@@ -16,13 +16,11 @@ const MyConsult = ({ completedConsultationCount, lawyerId }: ConsultProps) => {
   if (isError) return <div>에러</div>;
   if (isSuccess)
     return (
-      <div className="mx-[50px] my-8">
+      <div className="mx-4 mt-8">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h3 className="m-0 text-body font-bold">최근 상담</h3>
-            <p className="ml-3 text-caption text-g3">
-              {completedConsultationCount}
-            </p>
+            <p className="ml-3 text-caption text-g3"></p>
             <div className="flex cursor-pointer items-center gap-1 text-p4">
               {data?.length ? (
                 <p
@@ -38,9 +36,15 @@ const MyConsult = ({ completedConsultationCount, lawyerId }: ConsultProps) => {
           </div>
 
           {data.length ? (
-            <div className="mt-4 grid grid-cols-3 gap-4 bg-p1">
+            <div className="mt-4 grid grid-cols-3 divide-x divide-gray-200">
               {data.slice(0, 3).map((request, index) => (
-                <div key={index} className="flex flex-col">
+                <div
+                  key={index}
+                  className="flex flex-col px-4 first:pl-0"
+                  onClick={() =>
+                    void navigate(`/board/consultation/${request.requestId}`)
+                  }
+                >
                   <p className="max-w-[20ch] cursor-pointer truncate text-caption">
                     {request.title}
                   </p>
@@ -54,7 +58,7 @@ const MyConsult = ({ completedConsultationCount, lawyerId }: ConsultProps) => {
               ))}
             </div>
           ) : (
-            <div className="typo-caption my-6 bg-p1 p-5 text-center text-p3">
+            <div className="typo-caption my-6 p-5 text-center text-p3">
               <p className="text-bodysemibold mb-2">상담 내역이 없습니다.</p>
             </div>
           )}
