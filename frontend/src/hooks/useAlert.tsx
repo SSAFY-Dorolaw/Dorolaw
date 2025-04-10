@@ -6,8 +6,9 @@ interface UseAlertReturn {
     isOpen: boolean;
     message: string;
     type: AlertType;
+    isLarge?: boolean; // 큰 글씨체 옵션 추가
   };
-  showAlert: (message: string, type?: AlertType) => void;
+  showAlert: (message: string, type?: AlertType, isLarge?: boolean) => void;
   closeAlert: () => void;
 }
 
@@ -15,10 +16,16 @@ export default function useAlert(): UseAlertReturn {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [type, setType] = useState<AlertType>('info');
+  const [isLarge, setIsLarge] = useState(false);
 
-  const showAlert = (newMessage: string, alertType: AlertType = 'info') => {
+  const showAlert = (
+    newMessage: string,
+    alertType: AlertType = 'info',
+    large = false,
+  ) => {
     setMessage(newMessage);
     setType(alertType);
+    setIsLarge(large);
     setIsOpen(true);
   };
 
@@ -31,6 +38,7 @@ export default function useAlert(): UseAlertReturn {
       isOpen,
       message,
       type,
+      isLarge,
     },
     showAlert,
     closeAlert,

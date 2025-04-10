@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { X, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 export type AlertType = 'success' | 'error' | 'info' | 'warning';
 
@@ -7,7 +9,8 @@ interface CustomAlertProps {
   isOpen: boolean;
   onClose: () => void;
   message: string;
-  type?: AlertType;
+  type: 'success' | 'error' | 'info' | 'warning';
+  isLarge?: boolean; // 큰 텍스트 옵션 추가
   autoClose?: boolean;
   autoCloseTime?: number;
 }
@@ -17,9 +20,18 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
   onClose,
   message,
   type = 'info',
+  isLarge = false,
   autoClose = true,
   autoCloseTime = 3000,
 }) => {
+  // AOS 초기화
+  useEffect(() => {
+    AOS.init({
+      duration: 500,
+      easing: 'ease-out',
+    });
+  }, []);
+
   // 알림 타입별 스타일 정의
   const alertStyles = {
     success: {
@@ -65,22 +77,31 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      className="fixed top-4 left-1/2 z-50 transform -translate-x-1/2"
+      data-aos="fade-down"
+      data-aos-duration="500"
+    >
       <div
-        className={`mx-auto w-full max-w-md rounded-lg border-l-4 p-4 shadow-lg ${currentStyle.bgColor} ${currentStyle.borderColor}`}
+        className={`${currentStyle.bgColor} ${currentStyle.borderColor} border-l-4 rounded-lg shadow-lg p-6 max-w-md w-full`}
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {currentStyle.icon}
-            <span className={`font-medium ${currentStyle.textColor}`}>
-              {message}
-            </span>
-          </div>
+          <p
+            className={`${isLarge ? 'text-lg font-medium' : 'text-base'} whitespace-pre-line ${currentStyle.textColor}`}
+          >
+            {message}
+          </p>
           <button
             onClick={onClose}
-            className="inline-flex size-8 items-center justify-center rounded-lg bg-transparent text-gray-400 hover:bg-gray-200 hover:text-gray-900"
+            className={`${currentStyle.textColor} ml-4 hover:opacity-70 transition-opacity`}
           >
-            <X className="size-5" />
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
           </button>
         </div>
       </div>
