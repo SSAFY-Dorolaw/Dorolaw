@@ -75,67 +75,73 @@ const AnalysisInfo = () => {
   };
 
   return (
-    <div className="col-span-7 mb-10">
-      <div className="flex w-full justify-start gap-2">
-        {!editMode ? (
-          <>
-            <h2>{data?.title}</h2>
-            <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2">
-              분석완료
-            </div>
-          </>
-        ) : (
-          <ModifyTitle />
-        )}
-      </div>
-      {isWriter && (
-        <div className="icongroup flex justify-end gap-2">
-          <Edit
-            strokeWidth={3}
-            size={24}
-            className="cursor-pointer hover:text-green-500"
-            onClick={editPost}
-          />
-          <RiDeleteBin6Line
-            strokeWidth={1}
-            size={24}
-            className="cursor-pointer hover:text-red-500"
-            onClick={deletePost}
-          />
+    <div className="col-span-7 mb-20">
+      <div className="space-y-2 rounded-lg bg-white p-6 shadow-md">
+        {/* 제목 및 상태 */}
+        <div className="flex w-full items-center gap-4">
+          {!editMode ? (
+            <>
+              <h2 className="text-2xl font-bold text-gray-800">
+                {data?.title}
+              </h2>
+              <div className="typo-button-small my-auto h-fit rounded-[10px] bg-p2 px-2 text-gray-700">
+                분석완료
+              </div>
+            </>
+          ) : (
+            <ModifyTitle title={data?.title} />
+          )}
         </div>
-      )}
-
-      {/* 영상 재생 부분 */}
-      <div className="video my-4 aspect-video w-full bg-white">
-        {data?.fileName ? (
-          <video
-            src={`${API_URL}/videos/${data.fileName}`}
-            controls
-            className="size-full object-contain"
-            controlsList="nodownload"
-          >
-            브라우저가 비디오 태그를 지원하지 않습니다.
-          </video>
-        ) : (
-          <div className="flex size-full items-center justify-center text-gray-500">
-            업로드된 영상이 없습니다.
+        {isWriter && (
+          <div className="icongroup flex justify-end gap-2">
+            <Edit
+              strokeWidth={3}
+              size={24}
+              className="cursor-pointer hover:text-green-500"
+              onClick={editPost}
+            />
+            <RiDeleteBin6Line
+              strokeWidth={1}
+              size={24}
+              className="cursor-pointer hover:text-red-500"
+              onClick={deletePost}
+            />
           </div>
         )}
-      </div>
 
-      {/* 받은 과실비율 */}
-      <div>
-        <div className="rate flex flex-col gap-4">
-          <div className="rounded-lg bg-gray-100 p-4 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-800">
-              받은 과실비율
-            </h3>
+        {/* 영상 재생 부분 */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800">업로드된 영상</h3>
+          <div className="video mb-4 aspect-video w-full bg-gray-100">
+            {data?.fileName ? (
+              <video
+                src={`${API_URL}/videos/${data.fileName}`}
+                controls
+                className="size-full rounded-xl object-contain"
+                controlsList="nodownload"
+              >
+                브라우저가 비디오 태그를 지원하지 않습니다.
+              </video>
+            ) : (
+              <div className="flex size-full items-center justify-center text-gray-500">
+                업로드된 영상이 없습니다.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 받은 과실비율 */}
+        <div>
+          <h3 className="mt-20 text-xl font-semibold text-gray-800">
+            받은 과실비율
+          </h3>
+          <div className="mb-8 mt-4 flex flex-col gap-4">
             {!editMode ? (
-              <div className="mt-2 flex gap-4">
-                <p className="text-gray-700">
+              <div className="flex gap-4">
+                <p className="text-lg text-gray-700">
                   A차량: {data?.aiReport?.faultRatioA}%
                 </p>
-                <p className="text-gray-700">
+                <p className="text-lg text-gray-700">
                   B차량: {data?.aiReport?.faultRatioB}%
                 </p>
               </div>

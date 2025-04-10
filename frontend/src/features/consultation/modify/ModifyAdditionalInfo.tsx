@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
-const ModifyAdditionalInfo = () => {
-  const [description, setDescription] = useState(''); // 영상 외 추가정보
+interface ModifyAdditionalInfoProps {
+  content: string | undefined;
+}
+
+const ModifyAdditionalInfo = ({ content }: ModifyAdditionalInfoProps) => {
+  const [description, setDescription] = useState(content); // 영상 외 추가정보
 
   return (
     <div>
