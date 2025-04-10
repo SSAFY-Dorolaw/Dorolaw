@@ -58,7 +58,7 @@ function LawyerRequestList() {
               isSelected={request.isSelected}
               requestStatus={request.requestStatus}
               onClick={() =>
-                void navigate(`/consultation/${request.requestId}`)
+                void navigate(`/board/consultation/${request.requestId}`)
               }
             />
           ))}
@@ -73,7 +73,7 @@ function LawyerRequestList() {
             지금 의뢰 게시글에 답변을 달고 의뢰인의 상담을 받아보세요
           </p>
           <button
-            onClick={() => void navigate('/board')}
+            onClick={() => void navigate('/board/consultation')}
             className="hover:opacity980 rounded-lg bg-p5 px-6 py-3 font-medium text-p1 transition hover:text-y5"
           >
             사건 의뢰 신청 보러가기

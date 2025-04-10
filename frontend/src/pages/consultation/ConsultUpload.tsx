@@ -168,7 +168,7 @@ const ConsultUpload = () => {
         setSuccess(true);
         showAlert('의뢰글이 성공적으로 업로드되었습니다.', 'success');
         setTimeout(() => {
-          void navigate(`/board`);
+          void navigate(`/board/consultation`);
         }, 1500);
         console.log('의뢰글 업로드 성공: ', infoResponse.requestId);
       } else if ('message' in infoResponse) {

@@ -69,7 +69,7 @@ function ConsultationList() {
               requestId={consultation.requestId}
               requestTitle={consultation.requestTitle}
               onClick={() =>
-                void navigate(`/consultation/${consultation.requestId}`)
+                void navigate(`/board/consultation/${consultation.requestId}`)
               }
             />
           ))}

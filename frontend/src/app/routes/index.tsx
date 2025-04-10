@@ -21,7 +21,6 @@ import AdditionalQuestion from '@/features/reservation/AdditionalQuestion';
 import LawyerAuthenticationForm from '@/pages/mypage/lawyer/LawyerAuthenticationForm';
 import LawyerRequests from '@/pages/reservation/LawyerRequests';
 import ConsultationBoard from '@/pages/board/ConsultationBoard';
-import AnalysisBoard from '@/pages/board/AnalysisBoard';
 
 const router = createBrowserRouter([
   {

@@ -57,7 +57,7 @@ function LawyerConsultationList() {
               consultationTime={consultation.consultationTime}
               consultationType={consultation.consultationType}
               onClick={() =>
-                void navigate(`/consultation/${consultation.requestId}`)
+                void navigate(`/board/consultation/${consultation.requestId}`)
               }
             />
           ))}
