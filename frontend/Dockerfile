@@ -11,7 +11,7 @@ COPY . .
 ARG BUILD_DATE=unknown
 ENV BUILD_DATE=${BUILD_DATE}
 
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=768" npm run build
 
 FROM nginx:latest
 
